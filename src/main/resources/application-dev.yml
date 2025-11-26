@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: academic-sharing-platform
+
+  datasource:
+    url: jdbc:mysql://${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
+
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# JWT配置
+jwt:
+  secret: your-secret-key-change-this-in-production-minimum-256-bits
+  expiration: 86400000  # 24小时
+
+# Swagger配置
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  show-actuator: false
+
+# 日志配置
+logging:
+  level:
+    com.scholar.platform: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
