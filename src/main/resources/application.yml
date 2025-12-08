@@ -1,3 +1,9 @@
+# src/main/resources/application.yml
+
 spring:
+  # 核心修改：在这里引入 .env 文件
+  config:
+    import: optional:file:.env[.properties]
+  
   profiles:
     active: dev

@@ -1,0 +1,55 @@
+# Build outputs
+/target/
+/build/
+/out/
+/bin/
+
+# IDE and tooling metadata
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.factorypath
+.vscode/
+.history/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs and temp files
+*.log
+logs/
+*.tmp
+tmp/
+/temp/
+
+# Runtime and crash dumps
+hs_err_pid*
+replay_pid*
+
+# Coverage and test artifacts
+coverage/
+*.lcov
+jacoco.exec
+*.ec
+
+# Environment & local config
+.env
+env/
+*.local
+*.secret
+
+# Bytecode
+*.class
+
+# Archives
+*.jar
+*.war
+
+# Databases (keep schema SQL files tracked)
+*.db
+*.sqlite
