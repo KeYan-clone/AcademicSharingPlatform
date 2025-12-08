@@ -1,5 +1,4 @@
 package com.scholar.platform.service;
-
 import com.scholar.platform.entity.Follow;
 import com.scholar.platform.entity.User;
 import com.scholar.platform.repository.FollowRepository;
@@ -57,6 +56,36 @@ public class FollowService {
 
   public long getFollowerCount(String userId) {
     return followRepository.countByFollowingId(userId);
+  }
+  
+  /**
+   * 获取粉丝信息列表（userId, name）
+   */
+  public List<java.util.Map<String, Object>> getFollowersInfo(String userId) {
+    List<Follow> follows = getFollowers(userId);
+    return follows.stream().map(follow -> {
+      User follower = userRepository.findById(follow.getFollowerId()).orElse(null);
+      if (follower == null) return null;
+      java.util.Map<String, Object> info = new java.util.HashMap<>();
+      info.put("userId", follower.getId());
+      info.put("name", follower.getUsername());
+      return info;
+    }).filter(java.util.Objects::nonNull).toList();
+  }
+
+  /**
+   * 获取关注信息列表（userId, name）
+   */
+  public List<java.util.Map<String, Object>> getFollowingInfo(String userId) {
+    List<Follow> follows = getFollowing(userId);
+    return follows.stream().map(follow -> {
+      User following = userRepository.findById(follow.getFollowingId()).orElse(null);
+      if (following == null) return null;
+      java.util.Map<String, Object> info = new java.util.HashMap<>();
+      info.put("userId", following.getId());
+      info.put("name", following.getUsername());
+      return info;
+    }).filter(java.util.Objects::nonNull).toList();
   }
 
   public long getFollowingCount(String userId) {
