@@ -14,4 +14,6 @@ public interface ScholarCertificationRepository extends JpaRepository<ScholarCer
   List<ScholarCertification> findByStatus(ScholarCertification.CertificationStatus status);
 
   List<ScholarCertification> findByUserIdAndStatus(String userId, ScholarCertification.CertificationStatus status);
+
+  ScholarCertification findFirstByUserIdOrderBySubmittedAtDesc(String userId);
 }

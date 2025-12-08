@@ -5,6 +5,8 @@ import com.scholar.platform.entity.ScholarCertification;
 import com.scholar.platform.entity.User;
 import com.scholar.platform.repository.ScholarCertificationRepository;
 import com.scholar.platform.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ public class CertificationService {
 
   private final ScholarCertificationRepository certificationRepository;
   private final UserRepository userRepository;
+  private final ObjectMapper objectMapper;
 
   @Transactional
   public ScholarCertification submitCertification(String userId, CertificationRequest request) {
@@ -30,7 +33,7 @@ public class CertificationService {
     certification.setOrganization(request.getOrganization());
     certification.setOrgEmail(request.getOrgEmail());
     certification.setTitle(request.getTitle());
-    certification.setProofMaterials(request.getProofMaterials());
+    certification.setProofMaterials(serializeProofMaterials(request));
     certification.setStatus(ScholarCertification.CertificationStatus.PENDING);
 
     certification = certificationRepository.save(certification);
@@ -44,6 +47,21 @@ public class CertificationService {
 
   public List<ScholarCertification> getPendingCertifications() {
     return certificationRepository.findByStatus(ScholarCertification.CertificationStatus.PENDING);
+  }
+
+  public ScholarCertification getLatestByUser(String userId) {
+    return certificationRepository.findFirstByUserIdOrderBySubmittedAtDesc(userId);
+  }
+
+  private String serializeProofMaterials(CertificationRequest request) {
+    if (request.getProofMaterials() == null) {
+      return null;
+    }
+    try {
+      return objectMapper.writeValueAsString(request.getProofMaterials());
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException("证明材料格式不正确");
+    }
   }
 
   @Transactional

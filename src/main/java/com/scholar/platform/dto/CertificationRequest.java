@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Schema(description = "学者认证申请请求")
 public class CertificationRequest {
@@ -22,6 +24,6 @@ public class CertificationRequest {
   @Schema(description = "职称/学位")
   private String title;
 
-  @Schema(description = "证明材料(JSON数组)")
-  private String proofMaterials;
+  @Schema(description = "证明材料列表", example = "[\"https://example.com/cert1.png\"]")
+  private List<String> proofMaterials;
 }
