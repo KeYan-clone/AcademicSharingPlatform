@@ -3,6 +3,7 @@ package com.scholar.platform.controller;
 import com.scholar.platform.dto.ApiResponse;
 import com.scholar.platform.entity.Follow;
 import com.scholar.platform.service.FollowService;
+import com.scholar.platform.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -15,48 +16,63 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/follows")
+@RequestMapping("/social")
 @RequiredArgsConstructor
 @Tag(name = "关注管理", description = "用户关注和粉丝管理接口")
 @SecurityRequirement(name = "Bearer Authentication")
 public class FollowController {
 
   private final FollowService followService;
+  private final UserRepository userRepository;
 
-  @PostMapping("/{followingId}")
-  @Operation(summary = "关注用户", description = "关注指定用户")
+  @PostMapping("/follow/{userId}")
+  @Operation(summary = "关注一个学者", description = "关注指定学者")
   public ResponseEntity<ApiResponse<Void>> followUser(
       Authentication authentication,
-      @Parameter(description = "被关注用户ID") @PathVariable String followingId) {
-    String followerId = authentication.getName();
-    followService.follow(followerId, followingId);
+      @Parameter(description = "被关注学者ID") @PathVariable String userId) {
+    String email = authentication.getName();
+    String followerId = userRepository.findByEmail(email)
+            .map(u -> u.getId())
+            .orElseThrow(() -> new RuntimeException("当前用户不存在"));
+    followService.follow(followerId, userId);
     return ResponseEntity.ok(ApiResponse.success("关注成功", null));
   }
 
-  @DeleteMapping("/{followingId}")
-  @Operation(summary = "取消关注", description = "取消关注指定用户")
+  @DeleteMapping("/follow/{userId}")
+  @Operation(summary = "取消关注一个学者", description = "取消关注指定学者")
   public ResponseEntity<ApiResponse<Void>> unfollowUser(
       Authentication authentication,
-      @Parameter(description = "被关注用户ID") @PathVariable String followingId) {
-    String followerId = authentication.getName();
-    followService.unfollow(followerId, followingId);
-    return ResponseEntity.ok(ApiResponse.success("已取消关注", null));
+      @Parameter(description = "被取消关注学者ID") @PathVariable String userId) {
+    String email = authentication.getName();
+    String followerId = userRepository.findByEmail(email)
+            .map(u -> u.getId())
+            .orElseThrow(() -> new RuntimeException("当前用户不存在"));
+    followService.unfollow(followerId, userId);
+    return ResponseEntity.ok(ApiResponse.success("取消关注成功", null));
   }
 
-  @GetMapping("/{userId}/followers")
-  @Operation(summary = "获取粉丝列表", description = "查询指定用户的粉丝")
-  public ResponseEntity<ApiResponse<List<Follow>>> getFollowers(
-      @Parameter(description = "用户ID") @PathVariable String userId) {
-    List<Follow> followers = followService.getFollowers(userId);
-    return ResponseEntity.ok(ApiResponse.success(followers));
+  @GetMapping("/followers/{userId}")
+  @Operation(summary = "查看某个学者的粉丝列表", description = "查询指定学者的粉丝列表")
+  public ResponseEntity<ApiResponse<Object>> getFollowers(
+      @Parameter(description = "学者ID") @PathVariable String userId) {
+    List<java.util.Map<String, Object>> followers = followService.getFollowersInfo(userId);
+    int total = followers.size();
+    return ResponseEntity.ok(ApiResponse.success(new java.util.HashMap<String, Object>() {{
+      put("followers", followers);
+      put("total", total);
+    }}));
   }
 
-  @GetMapping("/{userId}/following")
-  @Operation(summary = "获取关注列表", description = "查询指定用户关注的人")
-  public ResponseEntity<ApiResponse<List<Follow>>> getFollowing(
-      @Parameter(description = "用户ID") @PathVariable String userId) {
-    List<Follow> following = followService.getFollowing(userId);
-    return ResponseEntity.ok(ApiResponse.success(following));
+  @GetMapping("/following/{userId}")
+  @Operation(summary = "查看某个学者关注的人列表", description = "查询指定学者关注的人列表")
+  public ResponseEntity<ApiResponse<Object>> getFollowing(
+      @Parameter(description = "学者ID") @PathVariable String userId) {
+    List<java.util.Map<String, Object>> following = followService.getFollowingInfo(userId);
+    int total = following.size();
+    return ResponseEntity.ok(ApiResponse.success(new java.util.HashMap<String, Object>() {{
+      put("following", following);
+      put("total", total);
+    }}));
   }
 
   @GetMapping("/{userId}/follower-count")
