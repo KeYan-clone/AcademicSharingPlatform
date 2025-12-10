@@ -48,6 +48,10 @@ public class Achievement {
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
+  @Enumerated(EnumType.STRING)
+  @Column(name = "achievement_status", nullable = false)
+  private AchievementStatus status = AchievementStatus.PENDING;
+
   @PrePersist
   protected void onCreate() {
     createdAt = LocalDateTime.now();
@@ -55,5 +59,9 @@ public class Achievement {
 
   public enum AchievementType {
     PAPER, PATENT, PROJECT, AWARD
+  }
+
+  public enum AchievementStatus {
+    PENDING, APPROVED, REJECTED
   }
 }
