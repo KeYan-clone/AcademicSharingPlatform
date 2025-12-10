@@ -49,13 +49,14 @@ public class ScholarService {
 
     // 转换为DTO
     return scholars.stream()
-        .map(this::toDTO)
+        .map(ScholarDTO::from)
         .collect(Collectors.toList());
   }
 
   /**
    * 查找用户的所有合作者
    * 合作者定义：与该用户共同作者过成果的其他用户
+   *
    */
   public List<ScholarDTO> findAllCollaborators(String userId) {
     // 获取用户的所有成果
@@ -80,14 +81,14 @@ public class ScholarService {
         .map(scholarRepository::findById)
         .filter(Optional::isPresent)
         .map(Optional::get)
-        .map(this::toDTO)
+        .map(ScholarDTO::from)
         .collect(Collectors.toList());
   }
 
   public ScholarDTO getScholarProfile(String userId) {
     Scholar scholar = scholarRepository.findById(userId)
         .orElseThrow(() -> new RuntimeException("学者信息不存在"));
-    return toDTO(scholar);
+    return ScholarDTO.from(scholar);
   }
 
   @Transactional
@@ -105,17 +106,6 @@ public class ScholarService {
     scholar.setAvatarUrl(dto.getAvatarUrl());
 
     scholar = scholarRepository.save(scholar);
-    return toDTO(scholar);
-  }
-
-  private ScholarDTO toDTO(Scholar scholar) {
-    ScholarDTO dto = new ScholarDTO();
-    dto.setUserId(scholar.getUserId());
-    dto.setPublicName(scholar.getPublicName());
-    dto.setOrganization(scholar.getOrganization());
-    dto.setTitle(scholar.getTitle());
-    dto.setBio(scholar.getBio());
-    dto.setAvatarUrl(scholar.getAvatarUrl());
-    return dto;
+    return ScholarDTO.from(scholar);
   }
 }

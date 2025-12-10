@@ -1,5 +1,6 @@
 package com.scholar.platform.dto;
 
+import com.scholar.platform.entity.Scholar;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -24,4 +25,18 @@ public class ScholarDTO {
 
   @Schema(description = "头像URL")
   private String avatarUrl;
+
+  /**
+   * 从Scholar实体创建DTO
+   */
+  public static ScholarDTO from(Scholar scholar) {
+    ScholarDTO dto = new ScholarDTO();
+    dto.setUserId(scholar.getUserId());
+    dto.setPublicName(scholar.getPublicName());
+    dto.setOrganization(scholar.getOrganization());
+    dto.setTitle(scholar.getTitle());
+    dto.setBio(scholar.getBio());
+    dto.setAvatarUrl(scholar.getAvatarUrl());
+    return dto;
+  }
 }

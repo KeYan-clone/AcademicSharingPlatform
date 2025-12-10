@@ -55,7 +55,6 @@ public class ScholarController {
         return ResponseEntity.ok(ApiResponse.success("更新成功", updated));
     }
 
-    //todo：加入学者合作关系网络，修改返回的数据结构
     @GetMapping("/{userId}/collaboration-network")
     @Operation(summary = "查看学者合作关系网络", description = "获取指定学者的合作关系网络图数据")
     public ResponseEntity<ApiResponse<List<ScholarDTO>>> getCollaborationNetwork(
