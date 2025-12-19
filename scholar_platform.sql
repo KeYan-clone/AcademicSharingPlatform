@@ -145,6 +145,7 @@ CREATE TABLE `forum_boards` (
   `name` varchar(100) NOT NULL COMMENT '板块名称',
   `type` int NOT NULL COMMENT '板块类型',
   `description` text COMMENT '描述',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_board_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='论坛板块';
@@ -174,6 +175,8 @@ CREATE TABLE `forum_posts` (
   `content` text NOT NULL COMMENT '内容',
   `attachments` json DEFAULT NULL COMMENT '附件列表',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '发布时间',
+  `view_count` int DEFAULT '0', 
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_board` (`board_id`),
   KEY `fk_post_author` (`author_id`),
@@ -204,6 +207,7 @@ CREATE TABLE `forum_replies` (
   `author_id` char(36) NOT NULL COMMENT '回复人',
   `content` text NOT NULL COMMENT '回复内容',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '回复时间',
+  `attachments` json DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_post` (`post_id`),
   KEY `fk_reply_author` (`author_id`),
@@ -532,8 +536,8 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL COMMENT '用户名',
   `email` varchar(100) NOT NULL COMMENT '邮箱',
   `password_hash` varchar(255) NOT NULL COMMENT '加盐哈希密码',
-  `role` enum('user','admin') NOT NULL DEFAULT 'user' COMMENT '角色: user/admin',
-  `certification_status` enum('not_certified','pending','certified') NOT NULL DEFAULT 'not_certified' COMMENT '认证状态',
+  `role` enum('USER','ADMIN') NOT NULL DEFAULT 'USER' COMMENT '角色: user/admin',
+  `certification_status` enum('NOT_CERTIFIED','PENDING','CERTIFIED') NOT NULL DEFAULT 'NOT_CERTIFIED' COMMENT '认证状态',
   `preferences` text COMMENT '用户偏好设置(JSON字符串)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_email` (`email`)
