@@ -12,6 +12,11 @@ spring:
       minimum-idle: 5
       connection-timeout: 30000
 
+  elasticsearch:
+    uris: http://113.44.184.21:9200
+    connection-timeout: 5s
+    socket-timeout: 3s
+
   mail:
     host: ${MAIL_HOST:localhost}
     port: ${MAIL_PORT:1025}

@@ -1,38 +1,66 @@
 package com.scholar.platform.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "成果信息")
 public class AchievementDTO {
 
   @Schema(description = "成果ID")
   private String id;
 
-  @Schema(description = "成果类型")
-  private String type;
+  @Schema(description = "DOI")
+  private String doi;
 
   @Schema(description = "标题")
   private String title;
 
-  @Schema(description = "发表年份")
-  private Integer publicationYear;
+  @Schema(description = "作者列表")
+  private List<AuthorInfo> authors;
+
+  @Schema(description = "发表日期")
+  private String publicationDate;
+
+  @Schema(description = "相关作品")
+  private List<String> relatedWorks;
+
+  @Schema(description = "引用次数")
+  private Integer citedByCount;
+
+  @Schema(description = "语言")
+  private String language;
+
+  @Schema(description = "学科概念")
+  private List<String> concepts;
+
+  @Schema(description = "论文链接")
+  private String landingPageUrl;
 
   @Schema(description = "摘要")
   private String abstractText;
 
-  @Schema(description = "DOI")
-  private String doi;
+  @Schema(description = "收藏次数")
+  private Integer favouriteCount;
 
-  @Schema(description = "发表期刊/会议")
-  private String publicationVenue;
+  @Schema(description = "阅读次数")
+  private Integer readCount;
 
-  @Schema(description = "引用次数")
-  private Integer citationCount;
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Schema(description = "作者信息")
+  public static class AuthorInfo {
+    @Schema(description = "作者ID")
+    private String id;
 
-  @Schema(description = "创建时间")
-  private LocalDateTime createdAt;
+    @Schema(description = "作者姓名")
+    private String displayName;
+  }
 }
