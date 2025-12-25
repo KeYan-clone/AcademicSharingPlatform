@@ -14,9 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.ScriptType;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -148,32 +150,17 @@ public class AchievementService {
    * 使用 Elasticsearch 脚本进行原子更新，避免并发覆盖问题
    */
   private void incrementReadCount(Achievement achievement) {
-    try {
-      // 使用 Painless 脚本进行原子更新
-      // 如果 readCount 不存在，初始化为 1；否则加 1
-      String scriptCode = "if (ctx._source.readCount == null) { ctx._source.readCount = 1 } else { ctx._source.readCount += 1 }";
-      
-      UpdateQuery updateQuery = UpdateQuery.builder(achievement.getId())
-          .withScript(scriptCode)
-          .withLang("painless")
-          .build();
+    updateEsFieldCount(achievement.getId(), "readCount", 1);
 
-      elasticsearchOperations.update(updateQuery, IndexCoordinates.of("openalex_works"));
-      
-      // 更新内存中的对象，以便后续 DTO 转换使用最新值（虽然只是近似值）
-      if (achievement.getReadCount() == null) {
-        achievement.setReadCount(1);
-      } else {
-        achievement.setReadCount(achievement.getReadCount() + 1);
-      }
-    } catch (Exception e) {
-      System.err.println("Failed to increment read count for achievement: " + achievement.getId() + ", error: " + e.getMessage());
+    if (achievement.getReadCount() == null) {
+      achievement.setReadCount(1);
+    } else {
+      achievement.setReadCount(achievement.getReadCount() + 1);
     }
   }
 
   /**
    * 更新概念热度统计
-   * 为当前成果的每个概念的热度计数加1
    */
   private void updateConcept(Achievement achievement) {
     if (achievement.getConcepts() == null || achievement.getConcepts().isEmpty()) {
@@ -205,10 +192,49 @@ public class AchievementService {
     }
   }
 
+  public List<AchievementDTO> getByIds(List<String> ids) {
+    Iterable<Achievement> achievements = achievementRepository.findAllById(ids);
+    List<AchievementDTO> dtos = new ArrayList<>();
+    achievements.forEach(a -> dtos.add(toDTO(a)));
+    return dtos;
+  }
+
+  public void incrementFavouriteCount(String achievementId) {
+    updateEsFieldCount(achievementId, "favouriteCount", 1);
+  }
+
+  public void decrementFavouriteCount(String achievementId) {
+    updateEsFieldCount(achievementId, "favouriteCount", -1);
+  }
+
+
+  private void updateEsFieldCount(String id, String field, int delta) {
+    try {
+      String scriptCode;
+      if (delta > 0) {
+        scriptCode = String.format("if (ctx._source.%s == null) { ctx._source.%s = %d } else { ctx._source.%s += %d }", field, field, delta, field, delta);
+      } 
+      else {
+        scriptCode = String.format("if (ctx._source.%s != null && ctx._source.%s > 0) { ctx._source.%s += %d }", field, field, field, delta);
+      }
+
+      UpdateQuery updateQuery = UpdateQuery.builder(id)
+          .withScript(scriptCode)
+          .withLang("painless")
+          .withScriptType(ScriptType.INLINE)
+          .build();
+
+      elasticsearchOperations.update(updateQuery, IndexCoordinates.of("openalex_works"));
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.err.println("Failed to update " + field + " for achievement: " + id + ", error: " + e.getMessage());
+    }
+  }
+
   /**
    * 转换为DTO，提取作者信息
    */
-  private AchievementDTO toDTO(Achievement achievement) {
+  public AchievementDTO toDTO(Achievement achievement) {
     AchievementDTO dto = new AchievementDTO();
     dto.setId(achievement.getId());
     dto.setDoi(achievement.getDoi());

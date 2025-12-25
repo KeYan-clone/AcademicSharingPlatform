@@ -5,12 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scholar.platform.dto.ApiResponse;
 import com.scholar.platform.dto.AppealRequest;
 import com.scholar.platform.dto.CertificationRequest;
+import com.scholar.platform.dto.CollectionRequest;
+import com.scholar.platform.dto.AchievementDTO;
 import com.scholar.platform.dto.UpdateUserRequest;
 import com.scholar.platform.entity.ScholarCertification;
 import com.scholar.platform.entity.User;
 import com.scholar.platform.entity.UserAppeal;
 import com.scholar.platform.service.AppealService;
 import com.scholar.platform.service.CertificationService;
+import com.scholar.platform.service.UserCollectionService;
 import com.scholar.platform.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,6 +41,7 @@ public class UserController {
   private final UserService userService;
   private final CertificationService certificationService;
   private final AppealService appealService;
+  private final UserCollectionService userCollectionService;
   private final ObjectMapper objectMapper;
 
   private String currentUserEmail() {
@@ -134,5 +138,33 @@ public class UserController {
     User user = userService.getByEmailOrThrow(currentUserEmail());
     UserAppeal appeal = appealService.createAppeal(user.getId(), request);
     return ResponseEntity.accepted().body(ApiResponse.success("申诉已提交", appeal));
+  }
+
+  @GetMapping("/me/collections")
+  @Operation(summary = "查看收藏夹")
+  public ResponseEntity<ApiResponse<Map<String, Object>>> getMyCollections() {
+    User user = userService.getByEmailOrThrow(currentUserEmail());
+    List<AchievementDTO> collections = userCollectionService.getMyCollections(user.getId());
+    return ResponseEntity.ok(ApiResponse.success(Map.of("collections", collections)));
+  }
+
+  @PostMapping("/me/collections")
+  @Operation(summary = "收藏一项学术成果")
+  public ResponseEntity<ApiResponse<String>> addCollection(@RequestBody CollectionRequest request) {
+    User user = userService.getByEmailOrThrow(currentUserEmail());
+    try {
+      userCollectionService.addCollection(user.getId(), request.getAchievementId());
+      return ResponseEntity.status(201).body(ApiResponse.success("收藏成功"));
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().body(ApiResponse.error(400, e.getMessage()));
+    }
+  }
+
+  @DeleteMapping("/me/collections/{achievementId}")
+  @Operation(summary = "取消收藏一项学术成果")
+  public ResponseEntity<Void> removeCollection(@PathVariable String achievementId) {
+    User user = userService.getByEmailOrThrow(currentUserEmail());
+    userCollectionService.removeCollection(user.getId(), achievementId);
+    return ResponseEntity.noContent().build();
   }
 }

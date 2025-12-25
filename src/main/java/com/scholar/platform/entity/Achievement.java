@@ -23,7 +23,7 @@ public class Achievement {
   @Field(type = FieldType.Keyword)
   private String doi;
 
-  @Field(type = FieldType.Text, analyzer = "standard")
+  @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
   private String title;
 
   @Field(type = FieldType.Nested)
@@ -44,13 +44,13 @@ public class Achievement {
   @Field(type = FieldType.Keyword)
   private String language;
 
-  @Field(type = FieldType.Keyword)
+  @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
   private List<String> concepts;
 
   @Field(name = "landing_page_url", type = FieldType.Keyword)
   private String landingPageUrl;
 
-  @Field(name = "abstract", type = FieldType.Text)
+  @Field(name = "abstract", type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
   private String abstractText;
 
   @Field(name = "authors_count", type = FieldType.Integer)
@@ -89,7 +89,7 @@ public class Achievement {
     @Field(type = FieldType.Keyword)
     private String id;
 
-    @Field(name = "display_name", type = FieldType.Text)
+    @Field(name = "display_name", type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String displayName;
 
     @Field(type = FieldType.Keyword)
