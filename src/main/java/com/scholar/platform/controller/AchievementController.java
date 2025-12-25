@@ -24,19 +24,21 @@ public class AchievementController {
 
   @GetMapping
   @Operation(summary = "检索学术成果（支持高级检索）", 
-             description = "支持关键词、学科领域和时间范围的组合检索。至少需要提供一个检索条件。field 为精确匹配。")
+             description = "支持关键词、学科领域、时间范围、作者和机构的组合检索。至少需要提供一个检索条件。field 为精确匹配。")
   public ResponseEntity<ApiResponse<PageResponse<AchievementDTO>>> searchAchievements(
       @Parameter(description = "关键词 - 模糊匹配（搜索标题和概念）") @RequestParam(required = false) String q,
       @Parameter(description = "学科领域/概念 - 精确匹配（从下拉列表选择）") @RequestParam(required = false) String field,
       @Parameter(description = "起始日期 (格式: yyyy-MM-dd)") @RequestParam(required = false) String startDate,
       @Parameter(description = "截止日期 (格式: yyyy-MM-dd)") @RequestParam(required = false) String endDate,
+      @Parameter(description = "作者姓名 - 精确匹配") @RequestParam(required = false) String author,
+      @Parameter(description = "机构名称 - 精确匹配") @RequestParam(required = false) String institution,
       @Parameter(description = "页码") @RequestParam(defaultValue = "0") int page,
       @Parameter(description = "每页大小") @RequestParam(defaultValue = "10") int size) {
     
     Pageable pageable = PageRequest.of(page, size);
     
     try {
-      Page<AchievementDTO> result = achievementService.advancedSearch(q, field, startDate, endDate, pageable);
+      Page<AchievementDTO> result = achievementService.advancedSearch(q, field, startDate, endDate, author, institution, pageable);
       return ResponseEntity.ok(ApiResponse.success(PageResponse.of(result)));
     } catch (IllegalArgumentException e) {
       return ResponseEntity.badRequest()

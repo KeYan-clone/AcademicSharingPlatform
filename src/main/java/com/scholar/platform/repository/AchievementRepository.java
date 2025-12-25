@@ -46,6 +46,10 @@ public interface AchievementRepository extends ElasticsearchRepository<Achieveme
       """)
   Page<Achievement> findByConceptsExactMatch(String concept, Pageable pageable);
 
+  Page<Achievement> findByInstitutionIds(String institutionId, Pageable pageable);
+
+  Page<Achievement> findByAuthorIds(String authorId, Pageable pageable);
+
   /**
    * 按时间范围和精确概念检索
    */

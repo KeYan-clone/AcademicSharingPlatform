@@ -23,7 +23,7 @@ public class AchievementDTO {
   private String title;
 
   @Schema(description = "作者列表")
-  private List<AuthorInfo> authors;
+  private List<AuthorInfo> authorships;
 
   @Schema(description = "发表日期")
   private String publicationDate;
@@ -52,6 +52,12 @@ public class AchievementDTO {
   @Schema(description = "阅读次数")
   private Integer readCount;
 
+  @Schema(description = "作者ID列表")
+  private List<String> authorIds;
+
+  @Schema(description = "机构ID列表")
+  private List<String> institutionIds;
+
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
@@ -61,6 +67,6 @@ public class AchievementDTO {
     private String id;
 
     @Schema(description = "作者姓名")
-    private String displayName;
+    private String name;
   }
 }

@@ -62,6 +62,12 @@ public class Achievement {
   @Field(name = "readCount", type = FieldType.Integer)
   private Integer readCount;
 
+  @Field(name = "author_ids", type = FieldType.Keyword)
+  private List<String> authorIds;
+
+  @Field(name = "institution_ids", type = FieldType.Keyword)
+  private List<String> institutionIds;
+
   @Data
   @NoArgsConstructor
   @AllArgsConstructor

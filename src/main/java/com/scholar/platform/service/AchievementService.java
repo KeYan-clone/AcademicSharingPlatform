@@ -2,10 +2,19 @@ package com.scholar.platform.service;
 
 import com.scholar.platform.dto.AchievementDTO;
 import com.scholar.platform.entity.Achievement;
+import com.scholar.platform.entity.Author;
+import com.scholar.platform.entity.Concept;
+import com.scholar.platform.entity.Institution;
 import com.scholar.platform.repository.AchievementRepository;
+import com.scholar.platform.repository.AuthorRepository;
+import com.scholar.platform.repository.ConceptRepository;
+import com.scholar.platform.repository.InstitutionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +25,10 @@ import java.util.stream.Collectors;
 public class AchievementService {
 
   private final AchievementRepository achievementRepository;
+  private final InstitutionRepository institutionRepository;
+  private final AuthorRepository authorRepository;
+  private final ConceptRepository conceptRepository;
+  private final ElasticsearchOperations elasticsearchOperations;
 
   /**
    * 通过关键词搜索（标题或概念）
@@ -53,16 +66,41 @@ public class AchievementService {
   }
 
   /**
-   * 高级检索：支持关键词、概念和时间范围的组合检索
+   * 高级检索：支持关键词、概念、时间范围、作者和机构的组合检索
    * @param keyword 关键词（模糊搜索标题和概念）
    * @param field 学科领域/概念（精确匹配，由用户从下拉列表选择）
    * @param startDate 开始日期
    * @param endDate 结束日期
+   * @param authorName 作者姓名（精确匹配）
+   * @param institutionName 机构名称（精确匹配）
    * @param pageable 分页参数
    */
   public Page<AchievementDTO> advancedSearch(String keyword, String field, 
                                               String startDate, String endDate, 
+                                              String authorName, String institutionName,
                                               Pageable pageable) {
+    // 1. 机构检索
+    if (institutionName != null && !institutionName.trim().isEmpty()) {
+      Page<Institution> institutions = institutionRepository.findByDisplayName(institutionName, Pageable.ofSize(1));
+      if (institutions.hasContent()) {
+        String institutionId = institutions.getContent().get(0).getId();
+        return achievementRepository.findByInstitutionIds(institutionId, pageable).map(this::toDTO);
+      } else {
+        return Page.empty(pageable);
+      }
+    }
+
+    // 2. 作者检索
+    if (authorName != null && !authorName.trim().isEmpty()) {
+      Page<Author> authors = authorRepository.findByDisplayName(authorName, Pageable.ofSize(1));
+      if (authors.hasContent()) {
+        String authorId = authors.getContent().get(0).getId();
+        return achievementRepository.findByAuthorIds(authorId, pageable).map(this::toDTO);
+      } else {
+        return Page.empty(pageable);
+      }
+    }
+
     // 如果有时间范围
     if (startDate != null && endDate != null) {
       // 时间 + 概念/领域（精确匹配）
@@ -93,11 +131,78 @@ public class AchievementService {
 
   /**
    * 获取成果详情
+   * 同时更新阅读次数和概念热度统计
    */
   public AchievementDTO getById(String id) {
     Achievement achievement = achievementRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("成果不存在"));
+
+    incrementReadCount(achievement);
+    updateConcept(achievement);
+    
     return toDTO(achievement);
+  }
+
+  /**
+   * 增加成果的阅读次数
+   * 使用 Elasticsearch 脚本进行原子更新，避免并发覆盖问题
+   */
+  private void incrementReadCount(Achievement achievement) {
+    try {
+      // 使用 Painless 脚本进行原子更新
+      // 如果 readCount 不存在，初始化为 1；否则加 1
+      String scriptCode = "if (ctx._source.readCount == null) { ctx._source.readCount = 1 } else { ctx._source.readCount += 1 }";
+      
+      UpdateQuery updateQuery = UpdateQuery.builder(achievement.getId())
+          .withScript(scriptCode)
+          .withLang("painless")
+          .build();
+
+      elasticsearchOperations.update(updateQuery, IndexCoordinates.of("openalex_works"));
+      
+      // 更新内存中的对象，以便后续 DTO 转换使用最新值（虽然只是近似值）
+      if (achievement.getReadCount() == null) {
+        achievement.setReadCount(1);
+      } else {
+        achievement.setReadCount(achievement.getReadCount() + 1);
+      }
+    } catch (Exception e) {
+      System.err.println("Failed to increment read count for achievement: " + achievement.getId() + ", error: " + e.getMessage());
+    }
+  }
+
+  /**
+   * 更新概念热度统计
+   * 为当前成果的每个概念的热度计数加1
+   */
+  private void updateConcept(Achievement achievement) {
+    if (achievement.getConcepts() == null || achievement.getConcepts().isEmpty()) {
+      return;
+    }
+    
+    try {
+      for (String concept : achievement.getConcepts()) {
+        if (concept == null || concept.trim().isEmpty()) {
+          continue;
+        }
+
+        int updatedRows = conceptRepository.incrementHeatCount(concept);
+
+        if (updatedRows == 0) {
+            if (!conceptRepository.existsById(concept)) {
+                try {
+                    conceptRepository.save(new Concept(concept, 1));
+                } catch (Exception e) {
+                    conceptRepository.incrementHeatCount(concept);
+                }
+            } else {
+                conceptRepository.incrementHeatCount(concept);
+            }
+        }
+      }
+    } catch (Exception e) {
+      System.err.println("Failed to update concept statistics for achievement: " + achievement.getId() + ", error: " + e.getMessage());
+    }
   }
 
   /**
@@ -117,6 +222,8 @@ public class AchievementService {
     dto.setAbstractText(achievement.getAbstractText());
     dto.setFavouriteCount(achievement.getFavouriteCount());
     dto.setReadCount(achievement.getReadCount());
+    dto.setAuthorIds(achievement.getAuthorIds());
+    dto.setInstitutionIds(achievement.getInstitutionIds());
 
     if (achievement.getAuthorships() != null) {
       List<AchievementDTO.AuthorInfo> authors = achievement.getAuthorships().stream()
@@ -126,7 +233,7 @@ public class AchievementService {
               authorship.getAuthor().getDisplayName()
           ))
           .collect(Collectors.toList());
-      dto.setAuthors(authors);
+      dto.setAuthorships(authors);
     }
 
     return dto;
