@@ -225,30 +225,42 @@ LOCK TABLES `forum_replies` WRITE;
 /*!40000 ALTER TABLE `forum_replies` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `paper_keywords`
---
 
+
+-- paper_keywords definition
 DROP TABLE IF EXISTS `paper_keywords`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `paper_keywords` (
-  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `id` varchar(36) NOT NULL,
   `keyword` varchar(255) NOT NULL COMMENT '关键词',
   `cnt` int NOT NULL DEFAULT '0' COMMENT '出现次数',
+  `cnt1` int DEFAULT NULL,
+  `cnt2` int DEFAULT NULL,
+  `cnt3` int DEFAULT NULL,
+  `cnt4` int DEFAULT NULL,
+  `cnt5` varchar(100) DEFAULT NULL,
+  `cnt6` int DEFAULT NULL,
+  `cnt7` int DEFAULT NULL,
+  `cnt8` int DEFAULT NULL,
+  `cnt9` int DEFAULT NULL,
+  `cnt10` int DEFAULT NULL,
+  `cnt11` int DEFAULT NULL,
+  `cnt12` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_keyword` (`keyword`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='论文关键词统计';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `paper_keywords`
---
 
 LOCK TABLES `paper_keywords` WRITE;
-/*!40000 ALTER TABLE `paper_keywords` DISABLE KEYS */;
-/*!40000 ALTER TABLE `paper_keywords` ENABLE KEYS */;
+INSERT INTO paper_keywords (id,keyword,cnt,cnt1,cnt2,cnt3,cnt4,cnt5,cnt6,cnt7,cnt8,cnt9,cnt10,cnt11,cnt12) VALUES
+	 ('02da0f66-6ca9-4966-92bc-8c8e8d4e8242','Computational biology',4,0,0,0,0,0,0,1,0,0,1,0,3),
+	 ('12b39571-03ee-46b0-8deb-a32680a0339d','Engineering',6,0,0,0,0,0,0,2,0,0,0,1,1),
+	 ('17f92c3c-35f8-4996-90f6-f8e6e7fd2ba7','Philosophy',8,0,0,0,0,0,0,0,1,0,1,0,1),
+	 ('1d532ee4-28f0-476f-af47-b08d3632aae7','Biology',3,0,0,0,0,0,0,0,0,1,0,0,3),
+	 ('a093e90a-c960-42f3-8bd9-7e298b9897d7','Chemistry',4,0,0,0,0,0,0,0,0,1,0,0,1),
+	 ('a8ec3023-2de3-4a3e-9990-41b57cef31a5','Computer science',2,0,0,0,0,0,0,0,5,0,0,1,2),
+	 ('d50bcb89-75ec-446b-be9c-84c461f00037','Evolutionary biology',2,0,0,0,0,0,0,0,0,2,0,0,2),
+	 ('e9231e9a-1450-4cff-8c9d-8d278f471a18','Artificial intelligence',8,0,0,0,0,0,0,5,0,0,2,0,1);
 UNLOCK TABLES;
+
 
 --
 -- Table structure for table `papers`
