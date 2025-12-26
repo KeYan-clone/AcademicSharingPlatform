@@ -14,4 +14,6 @@ public interface PaperKeywordRepository extends JpaRepository<PaperKeyword, Stri
 
     @Query("SELECT pk FROM PaperKeyword pk")
     List<PaperKeyword> findAllKeywords();
+
+    PaperKeyword findFirstByOrderByCntDesc();
 }

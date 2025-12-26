@@ -5,9 +5,13 @@ import com.scholar.platform.entity.*;
 import com.scholar.platform.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.ScriptType;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Service;
@@ -26,7 +30,8 @@ public class AchievementService {
   private final AchievementRepository achievementRepository;
   private final InstitutionRepository institutionRepository;
   private final AuthorRepository authorRepository;
-  private final ConceptRepository conceptRepository;
+  // private final ConceptRepository conceptRepository;
+  private final PaperKeywordRepository paperKeywordRepository;
   private final ElasticsearchOperations elasticsearchOperations;
   private final UserRepository userRepository;
 
@@ -75,59 +80,83 @@ public class AchievementService {
    * @param institutionName 机构名称（精确匹配）
    * @param pageable 分页参数
    */
-  public Page<AchievementDTO> advancedSearch(String keyword, String field, 
-                                              String startDate, String endDate, 
-                                              String authorName, String institutionName,
-                                              Pageable pageable) {
-    // 1. 机构检索
-    if (institutionName != null && !institutionName.trim().isEmpty()) {
-      Page<Institution> institutions = institutionRepository.findByDisplayName(institutionName, Pageable.ofSize(1));
-      if (institutions.hasContent()) {
-        String institutionId = institutions.getContent().get(0).getId();
-        return achievementRepository.findByInstitutionIds(institutionId, pageable).map(this::toDTO);
-      } else {
-        return Page.empty(pageable);
-      }
-    }
+public Page<AchievementDTO> advancedSearch(String keyword, String field,
+                                               String startDate, String endDate,
+                                               String authorName, String institutionName,
+                                               Pageable pageable) {
+        // 1. 预先解析 ID (暂缓搜索)
+        String institutionId = null;
+        if (institutionName != null && !institutionName.trim().isEmpty()) {
+            Page<Institution> institutions = institutionRepository.findByDisplayName(institutionName, Pageable.ofSize(1));
+            if (institutions.hasContent()) {
+                institutionId = institutions.getContent().get(0).getId();
+            } else {
+                return Page.empty(pageable);
+            }
+        }
 
-    // 2. 作者检索
-    if (authorName != null && !authorName.trim().isEmpty()) {
-      Page<Author> authors = authorRepository.findByDisplayName(authorName, Pageable.ofSize(1));
-      if (authors.hasContent()) {
-        String authorId = authors.getContent().get(0).getId();
-        return achievementRepository.findByAuthorIds(authorId, pageable).map(this::toDTO);
-      } else {
-        return Page.empty(pageable);
-      }
-    }
+        String authorId = null;
+        if (authorName != null && !authorName.trim().isEmpty()) {
+            Page<Author> authors = authorRepository.findByDisplayName(authorName, Pageable.ofSize(1));
+            if (authors.hasContent()) {
+                authorId = authors.getContent().get(0).getId();
+            } else {
+                return Page.empty(pageable);
+            }
+        }
 
-    // 如果有时间范围
-    if (startDate != null && endDate != null) {
-      // 时间 + 概念/领域（精确匹配）
-      if (field != null && !field.trim().isEmpty()) {
-        return achievementRepository.findByDateRangeAndConceptExactMatch(
-            startDate, endDate, field, pageable).map(this::toDTO);
-      }
-      // 时间 + 关键词（模糊匹配，支持空格）
-      else if (keyword != null && !keyword.trim().isEmpty()) {
-        return achievementRepository.searchByDateRangeAndKeywordWithSpaceSupport(
-            startDate, endDate, keyword, pageable).map(this::toDTO);
-      }
-      // 仅时间
-      else {
-        return searchByDateRange(startDate, endDate, pageable);
-      }
+        // 2. 构建组合查询 Criteria
+        Criteria criteria = new Criteria();
+        boolean hasCondition = false;
+
+        if (institutionId != null) {
+            criteria = criteria.and("institution_ids").is(institutionId);
+            hasCondition = true;
+        }
+
+        if (authorId != null) {
+            criteria = criteria.and("author_ids").is(authorId);
+            hasCondition = true;
+        }
+
+        if (startDate != null && endDate != null) {
+            criteria = criteria.and("publication_date").between(startDate, endDate);
+            hasCondition = true;
+        }
+
+        if (field != null && !field.trim().isEmpty()) {
+            criteria = criteria.and("concepts").matches(field);
+            hasCondition = true;
+        }
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            Criteria keywordCriteria = new Criteria("title").matches(keyword)
+                    .or("concepts").matches(keyword);
+            criteria = criteria.subCriteria(keywordCriteria);
+            hasCondition = true;
+        }
+
+        if (!hasCondition) {
+            // 尝试获取最热的 concept
+            PaperKeyword topKeyword = paperKeywordRepository.findFirstByOrderByCntDesc();
+            if (topKeyword != null && topKeyword.getKeyword() != null) {
+                criteria = criteria.and("concepts").matches(topKeyword.getKeyword());
+            } else {
+                throw new IllegalArgumentException("请输入检索内容");
+            }
+        }
+
+        CriteriaQuery query = new CriteriaQuery(criteria);
+        query.setPageable(pageable);
+
+        SearchHits<Achievement> searchHits = elasticsearchOperations.search(query, Achievement.class);
+
+        List<AchievementDTO> list = searchHits.getSearchHits().stream()
+                .map(hit -> toDTO(hit.getContent()))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(list, pageable, searchHits.getTotalHits());
     }
-    // 无时间范围，使用原有检索逻辑
-    else if (field != null && !field.trim().isEmpty()) {
-      // field 始终使用精确匹配
-      return searchByConceptsExact(field, pageable);
-    } else if (keyword != null && !keyword.trim().isEmpty()) {
-      return searchByKeyword(keyword, pageable);
-    } else {
-      throw new IllegalArgumentException("请输入检索内容");
-    }
-  }
 
   /**
    * 获取成果详情
@@ -138,7 +167,7 @@ public class AchievementService {
         .orElseThrow(() -> new RuntimeException("成果不存在"));
 
     incrementReadCount(achievement);
-    updateConcept(achievement);
+    // updateConcept(achievement);
     
     return toDTO(achievement);
   }
@@ -157,38 +186,38 @@ public class AchievementService {
     }
   }
 
-  /**
-   * 更新概念热度统计
-   */
-  private void updateConcept(Achievement achievement) {
-    if (achievement.getConcepts() == null || achievement.getConcepts().isEmpty()) {
-      return;
-    }
+  // /**
+  //  * 更新概念热度统计
+  //  */
+  // private void updateConcept(Achievement achievement) {
+  //   if (achievement.getConcepts() == null || achievement.getConcepts().isEmpty()) {
+  //     return;
+  //   }
     
-    try {
-      for (String concept : achievement.getConcepts()) {
-        if (concept == null || concept.trim().isEmpty()) {
-          continue;
-        }
+  //   try {
+  //     for (String concept : achievement.getConcepts()) {
+  //       if (concept == null || concept.trim().isEmpty()) {
+  //         continue;
+  //       }
 
-        int updatedRows = conceptRepository.incrementHeatCount(concept);
+  //       int updatedRows = conceptRepository.incrementHeatCount(concept);
 
-        if (updatedRows == 0) {
-            if (!conceptRepository.existsById(concept)) {
-                try {
-                    conceptRepository.save(new Concept(concept, 1));
-                } catch (Exception e) {
-                    conceptRepository.incrementHeatCount(concept);
-                }
-            } else {
-                conceptRepository.incrementHeatCount(concept);
-            }
-        }
-      }
-    } catch (Exception e) {
-      System.err.println("Failed to update concept statistics for achievement: " + achievement.getId() + ", error: " + e.getMessage());
-    }
-  }
+  //       if (updatedRows == 0) {
+  //           if (!conceptRepository.existsById(concept)) {
+  //               try {
+  //                   conceptRepository.save(new Concept(concept, 1));
+  //               } catch (Exception e) {
+  //                   conceptRepository.incrementHeatCount(concept);
+  //               }
+  //           } else {
+  //               conceptRepository.incrementHeatCount(concept);
+  //           }
+  //       }
+  //     }
+  //   } catch (Exception e) {
+  //     System.err.println("Failed to update concept statistics for achievement: " + achievement.getId() + ", error: " + e.getMessage());
+  //   }
+  // }
 
   public List<AchievementDTO> getByIds(List<String> ids) {
     List<String> prefixedIds = ids.stream().map(this::ensureIdPrefix).collect(Collectors.toList());
