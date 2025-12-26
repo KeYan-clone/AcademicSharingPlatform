@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import com.scholar.platform.util.Utils;
+
 @Entity
 @Table(name = "achievement_authors")
 @Data
@@ -30,4 +32,8 @@ public class AchievementAuthor {
   @ManyToOne
   @JoinColumn(name = "author_user_id")
   private User authorUser;
+
+  public Achievement gAchievement(){
+    return Utils.getAchievement(achievementId);
+  }
 }
