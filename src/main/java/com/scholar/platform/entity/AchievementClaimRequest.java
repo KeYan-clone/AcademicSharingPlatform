@@ -26,6 +26,9 @@ public class AchievementClaimRequest {
   @Column(name = "achievement_id", nullable = false)
   private String achievementId;
 
+  @Column(name = "author_order", nullable = false)
+  private Integer authorOrder;
+
   @Enumerated(EnumType.STRING)
   @Column(name = "status", nullable = false)
   private ClaimStatus status = ClaimStatus.PENDING;

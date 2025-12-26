@@ -68,63 +68,43 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 为用户添加成果
-     */
     @Transactional
-    public AchievementDTO addUserAchievement(String userId, AchievementRequest request) {
+    public void claimAchievement(String requestId) {
+        // 查找认证请求
+        AchievementClaimRequest request = achievementClaimRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("认证请求不存在"));
+
+        // 检查请求状态
+        if (request.getStatus() != AchievementClaimRequest.ClaimStatus.PENDING) {
+            throw new RuntimeException("该请求已处理，不能重复处理");
+        }
+
         // 验证用户存在
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("用户不存在"));
 
-        // 创建成果
-        //todo：完善字段
-        Achievement achievement = new Achievement();
-        achievement.setTitle(request.getTitle());
-        achievement.setAbstractText(request.getAbstractText());
-        achievement.setDoi(request.getDoi());
-        achievement.setStatus(Achievement.AchievementStatus.PENDING); // 默认待审核
+        // 验证成果存在
+        Achievement achievement = achievementRepository.findById(request.getAchievementId())
+                .orElseThrow(() -> new RuntimeException("成果不存在"));
 
-        achievement = achievementRepository.save(achievement);
-
-        // 创建作者关联（用户为第一作者）
+        // 建立用户与成果的作者关联
         AchievementAuthor author = new AchievementAuthor();
+        author.setAchievementId(request.getAchievementId());
         author.setAuthorUser(user);
         author.setAuthorName(user.getUsername());
-        author.setAuthorOrder(1);
+        author.setAuthorOrder(request.getAuthorOrder());
         achievementAuthorRepository.save(author);
 
-        return Achievement.toDTO(achievement);
-    }
-
-    
-
-    @Transactional
-    public void claimAchievement(String userId, String achievementId,Integer number) {
-        // 验证用户存在
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("用户不存在"));
-
-        // 查找未认领的成果
-        Achievement unclaimedAchievements = achievementRepository.findById(achievementId).
-                orElseThrow(() -> new RuntimeException("成果不存在"));
-
-
-        // 创建作者关联（用户为第一作者）
-        AchievementAuthor author = new AchievementAuthor();
-        author.setAchievementId(achievementId);
-        author.setAuthorUser(user);
-        author.setAuthorName(user.getUsername());
-        author.setAuthorOrder(number);
-        achievementAuthorRepository.save(author);
-
+        // 将请求状态修改为成功
+        request.setStatus(AchievementClaimRequest.ClaimStatus.APPROVED);
+        achievementClaimRequestRepository.save(request);
     }
 
     /**
      * 发起成果认领请求
      */
     @Transactional
-    public void requestClaimAchievement(String userId, String achievementId) {
+    public void requestClaimAchievement(String userId, String achievementId, Integer authorOrder) {
         // 验证用户存在
         userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("用户不存在"));
@@ -146,6 +126,7 @@ public class UserService {
         AchievementClaimRequest request = new AchievementClaimRequest();
         request.setUserId(userId);
         request.setAchievementId(achievementId);
+        request.setAuthorOrder(authorOrder);
         request.setStatus(AchievementClaimRequest.ClaimStatus.PENDING);
 
         achievementClaimRequestRepository.save(request);

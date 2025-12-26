@@ -144,15 +144,6 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success(achievements));
     }
 
-    @PostMapping("/me/achievements")
-    @Operation(summary = "为当前用户添加学术成果")
-    public ResponseEntity<ApiResponse<AchievementDTO>> addMyAchievement(
-            @Validated @RequestBody AchievementRequest request) {
-        User user = userService.getByEmailOrThrow(currentUserEmail());
-        AchievementDTO achievement = userService.addUserAchievement(user.getId(), request);
-        return ResponseEntity.status(202).body(ApiResponse.success(achievement));
-    }
-
     @PutMapping("/me/achievements/{achievementId}")
     @Operation(summary = "更新当前用户的学术成果")
     public ResponseEntity<ApiResponse<AchievementDTO>> updateMyAchievement(
@@ -171,14 +162,22 @@ public class UserController {
         userService.deleteUserAchievement(user.getId(), achievementId);
         return ResponseEntity.status(204).body(ApiResponse.success("成果已删除", null));
     }
-    @PutMapping("/me/achievements/claim/{achievementId}/{number}")
-    @Operation(summary = "认领学术成果")
-    public ResponseEntity<ApiResponse<AchievementDTO>> claimAchievement(
+    @PutMapping("/me/achievements/claim/{achievementId}/{authorOrder}")
+    @Operation(summary = "发起认领学术成果请求")
+    public ResponseEntity<ApiResponse<AchievementDTO>> requestClaimAchievement(
             @Parameter(description = "成果ID") @PathVariable String achievementId,
-            @Parameter(description = "作者排序号") @PathVariable Integer number) {
+            @Parameter(description = "作者顺序") @PathVariable Integer authorOrder) {
         User user = userService.getByEmailOrThrow(currentUserEmail());
-        userService.requestClaimAchievement(user.getId(), achievementId);
+        userService.requestClaimAchievement(user.getId(), achievementId, authorOrder);
         return ResponseEntity.status(200).body(ApiResponse.success("认领申请已提交，请等待审核", null));
+    }
+
+    @PutMapping("/me/achievements/claim/approve/{requestId}")
+    @Operation(summary = "通过认领请求（建立作者关联）")
+    public ResponseEntity<ApiResponse<Void>> approveClaimAchievement(
+            @Parameter(description = "认证请求ID") @PathVariable String requestId) {
+        userService.claimAchievement(requestId);
+        return ResponseEntity.status(200).body(ApiResponse.success("认领成功，已建立作者关联", null));
     }
 
     @GetMapping("/me/collections")
