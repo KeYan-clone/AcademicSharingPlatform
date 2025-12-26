@@ -15,7 +15,7 @@ spring:
   elasticsearch:
     uris: http://113.44.184.21:9200
     connection-timeout: 50s
-    socket-timeout: 3s
+    socket-timeout: 30s
 
   mail:
     host: ${MAIL_HOST:localhost}
