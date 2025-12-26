@@ -82,7 +82,6 @@ class ScholarServiceTest {
     testAchievement = new Achievement();
     testAchievement.setId("achievement-1");
     testAchievement.setTitle("深度学习研究论文");
-    testAchievement.setType(Achievement.AchievementType.PAPER);
   }
 
   @Test
@@ -157,12 +156,12 @@ class ScholarServiceTest {
   void testFindAllCollaborators_Success() {
     // Given
     AchievementAuthor author1 = new AchievementAuthor();
-    author1.setAchievement(testAchievement);
+    author1.setAchievementId(testAchievement.getId());
     author1.setAuthorUser(testUser1);
     author1.setAuthorOrder(1);
 
     AchievementAuthor author2 = new AchievementAuthor();
-    author2.setAchievement(testAchievement);
+    author2.setAchievementId(testAchievement.getId());
     author2.setAuthorUser(testUser2);
     author2.setAuthorOrder(2);
 
@@ -187,7 +186,7 @@ class ScholarServiceTest {
   void testFindAllCollaborators_NoCollaborators() {
     // Given
     AchievementAuthor author1 = new AchievementAuthor();
-    author1.setAchievement(testAchievement);
+    author1.setAchievementId(testAchievement.getId());
     author1.setAuthorUser(testUser1);
 
     when(achievementAuthorRepository.findByAuthorUserId("user-1"))

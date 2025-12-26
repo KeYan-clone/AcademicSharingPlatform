@@ -12,6 +12,7 @@ import com.scholar.platform.repository.AchievementRepository;
 import com.scholar.platform.repository.UserCollectionRepository;
 import com.scholar.platform.repository.UserRepository;
 import com.scholar.platform.util.Utils;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,6 +92,27 @@ public class UserService {
         achievementAuthorRepository.save(author);
 
         return Achievement.toDTO(achievement);
+    }
+
+    @Transactional
+    public void claimAchievement(String userId, String achievementId,Integer number) {
+        // 验证用户存在
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("用户不存在"));
+
+        // 查找未认领的成果
+        Achievement unclaimedAchievements = achievementRepository.findById(achievementId).
+                orElseThrow(() -> new RuntimeException("成果不存在"));
+
+
+        // 创建作者关联（用户为第一作者）
+        AchievementAuthor author = new AchievementAuthor();
+        author.setAchievementId(achievementId);
+        author.setAuthorUser(user);
+        author.setAuthorName(user.getUsername());
+        author.setAuthorOrder(number);
+        achievementAuthorRepository.save(author);
+
     }
 
     /**
