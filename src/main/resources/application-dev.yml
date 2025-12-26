@@ -14,7 +14,7 @@ spring:
 
   elasticsearch:
     uris: http://113.44.184.21:9200
-    connection-timeout: 5s
+    connection-timeout: 50s
     socket-timeout: 3s
 
   mail:
