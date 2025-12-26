@@ -160,11 +160,11 @@ public class UserController {
     }
   }
 
-  @DeleteMapping("/me/collections/{achievementId}")
+  @PostMapping("/me/collections/delete")
   @Operation(summary = "取消收藏一项学术成果")
-  public ResponseEntity<Void> removeCollection(@PathVariable String achievementId) {
+  public ResponseEntity<Void> removeCollection(@RequestBody CollectionRequest request) {
     User user = userService.getByEmailOrThrow(currentUserEmail());
-    userCollectionService.removeCollection(user.getId(), achievementId);
+    userCollectionService.removeCollection(user.getId(), request.getAchievementId());
     return ResponseEntity.noContent().build();
   }
 }

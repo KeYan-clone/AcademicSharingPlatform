@@ -9,6 +9,13 @@
 *.iml
 *.ipr
 *.iws
+*.ipr
+
+# VS Code (如果有队友用)
+.vscode/
+
+# Eclipse (如果有队友用)
+.classpath
 .project
 .classpath
 .settings/
@@ -16,10 +23,29 @@
 .vscode/
 .history/
 
+# --------------------
+# 3. 敏感文件 (绝对不能上传！！！)
+# --------------------
+.env
+*.p12
+*.jks
+application-secret.yml
+application-prod.yml
+
+# --------------------
+# 4. 系统垃圾文件
+# --------------------
+# Mac
 # OS generated files
 .DS_Store
-Thumbs.db
 
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# --------------------
+# 5. 日志文件
+# --------------------
 # Logs and temp files
 *.log
 logs/
@@ -53,3 +79,8 @@ env/
 # Databases (keep schema SQL files tracked)
 *.db
 *.sqlite
+
+# --------------------
+# 6. 构建文档
+# --------------------
+docs/
