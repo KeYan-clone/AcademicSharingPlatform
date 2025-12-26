@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.scholar.platform.util.IdPrefixUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -92,7 +93,7 @@ public class UserService {
                     .orElseThrow(() -> new RuntimeException("用户不存在"));
 
             // 验证成果存在
-            Achievement achievement = achievementRepository.findById(request.getAchievementId())
+            Achievement achievement = achievementRepository.findById(IdPrefixUtil.ensureIdPrefix(request.getAchievementId()))
                     .orElseThrow(() -> new RuntimeException("成果不存在"));
 
             // 建立用户与成果的作者关联
@@ -121,13 +122,15 @@ public class UserService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("用户不存在"));
 
+        System.out.println(achievementId);
         // 验证成果存在
-        achievementRepository.findById(achievementId)
+        achievementRepository.findById(IdPrefixUtil.ensureIdPrefix(achievementId))
                 .orElseThrow(() -> new RuntimeException("成果不存在"));
 
         // 检查是否有正在进行的待审核请求
         boolean hasPendingRequest = achievementClaimRequestRepository
-                .findByUserIdAndAchievementIdAndStatus(userId, achievementId, AchievementClaimRequest.ClaimStatus.PENDING)
+                .findByUserIdAndAchievementIdAndStatus(userId, achievementId,
+                        AchievementClaimRequest.ClaimStatus.PENDING)
                 .isPresent();
 
         if (hasPendingRequest) {
