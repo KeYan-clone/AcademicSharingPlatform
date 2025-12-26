@@ -5,9 +5,11 @@ import com.scholar.platform.dto.AchievementRequest;
 import com.scholar.platform.dto.CollectionDTO;
 import com.scholar.platform.entity.Achievement;
 import com.scholar.platform.entity.AchievementAuthor;
+import com.scholar.platform.entity.AchievementClaimRequest;
 import com.scholar.platform.entity.User;
 import com.scholar.platform.entity.UserCollection;
 import com.scholar.platform.repository.AchievementAuthorRepository;
+import com.scholar.platform.repository.AchievementClaimRequestRepository;
 import com.scholar.platform.repository.AchievementRepository;
 import com.scholar.platform.repository.UserCollectionRepository;
 import com.scholar.platform.repository.UserRepository;
@@ -29,6 +31,7 @@ public class UserService {
     private final AchievementRepository achievementRepository;
     private final AchievementAuthorRepository achievementAuthorRepository;
     private final UserCollectionRepository userCollectionRepository;
+    private final AchievementClaimRequestRepository achievementClaimRequestRepository;
 
     public Optional<User> findById(String id) {
         return userRepository.findById(id);
@@ -94,6 +97,8 @@ public class UserService {
         return Achievement.toDTO(achievement);
     }
 
+    
+
     @Transactional
     public void claimAchievement(String userId, String achievementId,Integer number) {
         // 验证用户存在
@@ -113,6 +118,37 @@ public class UserService {
         author.setAuthorOrder(number);
         achievementAuthorRepository.save(author);
 
+    }
+
+    /**
+     * 发起成果认领请求
+     */
+    @Transactional
+    public void requestClaimAchievement(String userId, String achievementId) {
+        // 验证用户存在
+        userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("用户不存在"));
+
+        // 验证成果存在
+        achievementRepository.findById(achievementId)
+                .orElseThrow(() -> new RuntimeException("成果不存在"));
+
+        // 检查是否有正在进行的待审核请求
+        boolean hasPendingRequest = achievementClaimRequestRepository
+                .findByUserIdAndAchievementIdAndStatus(userId, achievementId, AchievementClaimRequest.ClaimStatus.PENDING)
+                .isPresent();
+
+        if (hasPendingRequest) {
+            throw new RuntimeException("已存在待审核的认领请求，请勿重复提交");
+        }
+
+        // 创建认领请求
+        AchievementClaimRequest request = new AchievementClaimRequest();
+        request.setUserId(userId);
+        request.setAchievementId(achievementId);
+        request.setStatus(AchievementClaimRequest.ClaimStatus.PENDING);
+
+        achievementClaimRequestRepository.save(request);
     }
 
     /**
