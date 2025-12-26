@@ -69,7 +69,7 @@ public class UserService {
     }
 
     @Transactional
-    public void claimAchievement(String requestId) {
+    public void replyClaimAchievement(String requestId, Boolean approve) {
         // 查找认证请求
         AchievementClaimRequest request = achievementClaimRequestRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("认证请求不存在"));
@@ -79,24 +79,29 @@ public class UserService {
             throw new RuntimeException("该请求已处理，不能重复处理");
         }
 
-        // 验证用户存在
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("用户不存在"));
+        if (approve) {
+            // 验证用户存在
+            User user = userRepository.findById(request.getUserId())
+                    .orElseThrow(() -> new RuntimeException("用户不存在"));
 
-        // 验证成果存在
-        Achievement achievement = achievementRepository.findById(request.getAchievementId())
-                .orElseThrow(() -> new RuntimeException("成果不存在"));
+            // 验证成果存在
+            Achievement achievement = achievementRepository.findById(request.getAchievementId())
+                    .orElseThrow(() -> new RuntimeException("成果不存在"));
 
-        // 建立用户与成果的作者关联
-        AchievementAuthor author = new AchievementAuthor();
-        author.setAchievementId(request.getAchievementId());
-        author.setAuthorUser(user);
-        author.setAuthorName(user.getUsername());
-        author.setAuthorOrder(request.getAuthorOrder());
-        achievementAuthorRepository.save(author);
+            // 建立用户与成果的作者关联
+            AchievementAuthor author = new AchievementAuthor();
+            author.setAchievementId(request.getAchievementId());
+            author.setAuthorUser(user);
+            author.setAuthorName(user.getUsername());
+            author.setAuthorOrder(request.getAuthorOrder());
+            achievementAuthorRepository.save(author);
 
-        // 将请求状态修改为成功
-        request.setStatus(AchievementClaimRequest.ClaimStatus.APPROVED);
+            // 将请求状态修改为成功
+            request.setStatus(AchievementClaimRequest.ClaimStatus.APPROVED);
+        } else {
+            // 拒绝请求
+            request.setStatus(AchievementClaimRequest.ClaimStatus.REJECTED);
+        }
         achievementClaimRequestRepository.save(request);
     }
 

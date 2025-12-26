@@ -172,14 +172,6 @@ public class UserController {
         return ResponseEntity.status(200).body(ApiResponse.success("认领申请已提交，请等待审核", null));
     }
 
-    @PutMapping("/me/achievements/claim/approve/{requestId}")
-    @Operation(summary = "通过认领请求（建立作者关联）")
-    public ResponseEntity<ApiResponse<Void>> approveClaimAchievement(
-            @Parameter(description = "认证请求ID") @PathVariable String requestId) {
-        userService.claimAchievement(requestId);
-        return ResponseEntity.status(200).body(ApiResponse.success("认领成功，已建立作者关联", null));
-    }
-
     @GetMapping("/me/collections")
     @Operation(summary = "获取用户的收藏列表")
     public ResponseEntity<ApiResponse<List<CollectionDTO>>> getMyCollections(){
