@@ -2,6 +2,7 @@ package com.scholar.platform.dto;
 
 import com.scholar.platform.entity.Achievement;
 import com.scholar.platform.entity.UserCollection;
+import com.scholar.platform.util.Utils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -19,9 +20,6 @@ public class CollectionDTO {
     @Schema(description = "成果标题", example = "AI与金融风险管理")
     private String title;
 
-    @Schema(description = "成果类型 (PAPER, PATENT, PROJECT, AWARD)", example = "PAPER")
-    private Achievement.AchievementType type;
-
     @Schema(description = "收藏发生的时间")
     private LocalDateTime savedAt;
 
@@ -33,10 +31,9 @@ public class CollectionDTO {
         dto.setAchievementId(collection.getAchievementId());
         dto.setSavedAt(collection.getSavedAt());
 
-        Achievement achievement = collection.getAchievement();
+        Achievement achievement = Utils.getAchievement(collection.getAchievementId());
         if (achievement != null) {
             dto.setTitle(achievement.getTitle());
-            dto.setType(achievement.getType());
         }
 
         return dto;

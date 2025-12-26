@@ -11,6 +11,7 @@ import com.scholar.platform.repository.AchievementAuthorRepository;
 import com.scholar.platform.repository.AchievementRepository;
 import com.scholar.platform.repository.UserCollectionRepository;
 import com.scholar.platform.repository.UserRepository;
+import com.scholar.platform.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,9 +58,9 @@ public class UserService {
         List<AchievementAuthor> authorships = achievementAuthorRepository.findByAuthorUserId(userId);
 
         return authorships.stream()
-                .map(AchievementAuthor::getAchievement)
+                .map(Utils::getAchievement)
                 .filter(achievement -> status == null || achievement.getStatus().equals(status))
-                .map(this::toDTO)
+                .map(Achievement::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -73,27 +74,23 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("用户不存在"));
 
         // 创建成果
+        //todo：完善字段
         Achievement achievement = new Achievement();
-        achievement.setType(request.getType());
         achievement.setTitle(request.getTitle());
-        achievement.setPublicationYear(request.getPublicationYear());
         achievement.setAbstractText(request.getAbstractText());
         achievement.setDoi(request.getDoi());
-        achievement.setPublicationVenue(request.getPublicationVenue());
-        achievement.setSourceData(request.getSourceData());
         achievement.setStatus(Achievement.AchievementStatus.PENDING); // 默认待审核
 
         achievement = achievementRepository.save(achievement);
 
         // 创建作者关联（用户为第一作者）
         AchievementAuthor author = new AchievementAuthor();
-        author.setAchievement(achievement);
         author.setAuthorUser(user);
         author.setAuthorName(user.getUsername());
         author.setAuthorOrder(1);
         achievementAuthorRepository.save(author);
 
-        return toDTO(achievement);
+        return Achievement.toDTO(achievement);
     }
 
     /**
@@ -116,16 +113,12 @@ public class UserService {
         }
 
         // 更新成果信息
-        achievement.setType(request.getType());
         achievement.setTitle(request.getTitle());
-        achievement.setPublicationYear(request.getPublicationYear());
         achievement.setAbstractText(request.getAbstractText());
         achievement.setDoi(request.getDoi());
-        achievement.setPublicationVenue(request.getPublicationVenue());
-        achievement.setSourceData(request.getSourceData());
 
         achievement = achievementRepository.save(achievement);
-        return toDTO(achievement);
+        return Achievement.toDTO(achievement);
     }
 
     /**
@@ -190,7 +183,6 @@ public class UserService {
         CollectionDTO dto = new CollectionDTO();
         dto.setAchievementId(achievementId);
         dto.setTitle(achievement.getTitle());
-        dto.setType(achievement.getType());
         dto.setSavedAt(collection.getSavedAt());
 
         return dto;
@@ -210,20 +202,4 @@ public class UserService {
         userCollectionRepository.deleteById(id);
     }
 
-    /**
-     * 将Achievement实体转换为DTO
-     */
-    private AchievementDTO toDTO(Achievement achievement) {
-        AchievementDTO dto = new AchievementDTO();
-        dto.setId(achievement.getId());
-        dto.setType(achievement.getType().name());
-        dto.setTitle(achievement.getTitle());
-        dto.setPublicationYear(achievement.getPublicationYear());
-        dto.setAbstractText(achievement.getAbstractText());
-        dto.setDoi(achievement.getDoi());
-        dto.setPublicationVenue(achievement.getPublicationVenue());
-        dto.setCitationCount(achievement.getCitationCount());
-        dto.setCreatedAt(achievement.getCreatedAt());
-        return dto;
-    }
 }

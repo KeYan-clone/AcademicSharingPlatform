@@ -1,6 +1,5 @@
 package com.scholar.platform.dto;
 
-import com.scholar.platform.entity.Achievement.AchievementType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,10 +12,6 @@ import java.time.LocalDateTime;
 @Schema(description = "添加学术成果的请求体")
 public class AchievementRequest {
 
-    // 成果类型：论文、专利、项目、奖项
-    @NotNull(message = "成果类型不能为空")
-    @Schema(description = "成果类型 (PAPER, PATENT, PROJECT, AWARD)", requiredMode = Schema.RequiredMode.REQUIRED)
-    private AchievementType type;
 
     // 标题
     @NotBlank(message = "标题不能为空")

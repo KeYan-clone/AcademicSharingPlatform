@@ -7,6 +7,7 @@ import com.scholar.platform.entity.User;
 import com.scholar.platform.repository.AchievementAuthorRepository;
 import com.scholar.platform.repository.ScholarRepository;
 import com.scholar.platform.repository.UserRepository;
+import com.scholar.platform.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +65,7 @@ public class ScholarService {
 
     // 提取成果ID列表
     List<String> achievementIds = userAuthorships.stream()
-        .map(aa -> aa.getAchievement().getId())
+        .map(aa -> Utils.getAchievement(aa.getAchievementId()).getId())
         .collect(Collectors.toList());
 
     // 找出这些成果的所有其他作者
