@@ -1,14 +1,8 @@
 package com.scholar.platform.service;
 
 import com.scholar.platform.dto.AchievementDTO;
-import com.scholar.platform.entity.Achievement;
-import com.scholar.platform.entity.Author;
-import com.scholar.platform.entity.Concept;
-import com.scholar.platform.entity.Institution;
-import com.scholar.platform.repository.AchievementRepository;
-import com.scholar.platform.repository.AuthorRepository;
-import com.scholar.platform.repository.ConceptRepository;
-import com.scholar.platform.repository.InstitutionRepository;
+import com.scholar.platform.entity.*;
+import com.scholar.platform.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +11,7 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.ScriptType;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +28,7 @@ public class AchievementService {
   private final AuthorRepository authorRepository;
   private final ConceptRepository conceptRepository;
   private final ElasticsearchOperations elasticsearchOperations;
+  private final UserRepository userRepository;
 
   /**
    * 通过关键词搜索（标题或概念）
@@ -281,4 +277,36 @@ public class AchievementService {
     }
     return id;
   }
+
+      public List<AchievementDTO> getPendingAchievements() {
+        return achievementRepository.findByStatus(Achievement.AchievementStatus.PENDING)
+                .stream()
+                .map(Achievement::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Achievement approveAchievement(String achievementId, String adminId) {
+        Achievement achievement = achievementRepository.findById(achievementId)
+                .orElseThrow(() -> new RuntimeException("成果不存在"));
+
+        User admin = userRepository.findById(adminId)
+                .orElseThrow(() -> new RuntimeException("管理员不存在"));
+
+        achievement.setStatus(Achievement.AchievementStatus.APPROVED);
+        return achievementRepository.save(achievement);
+    }
+
+    @Transactional
+    public Achievement rejectAchievement(String achievementId, String adminId, String reason) {
+        Achievement achievement = achievementRepository.findById(achievementId)
+                .orElseThrow(() -> new RuntimeException("成果不存在"));
+
+        User admin = userRepository.findById(adminId)
+                .orElseThrow(() -> new RuntimeException("管理员不存在"));
+
+        achievement.setStatus(Achievement.AchievementStatus.REJECTED);
+        return achievementRepository.save(achievement);
+    }
+  
 }
