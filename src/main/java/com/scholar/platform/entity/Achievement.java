@@ -72,6 +72,7 @@ public class Achievement {
     @Field(name = "institution_ids", type = FieldType.Keyword)
     private List<String> institutionIds;
 
+    @Field(type = FieldType.Keyword)
     private AchievementStatus status = AchievementStatus.PENDING;
 
     @Data
