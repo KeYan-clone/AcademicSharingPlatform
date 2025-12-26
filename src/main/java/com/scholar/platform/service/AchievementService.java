@@ -2,13 +2,9 @@ package com.scholar.platform.service;
 
 import com.scholar.platform.dto.AchievementDTO;
 import com.scholar.platform.entity.Achievement;
-import com.scholar.platform.entity.Author;
-import com.scholar.platform.entity.Concept;
-import com.scholar.platform.entity.Institution;
+import com.scholar.platform.entity.User;
 import com.scholar.platform.repository.AchievementRepository;
-import com.scholar.platform.repository.AuthorRepository;
-import com.scholar.platform.repository.ConceptRepository;
-import com.scholar.platform.repository.InstitutionRepository;
+import com.scholar.platform.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +13,10 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.ScriptType;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,22 +27,7 @@ import java.util.stream.Collectors;
 public class AchievementService {
 
   private final AchievementRepository achievementRepository;
-  private final InstitutionRepository institutionRepository;
-  private final AuthorRepository authorRepository;
-  private final ConceptRepository conceptRepository;
-  private final ElasticsearchOperations elasticsearchOperations;
-
-  /**
-   * 通过关键词搜索（标题或概念）
-   * 使用 match 查询，支持包含空格的关键词如 "artificial intelligence"
-   */
-  public Page<AchievementDTO> searchByKeyword(String keyword, Pageable pageable) {
-    if (keyword == null || keyword.trim().isEmpty()) {
-      throw new IllegalArgumentException("请输入检索内容");
-    }
-    return achievementRepository.searchByKeywordWithSpaceSupport(keyword, pageable)
-        .map(this::toDTO);
-  }
+  private final UserRepository userRepository;
 
   /**
    * 按照concepts精确匹配检索（支持带空格的完整短语，如 "Computer science"）
@@ -145,96 +130,38 @@ public class AchievementService {
     return toDTO(achievement);
   }
 
-  /**
-   * 增加成果的阅读次数
-   * 使用 Elasticsearch 脚本进行原子更新，避免并发覆盖问题
-   */
-  private void incrementReadCount(Achievement achievement) {
-    updateEsFieldCount(achievement.getId(), "readCount", 1);
-
-    if (achievement.getReadCount() == null) {
-      achievement.setReadCount(1);
-    } else {
-      achievement.setReadCount(achievement.getReadCount() + 1);
-    }
+  public List<AchievementDTO> getPendingAchievements() {
+    return achievementRepository.findByStatus(Achievement.AchievementStatus.PENDING)
+        .stream()
+        .map(this::toDTO)
+        .collect(Collectors.toList());
   }
 
-  /**
-   * 更新概念热度统计
-   */
-  private void updateConcept(Achievement achievement) {
-    if (achievement.getConcepts() == null || achievement.getConcepts().isEmpty()) {
-      return;
-    }
-    
-    try {
-      for (String concept : achievement.getConcepts()) {
-        if (concept == null || concept.trim().isEmpty()) {
-          continue;
-        }
+  @Transactional
+  public Achievement approveAchievement(String achievementId, String adminId) {
+    Achievement achievement = achievementRepository.findById(achievementId)
+        .orElseThrow(() -> new RuntimeException("成果不存在"));
 
-        int updatedRows = conceptRepository.incrementHeatCount(concept);
+    User admin = userRepository.findById(adminId)
+        .orElseThrow(() -> new RuntimeException("管理员不存在"));
 
-        if (updatedRows == 0) {
-            if (!conceptRepository.existsById(concept)) {
-                try {
-                    conceptRepository.save(new Concept(concept, 1));
-                } catch (Exception e) {
-                    conceptRepository.incrementHeatCount(concept);
-                }
-            } else {
-                conceptRepository.incrementHeatCount(concept);
-            }
-        }
-      }
-    } catch (Exception e) {
-      System.err.println("Failed to update concept statistics for achievement: " + achievement.getId() + ", error: " + e.getMessage());
-    }
+    achievement.setStatus(Achievement.AchievementStatus.APPROVED);
+    return achievementRepository.save(achievement);
   }
 
-  public List<AchievementDTO> getByIds(List<String> ids) {
-    Iterable<Achievement> achievements = achievementRepository.findAllById(ids);
-    List<AchievementDTO> dtos = new ArrayList<>();
-    achievements.forEach(a -> dtos.add(toDTO(a)));
-    return dtos;
+  @Transactional
+  public Achievement rejectAchievement(String achievementId, String adminId, String reason) {
+    Achievement achievement = achievementRepository.findById(achievementId)
+        .orElseThrow(() -> new RuntimeException("成果不存在"));
+
+    User admin = userRepository.findById(adminId)
+        .orElseThrow(() -> new RuntimeException("管理员不存在"));
+
+    achievement.setStatus(Achievement.AchievementStatus.REJECTED);
+    return achievementRepository.save(achievement);
   }
 
-  public void incrementFavouriteCount(String achievementId) {
-    updateEsFieldCount(achievementId, "favouriteCount", 1);
-  }
-
-  public void decrementFavouriteCount(String achievementId) {
-    updateEsFieldCount(achievementId, "favouriteCount", -1);
-  }
-
-
-  private void updateEsFieldCount(String id, String field, int delta) {
-    try {
-      String scriptCode;
-      if (delta > 0) {
-        scriptCode = String.format("if (ctx._source.%s == null) { ctx._source.%s = %d } else { ctx._source.%s += %d }", field, field, delta, field, delta);
-      } 
-      else {
-        scriptCode = String.format("if (ctx._source.%s != null && ctx._source.%s > 0) { ctx._source.%s += %d }", field, field, field, delta);
-      }
-
-      UpdateQuery updateQuery = UpdateQuery.builder(id)
-          .withScript(scriptCode)
-          .withLang("painless")
-          .withScriptType(ScriptType.INLINE)
-          .build();
-
-      elasticsearchOperations.update(updateQuery, IndexCoordinates.of("openalex_works"));
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.err.println("Failed to update " + field + " for achievement: " + id + ", error: " + e.getMessage());
-    }
-  }
-
-  /**
-   * 转换为DTO，提取作者信息
-   */
-  public AchievementDTO toDTO(Achievement achievement) {
+  private AchievementDTO toDTO(Achievement achievement) {
     AchievementDTO dto = new AchievementDTO();
     dto.setId(achievement.getId());
     dto.setDoi(achievement.getDoi());

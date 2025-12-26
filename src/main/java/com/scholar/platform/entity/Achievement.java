@@ -75,10 +75,13 @@ public class Achievement {
     @Field(type = FieldType.Nested)
     private Author author;
 
-    @Field(name = "author_position", type = FieldType.Keyword)
+  private AchievementStatus status = AchievementStatus.PENDING;
+
+  @PrePersist
+  protected void onCreate() {
+    createdAt = LocalDateTime.now();
     private String authorPosition;
 
-    @Field(name = "is_corresponding", type = FieldType.Boolean)
     private Boolean isCorresponding;
   }
 
@@ -94,5 +97,9 @@ public class Achievement {
 
     @Field(type = FieldType.Keyword)
     private String orcid;
+  }
+
+  public enum AchievementStatus {
+    PENDING, APPROVED, REJECTED
   }
 }

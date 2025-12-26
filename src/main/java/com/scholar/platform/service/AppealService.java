@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AppealService {
@@ -28,6 +31,32 @@ public class AppealService {
     appeal.setReason(request.getReason());
     appeal.setEvidenceMaterials(request.getEvidenceMaterials());
     appeal.setStatus(UserAppeal.AppealStatus.PENDING);
+
+    return userAppealRepository.save(appeal);
+  }
+
+  public List<UserAppeal> getPendingAppeals() {
+    return userAppealRepository.findByStatus(UserAppeal.AppealStatus.PENDING);
+  }
+
+  @Transactional
+  public UserAppeal processAppeal(String appealId, String adminId, String action, String reason) {
+    UserAppeal appeal = userAppealRepository.findById(appealId)
+        .orElseThrow(() -> new RuntimeException("申诉不存在"));
+
+    User admin = userRepository.findById(adminId)
+        .orElseThrow(() -> new RuntimeException("管理员不存在"));
+
+    if ("approve".equalsIgnoreCase(action)) {
+      appeal.setStatus(UserAppeal.AppealStatus.APPROVED);
+    } else if ("reject".equalsIgnoreCase(action)) {
+      appeal.setStatus(UserAppeal.AppealStatus.REJECTED);
+    } else {
+      throw new RuntimeException("无效的操作类型");
+    }
+
+    appeal.setProcessedByAdmin(admin);
+    appeal.setProcessedAt(LocalDateTime.now());
 
     return userAppealRepository.save(appeal);
   }
