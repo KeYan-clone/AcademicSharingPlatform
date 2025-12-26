@@ -1,0 +1,24 @@
+package com.scholar.platform.entity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "concept")
+public class Concept {
+
+    @Id
+    @Column(length = 255)
+    private String concept;
+
+    @Column(name = "heat_count")
+    private Integer heatCount;
+}

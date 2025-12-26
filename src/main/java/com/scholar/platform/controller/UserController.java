@@ -6,6 +6,7 @@ import com.scholar.platform.dto.*;
 import com.scholar.platform.entity.*;
 import com.scholar.platform.service.AppealService;
 import com.scholar.platform.service.CertificationService;
+import com.scholar.platform.service.UserCollectionService;
 import com.scholar.platform.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

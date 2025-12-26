@@ -389,55 +389,84 @@ paths:
   /achievements:
     get:
       tags: [Achievements]
-      summary: 检索学术成果（普通/高级检索）
+      summary: 检索学术成果（支持高级检索）
+      description: 支持关键词、学科领域和时间范围的组合检索。至少需要提供一个检索条件。
       security: []
       parameters:
         - name: q
           in: query
-          description: 关键词 - 普通检索
+          description: 关键词 - 在标题和概念中检索
           schema: { type: string }
-        - name: author
-          in: query
-          description: 高级检索
-          schema: { type: string }
-        - name: organization
-          in: query
-          description: 高级检索
-          schema: { type: string }
-        - name: time_start
-          in: query
-          schema: { type: string }
-        - name: time_end
-          in: query
-          schema: { type: string }
+          example: "Medicine"
         - name: field
           in: query
+          description: 学科领域 - 指定概念字段进行检索
           schema: { type: string }
-        - name: sort_by
+          example: "Computer Science"
+        - name: startDate
           in: query
-          schema: { type: string, enum: [citations, time] }
+          description: 起始日期（格式：yyyy-MM-dd）
+          schema: { type: string, format: date }
+          example: "2010-01-01"
+        - name: endDate
+          in: query
+          description: 截止日期（格式：yyyy-MM-dd）
+          schema: { type: string, format: date }
+          example: "2020-12-31"
+        - name: page
+          in: query
+          description: 页码（从0开始）
+          schema: { type: integer, default: 0 }
+        - name: size
+          in: query
+          description: 每页大小
+          schema: { type: integer, default: 10, maximum: 100 }
       responses:
         200:
-          description: 检索结果
+          description: 检索结果（分页）
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  results:
+                  content:
                     type: array
                     items:
                       type: object
                       properties:
-                        id: { type: string, format: uuid }
+                        id: { type: string, description: "OpenAlex ID", example: "https://openalex.org/W2372737649" }
+                        doi: { type: string, nullable: true }
                         title: { type: string }
-                        authors: { type: array, items: { type: string } }
-                        year: { type: integer }
-                        abstract: { type: string }
-                        citationCount: { type: integer }
-                  total: { type: integer }
+                        authors:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id: { type: string, description: "作者 OpenAlex ID" }
+                              displayName: { type: string, description: "作者显示名称" }
+                        publicationDate: { type: string, format: date }
+                        language: { type: string }
+                        citedByCount: { type: integer }
+                        concepts:
+                          type: array
+                          items: { type: string }
+                          description: "概念标签"
+                        relatedWorks:
+                          type: array
+                          items: { type: string }
+                          description: "相关作品 ID 列表"
+                        landingPageUrl: { type: string, format: uri }
+                  pageable:
+                    type: object
+                    properties:
+                      pageNumber: { type: integer }
+                      pageSize: { type: integer }
+                  totalElements: { type: integer }
+                  totalPages: { type: integer }
+                  last: { type: boolean }
+                  first: { type: boolean }
         400:
-          description: 请输入检索内容
+          description: 请至少提供 q 或 field 参数
           content:
             application/json:
               schema:
@@ -446,13 +475,16 @@ paths:
   /achievements/{id}:
     get:
       tags: [Achievements]
-      summary: 浏览学术成果详情
+      summary: 获取学术成果详情（从 Elasticsearch）
+      description: 根据 OpenAlex ID 获取学术成果的完整信息
       security: []
       parameters:
         - name: id
           in: path
           required: true
+          description: "OpenAlex 成果 ID（完整 URL 或 ID 部分）"
           schema: { type: string }
+          example: "https://openalex.org/W2372737649"
       responses:
         200:
           description: 成果详情
@@ -461,15 +493,31 @@ paths:
               schema:
                 type: object
                 properties:
-                  id: { type: string, format: uuid }
+                  id: { type: string, description: "OpenAlex ID" }
+                  doi: { type: string, nullable: true }
                   title: { type: string }
-                  authors: { type: array, items: { type: string } }
-                  abstract: { type: string }
-                  doi: { type: string }
-                  publication: { type: string }
-                  year: { type: integer }
+                  authors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string, description: "作者 OpenAlex ID", example: "https://openalex.org/A2344342668" }
+                        displayName: { type: string, description: "作者显示名称", example: "G. Konovalov" }
+                  publicationDate: { type: string, format: date }
+                  language: { type: string }
+                  citedByCount: { type: integer, description: "被引用次数" }
+                  concepts:
+                    type: array
+                    items: { type: string }
+                    description: "概念标签列表"
+                    example: ["Medicine", "Cardiology"]
+                  relatedWorks:
+                    type: array
+                    items: { type: string }
+                    description: "相关作品 ID 列表"
+                  landingPageUrl: { type: string, format: uri, description: "作品落地页链接" }
         404:
-          description: 内容暂不可用
+          description: 成果未找到
           content:
             application/json:
               schema:

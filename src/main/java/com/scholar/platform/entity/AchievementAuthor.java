@@ -18,9 +18,8 @@ public class AchievementAuthor {
   @Column(name = "id", length = 36)
   private String id;
 
-  @ManyToOne
-  @JoinColumn(name = "achievement_id", nullable = false)
-  private Achievement achievement;
+  @Column(name = "achievement_id", nullable = false, length = 255)
+  private String achievementId;
 
   @Column(name = "author_order", nullable = false)
   private Integer authorOrder;

@@ -28,9 +28,6 @@ public class UserCollection {
   @JoinColumn(name = "user_id", insertable = false, updatable = false)
   private User user;
 
-  @ManyToOne
-  @JoinColumn(name = "achievement_id", insertable = false, updatable = false)
-  private Achievement achievement;
 
   @Column(name = "saved_at", nullable = false, updatable = false)
   private LocalDateTime savedAt;

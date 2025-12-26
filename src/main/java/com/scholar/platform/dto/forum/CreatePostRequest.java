@@ -1,0 +1,19 @@
+package com.scholar.platform.dto.forum;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+import java.util.List;
+
+@Data
+public class CreatePostRequest {
+    @NotBlank(message = "标题不能为空")
+    private String title;
+
+    @NotBlank(message = "内容不能为空")
+    private String content;
+
+    @NotBlank(message = "板块ID不能为空")
+    private String boardId;
+
+    private List<String> attachments;
+}

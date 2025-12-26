@@ -1,64 +1,102 @@
 package com.scholar.platform.entity;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
-@Entity
-@Table(name = "achievements")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(indexName = "openalex_works")
 public class Achievement {
 
   @Id
-  @UuidGenerator
-  @Column(name = "id", length = 36)
+  @Field(type = FieldType.Keyword)
   private String id;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "type", nullable = false)
-  private AchievementType type;
-
-  @Column(name = "title", columnDefinition = "TEXT", nullable = false)
-  private String title;
-
-  @Column(name = "publication_year")
-  private Integer publicationYear;
-
-  @Column(name = "abstract", columnDefinition = "TEXT")
-  private String abstractText;
-
-  @Column(name = "doi", length = 100, unique = true)
+  @Field(type = FieldType.Keyword)
   private String doi;
 
-  @Column(name = "publication_venue")
-  private String publicationVenue;
+  @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+  private String title;
 
-  @Column(name = "citation_count", nullable = false)
-  private Integer citationCount = 0;
+  @Field(type = FieldType.Nested)
+  private List<Authorship> authorships;
 
-  @Column(name = "source_data", columnDefinition = "JSON")
-  private String sourceData;
+  @Field(name = "publication_date", type = FieldType.Date, pattern = "yyyy-MM-dd")
+  private String publicationDate;
 
-  @Column(name = "created_at", nullable = false, updatable = false)
-  private LocalDateTime createdAt;
+  @Field(name = "has_abstract", type = FieldType.Boolean)
+  private Boolean hasAbstract;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "achievement_status", nullable = false)
+  @Field(name = "related_works", type = FieldType.Keyword)
+  private List<String> relatedWorks;
+
+  @Field(name = "cited_by_count", type = FieldType.Integer)
+  private Integer citedByCount;
+
+  @Field(type = FieldType.Keyword)
+  private String language;
+
+  @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+  private List<String> concepts;
+
+  @Field(name = "landing_page_url", type = FieldType.Keyword)
+  private String landingPageUrl;
+
+  @Field(name = "abstract", type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+  private String abstractText;
+
+  @Field(name = "authors_count", type = FieldType.Integer)
+  private Integer authorsCount;
+
+  @Field(name = "favouriteCount", type = FieldType.Integer)
+  private Integer favouriteCount;
+
+  @Field(name = "readCount", type = FieldType.Integer)
+  private Integer readCount;
+
+  @Field(name = "author_ids", type = FieldType.Keyword)
+  private List<String> authorIds;
+
+  @Field(name = "institution_ids", type = FieldType.Keyword)
+  private List<String> institutionIds;
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class Authorship {
+    @Field(type = FieldType.Nested)
+    private Author author;
+
   private AchievementStatus status = AchievementStatus.PENDING;
 
   @PrePersist
   protected void onCreate() {
     createdAt = LocalDateTime.now();
+    private String authorPosition;
+
+    private Boolean isCorresponding;
   }
 
-  public enum AchievementType {
-    PAPER, PATENT, PROJECT, AWARD
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class Author {
+    @Field(type = FieldType.Keyword)
+    private String id;
+
+    @Field(name = "display_name", type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    private String displayName;
+
+    @Field(type = FieldType.Keyword)
+    private String orcid;
   }
 
   public enum AchievementStatus {
