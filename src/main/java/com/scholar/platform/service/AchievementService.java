@@ -277,36 +277,4 @@ public class AchievementService {
     }
     return id;
   }
-
-      public List<AchievementDTO> getPendingAchievements() {
-        return achievementRepository.findByStatus(Achievement.AchievementStatus.PENDING)
-                .stream()
-                .map(Achievement::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public Achievement approveAchievement(String achievementId, String adminId) {
-        Achievement achievement = achievementRepository.findById(achievementId)
-                .orElseThrow(() -> new RuntimeException("成果不存在"));
-
-        User admin = userRepository.findById(adminId)
-                .orElseThrow(() -> new RuntimeException("管理员不存在"));
-
-        achievement.setStatus(Achievement.AchievementStatus.APPROVED);
-        return achievementRepository.save(achievement);
-    }
-
-    @Transactional
-    public Achievement rejectAchievement(String achievementId, String adminId, String reason) {
-        Achievement achievement = achievementRepository.findById(achievementId)
-                .orElseThrow(() -> new RuntimeException("成果不存在"));
-
-        User admin = userRepository.findById(adminId)
-                .orElseThrow(() -> new RuntimeException("管理员不存在"));
-
-        achievement.setStatus(Achievement.AchievementStatus.REJECTED);
-        return achievementRepository.save(achievement);
-    }
-  
 }
