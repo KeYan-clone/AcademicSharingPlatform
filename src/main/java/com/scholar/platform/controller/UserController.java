@@ -171,6 +171,16 @@ public class UserController {
         userService.deleteUserAchievement(user.getId(), achievementId);
         return ResponseEntity.status(204).body(ApiResponse.success("成果已删除", null));
     }
+    @PutMapping("/me/achievements/claim/{achievementId}/{number}")
+    @Operation(summary = "认领学术成果")
+    public ResponseEntity<ApiResponse<AchievementDTO>> claimAchievement(
+            @Parameter(description = "成果ID") @PathVariable String achievementId,
+            @Parameter(description = "作者排序号") @PathVariable Integer number
+    ) {
+        User user = userService.getByEmailOrThrow(currentUserEmail());
+        userService.claimAchievement(user.getId(), achievementId,number);
+        return ResponseEntity.status(200).body(ApiResponse.success("认领申请已提交，请等待审核", null));
+    }
 
     @GetMapping("/me/collections")
     @Operation(summary = "获取用户的收藏列表")
