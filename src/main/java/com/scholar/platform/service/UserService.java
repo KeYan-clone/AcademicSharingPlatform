@@ -80,6 +80,13 @@ public class UserService {
         }
 
         if (approve) {
+            // 检查该成果对应作者序的作者是否已存在
+            boolean authorExists = achievementAuthorRepository.existsByAchievementIdAndAuthorOrder(
+                    request.getAchievementId(), request.getAuthorOrder());
+            if (authorExists) {
+                throw new RuntimeException("该成果对应作者序的作者已存在");
+            }
+
             // 验证用户存在
             User user = userRepository.findById(request.getUserId())
                     .orElseThrow(() -> new RuntimeException("用户不存在"));
