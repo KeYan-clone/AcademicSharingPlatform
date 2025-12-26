@@ -3,9 +3,10 @@ spring:
     name: academic-sharing-platform
 
   datasource:
-    url: jdbc:mysql://${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    # 默认指向本地MySQL，缺失环境变量时仍可启动；.env 中可覆盖 DB_URL/DB_USERNAME/DB_PASSWORD
+    url: jdbc:mysql://${DB_URL:127.0.0.1:3306/academic_sharing?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
