@@ -1,9 +1,9 @@
 package com.scholar.platform.controller;
-
 import com.scholar.platform.dto.AchievementDTO;
 import com.scholar.platform.dto.ApiResponse;
 import com.scholar.platform.dto.PageResponse;
 import com.scholar.platform.service.AchievementService;
+import com.scholar.platform.service.PaperKeywordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class AchievementController {
 
   private final AchievementService achievementService;
+  private final PaperKeywordService paperKeywordService;
 
   @GetMapping
   @Operation(summary = "检索学术成果（支持高级检索）", 
@@ -51,6 +52,10 @@ public class AchievementController {
   public ResponseEntity<ApiResponse<AchievementDTO>> getAchievementById(
       @Parameter(description = "成果ID") @PathVariable String id) {
     AchievementDTO achievement = achievementService.getById(id);
+    // 统计关键词
+    if (achievement.getConcepts() != null && !achievement.getConcepts().isEmpty()) {
+      paperKeywordService.updateKeywords(achievement.getConcepts());
+    }
     return ResponseEntity.ok(ApiResponse.success(achievement));
   }
 }
