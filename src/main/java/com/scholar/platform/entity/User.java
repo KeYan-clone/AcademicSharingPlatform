@@ -41,9 +41,6 @@ public class User {
   @Column(name = "preferences", columnDefinition = "TEXT")
   private String preferences;
 
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
-  private Scholar scholar;
-
 
   public enum UserRole {
     USER, ADMIN

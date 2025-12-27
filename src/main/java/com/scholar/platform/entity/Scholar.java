@@ -1,9 +1,7 @@
 package com.scholar.platform.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
@@ -11,16 +9,18 @@ import org.hibernate.annotations.UuidGenerator;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "user")
+@EqualsAndHashCode(exclude = "user")
 public class Scholar {
 
   @Id
   @Column(name = "user_id", length = 36)
   private String userId;
-//
-//  @OneToOne
-//  @MapsId
-//  @JoinColumn(name = "user_id")
-//  private User user;
+
+  @OneToOne
+  @MapsId
+  @JoinColumn(name = "user_id")
+  private User user;
 
   @Column(name = "public_name", length = 100, nullable = false)
   private String publicName;

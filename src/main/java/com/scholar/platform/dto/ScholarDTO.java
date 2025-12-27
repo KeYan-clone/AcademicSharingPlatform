@@ -14,6 +14,12 @@ public class ScholarDTO {
   @Schema(description = "公开姓名")
   private String publicName;
 
+  @Schema(description = "用户姓名")
+  private String username;
+
+  @Schema(description = "用户邮箱")
+    private String email;
+
   @Schema(description = "机构")
   private String organization;
 
