@@ -81,7 +81,18 @@ public class ForumService {
                 .orElseThrow(() -> new RuntimeException("用户不存在"));
         
         ForumBoard board = boardRepository.findById(request.getBoardId())
-                .orElseThrow(() -> new RuntimeException("板块不存在"));
+                .orElseGet(() -> {
+                    log.info("板块不存在，自动创建: {}", request.getBoardId());
+                    ForumBoard newBoard = new ForumBoard();
+                    newBoard.setId(request.getBoardId());
+                    // 根据ID获取预设的名称，如果未知则默认使用ID
+                    newBoard.setName(getPredefinedBoardName(request.getBoardId()));
+                    newBoard.setType(0); // 新增：给type字段赋默认值
+                    newBoard.setCreatedAt(LocalDateTime.now()); // 如果有createdAt字段
+                    newBoard.setDescription(""); // 如果有description字段
+                    return boardRepository.save(newBoard);
+                });
+                //.orElseThrow(() -> new RuntimeException("板块不存在"));
 
         ForumPost post = new ForumPost();
         post.setTitle(request.getTitle());
@@ -91,6 +102,16 @@ public class ForumService {
         post.setAttachments(toJson(request.getAttachments()));
         
         return postRepository.save(post);
+    }
+
+    private String getPredefinedBoardName(String boardId) {
+        switch (boardId) {
+            case "1": return "学术交流";
+            case "2": return "资源共享";
+            case "3": return "校园生活";
+            case "4": return "求职招聘";
+            default: return "未知板块-" + boardId;
+        }
     }
 
     /**
