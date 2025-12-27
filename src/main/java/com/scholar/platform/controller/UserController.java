@@ -36,6 +36,7 @@ public class UserController {
     private final UserService userService;
     private final CertificationService certificationService;
     private final AppealService appealService;
+    private final UserCollectionService userCollectionService;
     private final ObjectMapper objectMapper;
 
     private String currentUserEmail() {
@@ -170,22 +171,24 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success(collections));
     }
 
-    @PostMapping("/me/collections/{achievementId}")
-    @Operation(summary = "添加收藏的学术成果")
-    public ResponseEntity<ApiResponse<Void>> addMyCollection(
-            @Parameter(description = "成果ID") @PathVariable String achievementId) {
-        User user = userService.getByEmailOrThrow(currentUserEmail());
-        userService.addUserCollection(user.getId(), achievementId);
-        return ResponseEntity.status(201).body(ApiResponse.success("收藏成功", null));
+    @PostMapping("/me/collections")
+    @Operation(summary = "收藏一项学术成果")
+    public ResponseEntity<ApiResponse<String>> addCollection(@RequestBody CollectionRequest request) {
+    User user = userService.getByEmailOrThrow(currentUserEmail());
+    try {
+        userCollectionService.addCollection(user.getId(), request.getAchievementId());
+        return ResponseEntity.status(201).body(ApiResponse.success("收藏成功"));
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(ApiResponse.error(400, e.getMessage()));
+    }
     }
 
-    @DeleteMapping("/me/collections/{achievementId}")
-    @Operation(summary = "移除收藏的学术成果")
-    public ResponseEntity<ApiResponse<Void>> removeMyCollection(
-            @Parameter(description = "成果ID") @PathVariable String achievementId) {
-        User user = userService.getByEmailOrThrow(currentUserEmail());
-        userService.deleteUserCollection(user.getId(), achievementId);
-        return ResponseEntity.status(204).body(ApiResponse.success("取消收藏成功", null));
+    @PostMapping("/me/collections/delete")
+    @Operation(summary = "取消收藏一项学术成果")
+    public ResponseEntity<Void> removeCollection(@RequestBody CollectionRequest request) {
+    User user = userService.getByEmailOrThrow(currentUserEmail());
+    userCollectionService.removeCollection(user.getId(), request.getAchievementId());
+    return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/me/achievements/claim/{achievementId}/{authorOrder}")
