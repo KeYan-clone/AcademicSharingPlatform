@@ -25,10 +25,11 @@ public class AchievementController {
   private final PaperKeywordService paperKeywordService;
 
   @GetMapping
-  @Operation(summary = "检索学术成果（支持高级检索）", 
-             description = "支持关键词、学科领域、时间范围、作者和机构的组合检索。至少需要提供一个检索条件。field 为精确匹配。")
+  @Operation(summary = "检索学术成果（支持高级检索，默认使用加权搜索）", 
+             description = "支持关键词、学科领域、时间范围、作者和机构的组合检索。至少需要提供一个检索条件。" +
+                           "关键词搜索现已改为默认使用加权排序（基于被引用数、收藏数、阅读数）。field 为精确匹配。")
   public ResponseEntity<ApiResponse<PageResponse<AchievementDTO>>> searchAchievements(
-      @Parameter(description = "关键词 - 模糊匹配（搜索标题和概念）") @RequestParam(required = false) String q,
+      @Parameter(description = "关键词 - 模糊匹配（搜索标题和概念，带加权）") @RequestParam(required = false) String q,
       @Parameter(description = "学科领域/概念 - 精确匹配（从下拉列表选择）") @RequestParam(required = false) String field,
       @Parameter(description = "起始日期 (格式: yyyy-MM-dd)") @RequestParam(required = false) String startDate,
       @Parameter(description = "截止日期 (格式: yyyy-MM-dd)") @RequestParam(required = false) String endDate,
