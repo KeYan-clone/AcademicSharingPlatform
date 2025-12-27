@@ -86,7 +86,6 @@ public class CertificationService {
 
         Scholar scholar = new Scholar();
         scholar.setUserId(user.getId());
-        scholar.setUser(certification.getUser());
         scholar.setPublicName(certification.getRealName());
         scholar.setOrganization(certification.getOrganization());
         scholar.setTitle(certification.getTitle());
