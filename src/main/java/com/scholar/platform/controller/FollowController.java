@@ -1,7 +1,6 @@
 package com.scholar.platform.controller;
 
 import com.scholar.platform.dto.ApiResponse;
-import com.scholar.platform.entity.Follow;
 import com.scholar.platform.service.FollowService;
 import com.scholar.platform.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/social")
 @RequiredArgsConstructor

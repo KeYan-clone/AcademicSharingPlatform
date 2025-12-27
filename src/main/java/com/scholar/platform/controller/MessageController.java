@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
-
 @RequestMapping("/social/dms")
 @RequiredArgsConstructor
 @Tag(name = "私信管理", description = "用户私信发送和查询接口")
