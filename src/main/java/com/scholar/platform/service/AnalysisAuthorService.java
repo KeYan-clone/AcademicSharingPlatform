@@ -24,6 +24,9 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
+import com.scholar.platform.dto.AuthorRelationDTO;
+import com.scholar.platform.entity.AuthorRelation;
+import com.scholar.platform.repository.AuthorRelationRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +37,7 @@ public class AnalysisAuthorService {
     private final UserRepository userRepository;
     private final AuthorRepository authorRepository; // ES Repository
     private final ScholarRankingRepository scholarRankingRepository;
+    private final AuthorRelationRepository authorRelationRepository;
     
     @Transactional
     public AuthorInfluenceDTO getAuthorTrend(String userId) {
@@ -143,6 +147,30 @@ public class AnalysisAuthorService {
         return rankings.stream()
                 .map(ScholarRankingDTO::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 根据作者名模糊查询作者关系（author1_name 或 author2_name 匹配）
+     */
+    public List<AuthorRelationDTO> getAuthorRelation(String authorName) {
+        List<AuthorRelation> list1 = authorRelationRepository.findByAuthor1NameContainingIgnoreCase(authorName);
+        List<AuthorRelation> list2 = authorRelationRepository.findByAuthor2NameContainingIgnoreCase(authorName);
+        List<AuthorRelation> merged = new ArrayList<>(list1);
+        for (AuthorRelation ar : list2) {
+            if (!merged.contains(ar)) {
+                merged.add(ar);
+            }
+        }
+
+        return merged.stream().map(ar -> {
+            AuthorRelationDTO dto = new AuthorRelationDTO();
+            dto.setAuthor1Id(ar.getAuthor1Id());
+            dto.setAuthor1Name(ar.getAuthor1Name());
+            dto.setAuthor2Id(ar.getAuthor2Id());
+            dto.setAuthor2Name(ar.getAuthor2Name());
+            dto.setCount(ar.getCount());
+            return dto;
+        }).collect(Collectors.toList());
     }
 }
 
