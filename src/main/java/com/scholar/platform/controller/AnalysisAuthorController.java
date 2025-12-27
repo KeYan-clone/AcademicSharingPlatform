@@ -1,6 +1,7 @@
 package com.scholar.platform.controller;
 
 import com.scholar.platform.dto.AuthorInfluenceDTO;
+import com.scholar.platform.dto.AuthorRelationDTO;
 import com.scholar.platform.dto.ScholarRankingDTO;
 import com.scholar.platform.service.AnalysisAuthorService;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,10 @@ public class AnalysisAuthorController {
     @GetMapping("/influence/ranking")
     public ResponseEntity<List<ScholarRankingDTO>> getRanking(@RequestParam String domain) {
         return ResponseEntity.ok(analysisAuthorService.getScholarRanking(domain));
+    }
+
+    @GetMapping("relation/{authorName}")
+    public ResponseEntity<List<AuthorRelationDTO>> getAuthorRelation(@PathVariable String authorName) {
+        return ResponseEntity.ok(analysisAuthorService.getAuthorRelation(authorName));
     }
 }
