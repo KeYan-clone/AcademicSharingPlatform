@@ -132,7 +132,52 @@ public interface AchievementRepository extends ElasticsearchRepository<Achieveme
             String startDate, String endDate, String keyword, Pageable pageable);
 
     /**
-     * @deprecated 改为使用 searchByKeywordWithWeighting() 或 searchByDateRangeAndKeywordWithWeighting() 以获得加权排序
+     * 双关键词搜索（支持中英文混合检索）
+     */
+    @Query("""
+      {
+        "bool": {
+          "should": [
+            {
+              "match": {
+                "title": {
+                  "query": "?0",
+                  "operator": "or"
+                }
+              }
+            },
+            {
+              "match": {
+                "concepts": {
+                  "query": "?0",
+                  "operator": "or"
+                }
+              }
+            },
+            {
+              "match": {
+                "title": {
+                  "query": "?1",
+                  "operator": "or"
+                }
+              }
+            },
+            {
+              "match": {
+                "concepts": {
+                  "query": "?1",
+                  "operator": "or"
+                }
+              }
+            }
+          ],
+          "minimum_should_match": 1
+        }
+      }
+      """)
+    Page<Achievement> searchByTwoKeywords(String keyword1, String keyword2, Pageable pageable);
+
+    /**
      * 按关键词搜索（支持空格）- 在标题或概念中搜索
      * 使用 match 查询，支持包含空格的关键词如 "artificial intelligence"
      */

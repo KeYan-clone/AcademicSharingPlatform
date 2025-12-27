@@ -9,7 +9,7 @@ public class PostListItemDTO {
     private String title;
     private String contentPreview; // 列表页可能只需要显示前几十个字
     private UserSummaryDTO author;
-    private String boardName;
+    private String boardId;
     private Integer viewCount;
     
     // 统计数据

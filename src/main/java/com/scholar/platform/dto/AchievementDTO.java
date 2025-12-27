@@ -25,6 +25,9 @@ public class AchievementDTO {
   @Schema(description = "作者列表")
   private List<AuthorInfo> authorships;
 
+  @Schema(description = "机构信息列表")
+  private List<InstitutionInfo> institution;
+
   @Schema(description = "发表日期")
   private String publicationDate;
 
@@ -58,6 +61,15 @@ public class AchievementDTO {
   @Schema(description = "机构ID列表")
   private List<String> institutionIds;
 
+  @Schema(description = "作者姓名列表")
+  private List<String> authorNames;
+
+  @Schema(description = "机构名称列表")
+  private List<String> institutionNames;
+  
+  @Schema(description = "是否已收藏")
+  private Boolean isFavourite;
+
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
@@ -68,5 +80,17 @@ public class AchievementDTO {
 
     @Schema(description = "作者姓名")
     private String name;
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Schema(description = "机构信息")
+  public static class InstitutionInfo {
+    @Schema(description = "机构ID")
+    private String id;
+
+    @Schema(description = "机构名称")
+    private String displayName;
   }
 }

@@ -1,6 +1,8 @@
 package com.scholar.platform.entity;
 
 import com.scholar.platform.dto.AchievementDTO;
+import com.scholar.platform.util.IdPrefixUtil;
+
 import jakarta.persistence.PrePersist;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -72,6 +74,12 @@ public class Achievement {
     @Field(name = "institution_ids", type = FieldType.Keyword)
     private List<String> institutionIds;
 
+    @Field(name = "author_names", type = FieldType.Keyword, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    private List<String> authorNames;
+
+    @Field(name = "institution_names", type = FieldType.Keyword, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    private List<String> institutionNames;
+
     @Field(type = FieldType.Keyword)
     private AchievementStatus status = AchievementStatus.PENDING;
 
@@ -81,6 +89,9 @@ public class Achievement {
     public static class Authorship {
         @Field(type = FieldType.Nested)
         private Author author;
+
+        @Field(type = FieldType.Nested)
+        private List<Institution> institutions;
 
         @Data
         @NoArgsConstructor
@@ -95,6 +106,26 @@ public class Achievement {
             @Field(type = FieldType.Keyword)
             private String orcid;
         }
+
+        @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class Institution {
+            @Field(type = FieldType.Keyword)
+            private String id;
+
+            @Field(name = "display_name", type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+            private String displayName;
+
+            @Field(type = FieldType.Keyword)
+            private String ror;
+
+            @Field(type = FieldType.Keyword)
+            private String countryCode;
+
+            @Field(type = FieldType.Keyword)
+            private String type;
+        }
     }
 
 
@@ -107,7 +138,7 @@ public class Achievement {
      */
     public  static AchievementDTO toDTO(Achievement achievement) {
         AchievementDTO dto = new AchievementDTO();
-        dto.setId(achievement.getId());
+        dto.setId(IdPrefixUtil.removeIdPrefix(achievement.getId()));
         dto.setDoi(achievement.getDoi());
         dto.setTitle(achievement.getTitle());
         dto.setPublicationDate(achievement.getPublicationDate());
@@ -121,6 +152,8 @@ public class Achievement {
         dto.setReadCount(achievement.getReadCount());
         dto.setAuthorIds(achievement.getAuthorIds());
         dto.setInstitutionIds(achievement.getInstitutionIds());
+        dto.setAuthorNames(achievement.getAuthorNames());
+        dto.setInstitutionNames(achievement.getInstitutionNames());
 
         if (achievement.getAuthorships() != null) {
             List<AchievementDTO.AuthorInfo> authors = achievement.getAuthorships().stream()
@@ -131,6 +164,25 @@ public class Achievement {
                     ))
                     .collect(Collectors.toList());
             dto.setAuthorships(authors);
+
+            // Extract Institutions
+            List<AchievementDTO.InstitutionInfo> institutions = new java.util.ArrayList<>();
+            for (Authorship authorship : achievement.getAuthorships()) {
+                if (authorship.getInstitutions() != null) {
+                    for (Authorship.Institution inst : authorship.getInstitutions()) {
+                        if (inst.getId() != null) {
+                            institutions.add(new AchievementDTO.InstitutionInfo(inst.getId(), inst.getDisplayName()));
+                        }
+                    }
+                }
+            }
+            // Remove duplicates based on ID
+            List<AchievementDTO.InstitutionInfo> uniqueInstitutions = institutions.stream()
+                .collect(Collectors.collectingAndThen(
+                    Collectors.toCollection(() -> new java.util.TreeSet<>(java.util.Comparator.comparing(AchievementDTO.InstitutionInfo::getId))),
+                    java.util.ArrayList::new));
+            
+            dto.setInstitution(uniqueInstitutions);
         }
 
         return dto;
