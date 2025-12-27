@@ -35,14 +35,15 @@ public class AchievementService {
     private final UserRepository userRepository;
 
     /**
-     * 通过关键词搜索（标题或概念）
-     * 使用 match 查询，支持包含空格的关键词如 "artificial intelligence"
+     * 通过关键词搜索（带加权排序）
+     * 使用 function_score 查询应用权重算法
+     * 权重因子 = (log(1+cited_by_count)×1.2 + log(1+favourite_count)×1.0 + log(1+read_count)×0.8) / 3
      */
     public Page<AchievementDTO> searchByKeyword(String keyword, Pageable pageable) {
         if (keyword == null || keyword.trim().isEmpty()) {
             throw new IllegalArgumentException("请输入检索内容");
         }
-        return achievementRepository.searchByKeywordWithSpaceSupport(keyword, pageable)
+        return achievementRepository.searchByKeywordWithWeighting(keyword, pageable)
                 .map(this::toDTO);
     }
 
@@ -59,20 +60,22 @@ public class AchievementService {
     }
 
     /**
-     * 按时间范围检索
+     * 按时间范围检索（带加权排序）
      */
     public Page<AchievementDTO> searchByDateRange(String startDate, String endDate, Pageable pageable) {
         if (startDate == null || endDate == null) {
             throw new IllegalArgumentException("起止时间不能为空");
         }
+        // 由于时间范围检索没有关键词，使用非加权版本
         return achievementRepository.findByPublicationDateBetween(startDate, endDate, pageable)
                 .map(this::toDTO);
     }
 
     /**
      * 高级检索：支持关键词、概念、时间范围、作者和机构的组合检索
+     * 现在统一使用加权搜索作为默认功能
      *
-     * @param keyword         关键词（模糊搜索标题和概念）
+     * @param keyword         关键词（模糊搜索标题和概念，带加权）
      * @param field           学科领域/概念（精确匹配，由用户从下拉列表选择）
      * @param startDate       开始日期
      * @param endDate         结束日期
@@ -105,7 +108,33 @@ public class AchievementService {
             }
         }
 
-        // 2. 构建组合查询 Criteria
+        // 2. 如果有关键词和时间范围，优先使用带权重的日期范围+关键词搜索
+        if (keyword != null && !keyword.trim().isEmpty() && startDate != null && endDate != null) {
+            Page<Achievement> results = achievementRepository.searchByDateRangeAndKeywordWithWeighting(
+                    startDate, endDate, keyword, pageable);
+            
+            // 3. 再进行内存中的过滤（概念、作者、机构）
+            if (field != null && !field.trim().isEmpty() ||
+                authorId != null || institutionId != null) {
+                return filterResults(results, field, authorId, institutionId, pageable);
+            }
+            return results.map(this::toDTO);
+        }
+
+        // 2b. 如果只有关键词，使用加权关键词搜索
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            Page<Achievement> results = achievementRepository.searchByKeywordWithWeighting(keyword, pageable);
+            
+            // 进行内存中的过滤（时间范围、概念、作者、机构）
+            if (startDate != null && endDate != null ||
+                field != null && !field.trim().isEmpty() ||
+                authorId != null || institutionId != null) {
+                return filterResults(results, field, authorId, institutionId, pageable, startDate, endDate);
+            }
+            return results.map(this::toDTO);
+        }
+
+        // 2c. 没有关键词，使用 Criteria 进行其他维度的组合搜索
         Criteria criteria = new Criteria();
         boolean hasCondition = false;
 
@@ -129,18 +158,13 @@ public class AchievementService {
             hasCondition = true;
         }
 
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            Criteria keywordCriteria = new Criteria("title").matches(keyword)
-                    .or("concepts").matches(keyword);
-            criteria = criteria.subCriteria(keywordCriteria);
-            hasCondition = true;
-        }
-
         if (!hasCondition) {
             // 尝试获取最热的 concept
             PaperKeyword topKeyword = paperKeywordRepository.findFirstByOrderByCntDesc();
             if (topKeyword != null && topKeyword.getKeyword() != null) {
-                criteria = criteria.and("concepts").matches(topKeyword.getKeyword());
+                // 使用加权搜索显示最热的关键词
+                return achievementRepository.searchByKeywordWithWeighting(topKeyword.getKeyword(), pageable)
+                        .map(this::toDTO);
             } else {
                 throw new IllegalArgumentException("请输入检索内容");
             }
@@ -156,6 +180,63 @@ public class AchievementService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(list, pageable, searchHits.getTotalHits());
+    }
+
+    /**
+     * 辅助方法：在内存中过滤结果
+     */
+    private Page<AchievementDTO> filterResults(Page<Achievement> results, String field,
+                                               String authorId, String institutionId,
+                                               Pageable pageable) {
+        return filterResults(results, field, authorId, institutionId, pageable, null, null);
+    }
+
+    /**
+     * 辅助方法：在内存中过滤结果（包含日期范围）
+     */
+    private Page<AchievementDTO> filterResults(Page<Achievement> results, String field,
+                                               String authorId, String institutionId,
+                                               Pageable pageable, String startDate, String endDate) {
+        List<AchievementDTO> filtered = results.getContent().stream()
+                .filter(achievement -> {
+                    // 按概念过滤
+                    if (field != null && !field.trim().isEmpty()) {
+                        if (achievement.getConcepts() == null ||
+                            !achievement.getConcepts().contains(field)) {
+                            return false;
+                        }
+                    }
+                    
+                    // 按作者过滤
+                    if (authorId != null) {
+                        if (achievement.getAuthorIds() == null ||
+                            !achievement.getAuthorIds().contains(authorId)) {
+                            return false;
+                        }
+                    }
+                    
+                    // 按机构过滤
+                    if (institutionId != null) {
+                        if (achievement.getInstitutionIds() == null ||
+                            !achievement.getInstitutionIds().contains(institutionId)) {
+                            return false;
+                        }
+                    }
+                    
+                    // 按日期范围过滤
+                    if (startDate != null && endDate != null && achievement.getPublicationDate() != null) {
+                        String pubDate = achievement.getPublicationDate();
+                        if (pubDate.compareTo(startDate) < 0 || pubDate.compareTo(endDate) > 0) {
+                            return false;
+                        }
+                    }
+                    
+                    return true;
+                })
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(filtered, pageable, results.getTotalElements());
     }
 
     /**
