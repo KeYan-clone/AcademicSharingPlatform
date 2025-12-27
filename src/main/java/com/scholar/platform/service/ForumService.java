@@ -106,10 +106,25 @@ public class ForumService {
 
     private String getPredefinedBoardName(String boardId) {
         switch (boardId) {
-            case "1": return "学术交流";
-            case "2": return "资源共享";
-            case "3": return "校园生活";
-            case "4": return "求职招聘";
+            case "Medicine": return "Medicine";
+            case "Biology": return "Biology";
+            case "Chemistry": return "Chemistry";
+            case "Computer science": return "Computer science";
+            case "Business": return "Business";
+            case "Sociology": return "Sociology";
+            case "Political science": return "Political science";
+            case "Geology": return "Geology";
+            case "Philosophy": return "Philosophy";
+            case "History": return "History";
+            case "Materials science": return "Materials science";
+            case "Psychology": return "Psychology";
+            case "Physics": return "Physics";
+            case "Environmental science": return "Environmental science";
+            case "Mathematics": return "Mathematics";
+            case "Engineering": return "Engineering";
+            case "Geography": return "Geography";
+            case "Economics": return "Economics";
+            case "Art": return "Art";
             default: return "未知板块-" + boardId;
         }
     }
