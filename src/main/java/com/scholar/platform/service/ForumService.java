@@ -57,7 +57,7 @@ public class ForumService {
             dto.setTitle(post.getTitle());
             // 截取内容预览
             dto.setContentPreview(post.getContent().length() > 100 ? post.getContent().substring(0, 100) + "..." : post.getContent());
-            dto.setBoardName(post.getBoard().getName());
+            dto.setBoardId(post.getBoard().getId());
             dto.setViewCount(post.getViewCount());
             dto.setCreatedAt(post.getCreatedAt());
             
