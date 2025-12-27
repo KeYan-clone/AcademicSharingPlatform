@@ -35,11 +35,21 @@ public class AchievementService {
   private final ElasticsearchOperations elasticsearchOperations;
   private final UserRepository userRepository;
   private final UserCollectionRepository userCollectionRepository;
+  private final TranslationService translationService;
 
   public Page<AchievementDTO> searchByKeyword(String keyword, Pageable pageable) {
       if (keyword == null || keyword.trim().isEmpty()) {
           throw new IllegalArgumentException("请输入检索内容");
       }
+
+      if (translationService.containsChinese(keyword)) {
+          String translatedKeyword = translationService.translateToEnglish(keyword);
+          if (!keyword.equals(translatedKeyword)) {
+              return achievementRepository.searchByTwoKeywords(keyword, translatedKeyword, pageable)
+                      .map(this::toDTO);
+          }
+      }
+
       return achievementRepository.searchByKeywordWithSpaceSupport(keyword, pageable)
               .map(this::toDTO);
   }
@@ -130,6 +140,15 @@ public class AchievementService {
       if (keyword != null && !keyword.trim().isEmpty()) {
           Criteria keywordCriteria = new Criteria("title").matches(keyword)
                   .or("concepts").matches(keyword);
+
+          if (translationService.containsChinese(keyword)) {
+              String translatedKeyword = translationService.translateToEnglish(keyword);
+              if (!keyword.equals(translatedKeyword)) {
+                  keywordCriteria = keywordCriteria.or("title").matches(translatedKeyword)
+                          .or("concepts").matches(translatedKeyword);
+              }
+          }
+
           criteria = criteria.subCriteria(keywordCriteria);
           hasCondition = true;
       }
