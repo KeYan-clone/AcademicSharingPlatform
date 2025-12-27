@@ -18,4 +18,6 @@ public interface AchievementClaimRequestRepository extends JpaRepository<Achieve
 
   Optional<AchievementClaimRequest> findByUserIdAndAchievementIdAndStatus(
       String userId, String achievementId, AchievementClaimRequest.ClaimStatus status);
+
+  List<AchievementClaimRequest> findByStatus(AchievementClaimRequest.ClaimStatus status);
 }

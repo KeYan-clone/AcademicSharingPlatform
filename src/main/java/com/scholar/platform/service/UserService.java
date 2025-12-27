@@ -3,6 +3,8 @@ package com.scholar.platform.service;
 import com.scholar.platform.dto.AchievementDTO;
 import com.scholar.platform.dto.AchievementRequest;
 import com.scholar.platform.dto.CollectionDTO;
+import com.scholar.platform.dto.PendingClaimRequestDTO;
+import com.scholar.platform.dto.UserClaimRequestDTO;
 import com.scholar.platform.entity.Achievement;
 import com.scholar.platform.entity.AchievementAuthor;
 import com.scholar.platform.entity.AchievementClaimRequest;
@@ -70,7 +72,7 @@ public class UserService {
     }
 
     @Transactional
-    public void replyClaimAchievement(String requestId, Boolean approve) {
+    public void replyClaimAchievement(String requestId, Boolean approve, String message) {
         // 查找认证请求
         AchievementClaimRequest request = achievementClaimRequestRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("认证请求不存在"));
@@ -254,6 +256,71 @@ public class UserService {
         }
 
         userCollectionRepository.deleteById(id);
+    }
+
+    /**
+     * 获取用户所有的认领请求
+     */
+    public List<UserClaimRequestDTO> getUserClaimRequests(String userId) {
+        // 获取用户的所有认领请求
+        List<AchievementClaimRequest> requests = achievementClaimRequestRepository.findByUserId(userId);
+        
+        // 转换为DTO并添加成果标题
+        return requests.stream()
+                .map(request -> {
+                    UserClaimRequestDTO dto = new UserClaimRequestDTO();
+                    dto.setRequestId(request.getId());
+                    dto.setAchievementId(request.getAchievementId());
+                    dto.setAuthorOrder(request.getAuthorOrder());
+                    dto.setStatus(request.getStatus());
+                    dto.setCreatedAt(request.getCreatedAt());
+                    dto.setUpdatedAt(request.getUpdatedAt());
+                    dto.setMessage(request.getMessage());
+                    
+                    // 获取成果标题
+                    Achievement achievement = achievementRepository.findById(IdPrefixUtil.ensureIdPrefix(request.getAchievementId()))
+                            .orElseThrow(() -> new RuntimeException("成果不存在"));
+                    dto.setAchievementTitle(achievement.getTitle());
+                    
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 获取所有待审核的认领请求
+     */
+    public List<PendingClaimRequestDTO> getPendingClaimRequests() {
+        // 获取所有待审核的认领请求
+        List<AchievementClaimRequest> requests = achievementClaimRequestRepository.findByStatus(AchievementClaimRequest.ClaimStatus.PENDING);
+        
+        // 转换为DTO并添加用户和成果信息，忽略不存在的用户或成果
+        return requests.stream()
+                .map(request -> {
+                    PendingClaimRequestDTO dto = new PendingClaimRequestDTO();
+                    dto.setRequestId(request.getId());
+                    dto.setUserId(request.getUserId());
+                    dto.setAchievementId(request.getAchievementId());
+                    dto.setAuthorOrder(request.getAuthorOrder());
+                    dto.setMessage(request.getMessage());
+                    dto.setStatus(request.getStatus());
+                    dto.setCreatedAt(request.getCreatedAt());
+                    
+                    // 获取用户名，如果用户不存在则使用"未知用户"
+                    userRepository.findById(request.getUserId())
+                            .ifPresentOrElse(
+                                user -> dto.setUsername(user.getUsername()),
+                                () -> dto.setUsername("未知用户")
+                            );
+                    
+                    // 获取成果标题，如果成果不存在则使用"未知成果"
+                    Achievement achievement = achievementRepository.findById(IdPrefixUtil.ensureIdPrefix(request.getAchievementId()))
+                            .orElse(null);
+                    dto.setAchievementTitle(achievement != null ? achievement.getTitle() : "未知成果");
+                    
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
 }
