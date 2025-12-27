@@ -29,7 +29,7 @@ public class MessageController {
   private final MessageService messageService;
   private final UserRepository userRepository;
 
-  @PostMapping("/send")
+  @PostMapping
   @Operation(summary = "发送私信", description = "向指定用户发送私信")
   public ResponseEntity<ApiResponse<Object>> sendMessage(
       Authentication authentication,
@@ -44,7 +44,7 @@ public class MessageController {
     }}));
   }
 
-  @GetMapping("/conversation/{userId}")
+  @GetMapping("/{userId}")
   @Operation(summary = "获取对话记录", description = "查询与指定用户的私信对话")
   public ResponseEntity<Object> getConversation(
       Authentication authentication,
