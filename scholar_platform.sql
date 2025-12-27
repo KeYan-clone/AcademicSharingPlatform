@@ -341,21 +341,59 @@ DROP TABLE IF EXISTS `scholar_influence`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `scholar_influence` (
-  `scholar_id` char(36) NOT NULL COMMENT '学者ID',
-  `year` int NOT NULL COMMENT '年份',
-  `value` decimal(18,4) NOT NULL COMMENT '影响力数值',
-  PRIMARY KEY (`scholar_id`,`year`),
-  CONSTRAINT `fk_inf_scholar` FOREIGN KEY (`scholar_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='学者影响力年表';
+  `user_id` varchar(36) NOT NULL COMMENT '用户ID，主键，对应users表ID',
+  `author_name` varchar(255) DEFAULT NULL COMMENT '作者显示名称 (OpenAlex display_name)',
+  `works_count` int DEFAULT 0 COMMENT '发表作品总数',
+  `cited_by_cnt` int DEFAULT 0 COMMENT '被引用总次数',
+  `h_index` int DEFAULT 0 COMMENT 'H指数',
+  `i10_index` int DEFAULT 0 COMMENT 'i10指数',
+  `open_alex_id` varchar(255) DEFAULT NULL COMMENT 'OpenAlex原始ID (用于关联ES数据)',
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='学者影响力数据缓存表';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `scholar_influence`
 --
 
+
+
+
 LOCK TABLES `scholar_influence` WRITE;
 /*!40000 ALTER TABLE `scholar_influence` DISABLE KEYS */;
 /*!40000 ALTER TABLE `scholar_influence` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+--
+-- Table structure for table `scholar_ranking`
+--
+
+DROP TABLE IF EXISTS `scholar_ranking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `scholar_ranking` (
+  `id` VARCHAR(100) PRIMARY KEY,     -- 唯一标识
+  `display_name` VARCHAR(255),       -- 姓名
+  `domain` VARCHAR(100),             -- 用于 WHERE 查询的一级学科
+  `primary_tags` VARCHAR(255),       -- 直接存拼好的字符串，如 "Gynecology, Stroke"
+  `h_index` INT,
+  `i10_index` INT,
+  `works_count` INT,
+  `influence_score` DOUBLE,          -- 后端根据算法算好的总分
+  `rank_in_domain` INT,              -- 预存该领域的排名，查询更快
+  INDEX `idx_domain_score` (`domain`, `influence_score` DESC) -- 核心索引
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `scholar_ranking`
+--
+
+LOCK TABLES `scholar_ranking` WRITE;
+/*!40000 ALTER TABLE `scholar_ranking` DISABLE KEYS */;
+/*!40000 ALTER TABLE `scholar_ranking` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

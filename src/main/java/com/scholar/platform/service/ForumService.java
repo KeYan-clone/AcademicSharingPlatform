@@ -81,7 +81,18 @@ public class ForumService {
                 .orElseThrow(() -> new RuntimeException("用户不存在"));
         
         ForumBoard board = boardRepository.findById(request.getBoardId())
-                .orElseThrow(() -> new RuntimeException("板块不存在"));
+                .orElseGet(() -> {
+                    log.info("板块不存在，自动创建: {}", request.getBoardId());
+                    ForumBoard newBoard = new ForumBoard();
+                    newBoard.setId(request.getBoardId());
+                    // 根据ID获取预设的名称，如果未知则默认使用ID
+                    newBoard.setName(getPredefinedBoardName(request.getBoardId()));
+                    newBoard.setType(0); // 新增：给type字段赋默认值
+                    newBoard.setCreatedAt(LocalDateTime.now()); // 如果有createdAt字段
+                    newBoard.setDescription(""); // 如果有description字段
+                    return boardRepository.save(newBoard);
+                });
+                //.orElseThrow(() -> new RuntimeException("板块不存在"));
 
         ForumPost post = new ForumPost();
         post.setTitle(request.getTitle());
@@ -91,6 +102,31 @@ public class ForumService {
         post.setAttachments(toJson(request.getAttachments()));
         
         return postRepository.save(post);
+    }
+
+    private String getPredefinedBoardName(String boardId) {
+        switch (boardId) {
+            case "Medicine": return "Medicine";
+            case "Biology": return "Biology";
+            case "Chemistry": return "Chemistry";
+            case "Computer science": return "Computer science";
+            case "Business": return "Business";
+            case "Sociology": return "Sociology";
+            case "Political science": return "Political science";
+            case "Geology": return "Geology";
+            case "Philosophy": return "Philosophy";
+            case "History": return "History";
+            case "Materials science": return "Materials science";
+            case "Psychology": return "Psychology";
+            case "Physics": return "Physics";
+            case "Environmental science": return "Environmental science";
+            case "Mathematics": return "Mathematics";
+            case "Engineering": return "Engineering";
+            case "Geography": return "Geography";
+            case "Economics": return "Economics";
+            case "Art": return "Art";
+            default: return "未知板块-" + boardId;
+        }
     }
 
     /**

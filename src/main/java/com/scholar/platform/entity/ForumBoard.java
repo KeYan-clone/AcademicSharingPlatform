@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class ForumBoard {
 
   @Id
-  @UuidGenerator
+  //@UuidGenerator
   @Column(name = "id", length = 36)
   private String id;
 
