@@ -15,34 +15,14 @@ public interface AchievementRepository extends ElasticsearchRepository<Achieveme
 
     Optional<Achievement> findByDoi(String doi);
 
-    /**
-     * @deprecated 改为使用 searchByKeywordWithWeighting() 以获得加权排序
-     */
-    @Deprecated(since = "2.0", forRemoval = true)
     Page<Achievement> findByTitleContaining(String title, Pageable pageable);
 
-    /**
-     * @deprecated 改为使用 searchByKeywordWithWeighting() 以获得加权排序
-     */
-    @Deprecated(since = "2.0", forRemoval = true)
     Page<Achievement> findByConceptsContaining(String concept, Pageable pageable);
 
-    /**
-     * @deprecated 改为使用 searchByKeywordWithWeighting() 以获得加权排序
-     */
-    @Deprecated(since = "2.0", forRemoval = true)
     Page<Achievement> findByTitleContainingOrConceptsContaining(String title, String concept, Pageable pageable);
 
-    /**
-     * @deprecated 改为使用 searchByKeywordWithWeighting() 以获得加权排序
-     */
-    @Deprecated(since = "2.0", forRemoval = true)
     Page<Achievement> findByPublicationDateBetween(String startDate, String endDate, Pageable pageable);
 
-    /**
-     * @deprecated 改为使用 searchByDateRangeAndKeywordWithWeighting() 以获得加权排序
-     */
-    @Deprecated(since = "2.0", forRemoval = true)
     Page<Achievement> findByPublicationDateBetweenAndTitleContainingOrConceptsContaining(
             String startDate, String endDate, String title, String concept, Pageable pageable);
 
@@ -133,211 +113,44 @@ public interface AchievementRepository extends ElasticsearchRepository<Achieveme
 
     /**
      * 双关键词搜索（支持中英文混合检索）
-     */
-    @Query("""
-      {
-        "bool": {
-          "should": [
-            {
-              "match": {
-                "title": {
-                  "query": "?0",
-                  "operator": "or"
-                }
-              }
-            },
-            {
-              "match": {
-                "concepts": {
-                  "query": "?0",
-                  "operator": "or"
-                }
-              }
-            },
-            {
-              "match": {
-                "title": {
-                  "query": "?1",
-                  "operator": "or"
-                }
-              }
-            },
-            {
-              "match": {
-                "concepts": {
-                  "query": "?1",
-                  "operator": "or"
-                }
-              }
-            }
-          ],
-          "minimum_should_match": 1
-        }
-      }
-      """)
-    Page<Achievement> searchByTwoKeywords(String keyword1, String keyword2, Pageable pageable);
-
-    /**
-     * 按关键词搜索（支持空格）- 在标题或概念中搜索
-     * 使用 match 查询，支持包含空格的关键词如 "artificial intelligence"
-     */
-    @Deprecated(since = "2.0", forRemoval = true)
-    @Query("""
-      {
-        "bool": {
-          "should": [
-            {
-              "match": {
-                "title": {
-                  "query": "?0",
-                  "operator": "or"
-                }
-              }
-            },
-            {
-              "match": {
-                "concepts": {
-                  "query": "?0",
-                  "operator": "or"
-                }
-              }
-            }
-          ],
-          "minimum_should_match": 1
-        }
-      }
-      """)
-    Page<Achievement> searchByKeywordWithSpaceSupport(String keyword, Pageable pageable);
-
-    /**
-     * 按关键词加权搜索（支持空格）
      * 使用 function_score 查询应用权重算法
-     * 最终得分 = 查询得分 × (1 + 加权因子)
-     * 权重因子 = (log(1+cited_by_count)×1.2 + log(1+favourite_count)×1.0 + log(1+read_count)×0.8) / 3
-     * 
-     * fields: title^3 (权重3), concepts^2.5 (权重2.5), abstract^1.5 (权重1.5)
-     * 引用权重系数: 1.2 > 收藏权重: 1.0 > 阅读权重: 0.8
-     */
-    @Query("""
-      {
-        "function_score": {
-          "query": {
-            "multi_match": {
-              "query": "?0",
-              "fields": ["title^3", "concepts^2.5", "abstract^1.5"],
-              "operator": "or",
-              "fuzziness": "AUTO"
-            }
-          },
-          "functions": [
-            {
-              "field_value_factor": {
-                "field": "cited_by_count",
-                "factor": 1.2,
-                "modifier": "log1p",
-                "missing": 0
-              }
-            },
-            {
-              "field_value_factor": {
-                "field": "favourite_count",
-                "factor": 1.0,
-                "modifier": "log1p",
-                "missing": 0
-              }
-            },
-            {
-              "field_value_factor": {
-                "field": "read_count",
-                "factor": 0.8,
-                "modifier": "log1p",
-                "missing": 0
-              }
-            }
-          ],
-          "score_mode": "sum",
-          "boost_mode": "multiply",
-          "max_boost": 42
-        }
-      }
-      """)
-    Page<Achievement> searchByKeywordWithWeighting(String keyword, Pageable pageable);
-
-    /**
-     * @deprecated 改为使用 searchByDateRangeAndKeywordWithWeighting() 以获得加权排序
-     * 按时间范围和关键词搜索（支持空格）
-     * 使用 match 查询，支持包含空格的关键词如 "artificial intelligence"
-     */
-    @Deprecated(since = "2.0", forRemoval = true)
-    @Query("""
-      {
-        "bool": {
-          "must": [
-            {
-              "range": {
-                "publication_date": {
-                  "gte": "?0",
-                  "lte": "?1"
-                }
-              }
-            }
-          ],
-          "should": [
-            {
-              "match": {
-                "title": {
-                  "query": "?2",
-                  "operator": "or"
-                }
-              }
-            },
-            {
-              "match": {
-                "concepts": {
-                  "query": "?2",
-                  "operator": "or"
-                }
-              }
-            }
-          ],
-          "minimum_should_match": 1
-        }
-      }
-      """)
-    Page<Achievement> searchByDateRangeAndKeywordWithSpaceSupport(
-            String startDate, String endDate, String keyword, Pageable pageable);
-
-    /**
-     * 按时间范围和关键词加权搜索（支持空格）
-     * 使用 function_score 查询应用权重算法
-     * 最终得分 = 查询得分 × (1 + 加权因子)
-     * 权重因子 = (log(1+cited_by_count)×1.2 + log(1+favourite_count)×1.0 + log(1+read_count)×0.8) / 3
-     * 
-     * fields: title^3 (权重3), concepts^2.5 (权重2.5), abstract^1.5 (权重1.5)
-     * 引用权重系数: 1.2 > 收藏权重: 1.0 > 阅读权重: 0.8
      */
     @Query("""
       {
         "function_score": {
           "query": {
             "bool": {
-              "must": [
-                {
-                  "range": {
-                    "publication_date": {
-                      "gte": "?0",
-                      "lte": "?1"
-                    }
-                  }
-                }
-              ],
               "should": [
                 {
-                  "multi_match": {
-                    "query": "?2",
-                    "fields": ["title^3", "concepts^2.5", "abstract^1.5"],
-                    "operator": "or",
-                    "fuzziness": "AUTO"
+                  "match": {
+                    "title": {
+                      "query": "?0",
+                      "operator": "or"
+                    }
+                  }
+                },
+                {
+                  "match": {
+                    "concepts": {
+                      "query": "?0",
+                      "operator": "or"
+                    }
+                  }
+                },
+                {
+                  "match": {
+                    "title": {
+                      "query": "?1",
+                      "operator": "or"
+                    }
+                  }
+                },
+                {
+                  "match": {
+                    "concepts": {
+                      "query": "?1",
+                      "operator": "or"
+                    }
                   }
                 }
               ],
@@ -376,8 +189,250 @@ public interface AchievementRepository extends ElasticsearchRepository<Achieveme
         }
       }
       """)
-    Page<Achievement> searchByDateRangeAndKeywordWithWeighting(
+    Page<Achievement> searchByTwoKeywords(String keyword1, String keyword2, Pageable pageable);
+
+    /**
+     * 按关键词搜索（支持空格）- 在标题或概念中搜索
+     * 使用 function_score 查询应用权重算法
+     */
+    @Query("""
+      {
+        "function_score": {
+          "query": {
+            "bool": {
+              "should": [
+                {
+                  "match": {
+                    "title": {
+                      "query": "?0",
+                      "operator": "or"
+                    }
+                  }
+                },
+                {
+                  "match": {
+                    "concepts": {
+                      "query": "?0",
+                      "operator": "or"
+                    }
+                  }
+                }
+              ],
+              "minimum_should_match": 1
+            }
+          },
+          "functions": [
+            {
+              "field_value_factor": {
+                "field": "cited_by_count",
+                "factor": 1.2,
+                "modifier": "log1p",
+                "missing": 0
+              }
+            },
+            {
+              "field_value_factor": {
+                "field": "favourite_count",
+                "factor": 1.0,
+                "modifier": "log1p",
+                "missing": 0
+              }
+            },
+            {
+              "field_value_factor": {
+                "field": "read_count",
+                "factor": 0.8,
+                "modifier": "log1p",
+                "missing": 0
+              }
+            }
+          ],
+          "score_mode": "sum",
+          "boost_mode": "multiply",
+          "max_boost": 42
+        }
+      }
+      """)
+    Page<Achievement> searchByKeywordWithSpaceSupport(String keyword, Pageable pageable);
+
+    /**
+     * 按时间范围和关键词搜索（支持空格）
+     * 使用 function_score 查询应用权重算法
+     */
+    @Query("""
+      {
+        "function_score": {
+          "query": {
+            "bool": {
+              "must": [
+                {
+                  "range": {
+                    "publication_date": {
+                      "gte": "?0",
+                      "lte": "?1"
+                    }
+                  }
+                }
+              ],
+              "should": [
+                {
+                  "match": {
+                    "title": {
+                      "query": "?2",
+                      "operator": "or"
+                    }
+                  }
+                },
+                {
+                  "match": {
+                    "concepts": {
+                      "query": "?2",
+                      "operator": "or"
+                    }
+                  }
+                }
+              ],
+              "minimum_should_match": 1
+            }
+          },
+          "functions": [
+            {
+              "field_value_factor": {
+                "field": "cited_by_count",
+                "factor": 1.2,
+                "modifier": "log1p",
+                "missing": 0
+              }
+            },
+            {
+              "field_value_factor": {
+                "field": "favourite_count",
+                "factor": 1.0,
+                "modifier": "log1p",
+                "missing": 0
+              }
+            },
+            {
+              "field_value_factor": {
+                "field": "read_count",
+                "factor": 0.8,
+                "modifier": "log1p",
+                "missing": 0
+              }
+            }
+          ],
+          "score_mode": "sum",
+          "boost_mode": "multiply",
+          "max_boost": 42
+        }
+      }
+      """)
+    Page<Achievement> searchByDateRangeAndKeywordWithSpaceSupport(
             String startDate, String endDate, String keyword, Pageable pageable);
 
     List<Achievement> findByStatus(Achievement.AchievementStatus status);
+
+    /**
+     * 高级检索组合查询（带权重排序）
+     * 支持关键词、概念、时间范围、作者和机构的组合检索
+     * 使用 function_score 查询应用权重算法
+     * 权重因子 = (log(1+cited_by_count)×1.2 + log(1+favourite_count)×1.0 + log(1+read_count)×0.8) / 3
+     */
+    @Query("""
+      {
+        "function_score": {
+          "query": {
+            "bool": {
+              "must": [
+                {
+                  "bool": {
+                    "should": [
+                      { "range": { "publication_date": { "gte": "?0", "lte": "?1" } } }
+                    ],
+                    "minimum_should_match": 0
+                  }
+                },
+                {
+                  "bool": {
+                    "should": [
+                      { "term": { "institution_ids": "?2" } }
+                    ],
+                    "minimum_should_match": 0
+                  }
+                },
+                {
+                  "bool": {
+                    "should": [
+                      { "term": { "author_ids": "?3" } }
+                    ],
+                    "minimum_should_match": 0
+                  }
+                },
+                {
+                  "bool": {
+                    "should": [
+                      { "match_phrase": { "concepts": "?4" } }
+                    ],
+                    "minimum_should_match": 0
+                  }
+                }
+              ],
+              "should": [
+                {
+                  "match": {
+                    "title": {
+                      "query": "?5",
+                      "operator": "or"
+                    }
+                  }
+                },
+                {
+                  "match": {
+                    "concepts": {
+                      "query": "?5",
+                      "operator": "or"
+                    }
+                  }
+                }
+              ],
+              "minimum_should_match": 1
+            }
+          },
+          "functions": [
+            {
+              "field_value_factor": {
+                "field": "cited_by_count",
+                "factor": 1.2,
+                "modifier": "log1p",
+                "missing": 0
+              }
+            },
+            {
+              "field_value_factor": {
+                "field": "favourite_count",
+                "factor": 1.0,
+                "modifier": "log1p",
+                "missing": 0
+              }
+            },
+            {
+              "field_value_factor": {
+                "field": "read_count",
+                "factor": 0.8,
+                "modifier": "log1p",
+                "missing": 0
+              }
+            }
+          ],
+          "score_mode": "sum",
+          "boost_mode": "multiply",
+          "max_boost": 42
+        }
+      }
+      """)
+    Page<Achievement> advancedSearchWithWeighting(
+            String startDate, String endDate,
+            String institutionId, String authorId,
+            String concept, String keyword,
+            Pageable pageable);
 }
