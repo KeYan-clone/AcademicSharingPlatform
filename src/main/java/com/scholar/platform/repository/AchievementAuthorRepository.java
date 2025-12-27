@@ -14,4 +14,6 @@ public interface AchievementAuthorRepository extends JpaRepository<AchievementAu
     List<AchievementAuthor> findByAuthorUserId(String userId);
 
     List<AchievementAuthor> findByAuthorNameContaining(String authorName);
+
+    boolean existsByAchievementIdAndAuthorOrder(String achievementId, Integer authorOrder);
 }

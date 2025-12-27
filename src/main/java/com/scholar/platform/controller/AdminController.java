@@ -1,13 +1,16 @@
 package com.scholar.platform.controller;
 
+import com.scholar.platform.dto.AchievementClaimReplyDTO;
 import com.scholar.platform.dto.AchievementDTO;
 import com.scholar.platform.dto.ApiResponse;
+import com.scholar.platform.dto.PendingClaimRequestDTO;
 import com.scholar.platform.entity.Achievement;
 import com.scholar.platform.entity.ScholarCertification;
 import com.scholar.platform.entity.UserAppeal;
 import com.scholar.platform.service.AchievementService;
 import com.scholar.platform.service.AppealService;
 import com.scholar.platform.service.CertificationService;
+import com.scholar.platform.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -33,6 +36,7 @@ public class AdminController {
   private final CertificationService certificationService;
   private final AppealService appealService;
   private final AchievementService achievementService;
+  private final UserService userService;
 
   /**
    * 获取待审核的学者认证列表
@@ -184,4 +188,36 @@ public class AdminController {
 
     return ResponseEntity.ok(ApiResponse.success(response));
   }
+
+  /**
+   * 获取所有待审核的成果认领请求
+   */
+  @GetMapping("/claim-requests/pending")
+  @Operation(summary = "获取所有待审核的成果认领请求", description = "管理员查看所有待审核的成果认领请求")
+  public ResponseEntity<ApiResponse<Map<String, Object>>> getPendingClaimRequests() {
+    List<PendingClaimRequestDTO> pendingRequests = userService.getPendingClaimRequests();
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("pendingClaimRequests", pendingRequests);
+
+    return ResponseEntity.ok(ApiResponse.success(response));
+  }
+
+  /**
+   * 处理成果认领请求
+   */
+  @PostMapping("/claim-requests/reply")
+  @Operation(summary = "回复成果认领请求", description = "管理员回复成果认领请求，可能建立作者关联")
+  public ResponseEntity<ApiResponse<Map<String, String>>> approveClaimRequest(
+      @Parameter(description = "认领请求回复") @RequestBody AchievementClaimReplyDTO reply
+) {
+    userService.replyClaimAchievement(reply.getRequestId(), reply.getIsApprove(), reply.getMessage());
+
+    Map<String, String> response = new HashMap<>();
+    response.put("message", "操作完成");
+
+    return ResponseEntity.ok(ApiResponse.success(response));
+  }
+
+  
 }

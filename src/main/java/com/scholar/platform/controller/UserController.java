@@ -137,20 +137,10 @@ public class UserController {
     @GetMapping("/me/achievements")
     @Operation(summary = "获取当前用户的学术成果列表")
     public ResponseEntity<ApiResponse<List<AchievementDTO>>> getMyAchievements(
-            @Parameter(description = "成果状态筛选 (可选): PENDING, APPROVED, REJECTED")
-            @RequestParam(required = false) Achievement.AchievementStatus status) {
+            @Parameter(description = "成果状态筛选 (可选): PENDING, APPROVED, REJECTED") @RequestParam(required = false) Achievement.AchievementStatus status) {
         User user = userService.getByEmailOrThrow(currentUserEmail());
         List<AchievementDTO> achievements = userService.getUserAchievements(user.getId(), status);
         return ResponseEntity.ok(ApiResponse.success(achievements));
-    }
-
-    @PostMapping("/me/achievements")
-    @Operation(summary = "为当前用户添加学术成果")
-    public ResponseEntity<ApiResponse<AchievementDTO>> addMyAchievement(
-            @Validated @RequestBody AchievementRequest request) {
-        User user = userService.getByEmailOrThrow(currentUserEmail());
-        AchievementDTO achievement = userService.addUserAchievement(user.getId(), request);
-        return ResponseEntity.status(202).body(ApiResponse.success(achievement));
     }
 
     @PutMapping("/me/achievements/{achievementId}")
@@ -174,9 +164,9 @@ public class UserController {
 
     @GetMapping("/me/collections")
     @Operation(summary = "获取用户的收藏列表")
-    public ResponseEntity<ApiResponse<List<CollectionDTO>>> getMyCollections(){
+    public ResponseEntity<ApiResponse<List<CollectionDTO>>> getMyCollections() {
         User user = userService.getByEmailOrThrow(currentUserEmail());
-        ArrayList<CollectionDTO> collections = (ArrayList<CollectionDTO>)userService.getUserCollections(user.getId());
+        ArrayList<CollectionDTO> collections = (ArrayList<CollectionDTO>) userService.getUserCollections(user.getId());
         return ResponseEntity.ok(ApiResponse.success(collections));
     }
 
@@ -197,4 +187,23 @@ public class UserController {
         userService.deleteUserCollection(user.getId(), achievementId);
         return ResponseEntity.status(204).body(ApiResponse.success("取消收藏成功", null));
     }
+
+    @PutMapping("/me/achievements/claim/{achievementId}/{authorOrder}")
+    @Operation(summary = "发起认领学术成果请求")
+    public ResponseEntity<ApiResponse<Void>> requestClaimAchievement(
+            @Parameter(description = "成果ID") @PathVariable String achievementId,
+            @Parameter(description = "作者顺序") @PathVariable Integer authorOrder) {
+        User user = userService.getByEmailOrThrow(currentUserEmail());
+        userService.requestClaimAchievement(user.getId(), achievementId, authorOrder);
+        return ResponseEntity.status(201).body(ApiResponse.success("认领申请已提交，请等待审核", null));
+    }
+
+    @GetMapping("/me/achievements/claim-requests")
+    @Operation(summary = "获取当前用户所有提交的认领请求")
+    public ResponseEntity<ApiResponse<List<UserClaimRequestDTO>>> getUserClaimRequests() {
+        User user = userService.getByEmailOrThrow(currentUserEmail());
+        List<UserClaimRequestDTO> claimRequests = userService.getUserClaimRequests(user.getId());
+        return ResponseEntity.ok(ApiResponse.success(claimRequests));
+    }
+
 }

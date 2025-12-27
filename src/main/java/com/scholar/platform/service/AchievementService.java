@@ -16,6 +16,7 @@ import org.springframework.data.elasticsearch.core.query.ScriptType;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.scholar.platform.util.IdPrefixUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +25,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AchievementService {
-
-  private static final String ID_PREFIX = "https://openalex.org/";
 
   private final AchievementRepository achievementRepository;
   private final InstitutionRepository institutionRepository;
@@ -72,13 +71,14 @@ public class AchievementService {
 
   /**
    * 高级检索：支持关键词、概念、时间范围、作者和机构的组合检索
-   * @param keyword 关键词（模糊搜索标题和概念）
-   * @param field 学科领域/概念（精确匹配，由用户从下拉列表选择）
-   * @param startDate 开始日期
-   * @param endDate 结束日期
-   * @param authorName 作者姓名（精确匹配）
+   * 
+   * @param keyword         关键词（模糊搜索标题和概念）
+   * @param field           学科领域/概念（精确匹配，由用户从下拉列表选择）
+   * @param startDate       开始日期
+   * @param endDate         结束日期
+   * @param authorName      作者姓名（精确匹配）
    * @param institutionName 机构名称（精确匹配）
-   * @param pageable 分页参数
+   * @param pageable        分页参数
    */
 public Page<AchievementDTO> advancedSearch(String keyword, String field,
                                                String startDate, String endDate,
@@ -163,12 +163,12 @@ public Page<AchievementDTO> advancedSearch(String keyword, String field,
    * 同时更新阅读次数和概念热度统计
    */
   public AchievementDTO getById(String id) {
-    Achievement achievement = achievementRepository.findById(ensureIdPrefix(id))
+    Achievement achievement = achievementRepository.findById(IdPrefixUtil.ensureIdPrefix(id))
         .orElseThrow(() -> new RuntimeException("成果不存在"));
 
     incrementReadCount(achievement);
     // updateConcept(achievement);
-    
+
     return toDTO(achievement);
   }
 
@@ -220,7 +220,7 @@ public Page<AchievementDTO> advancedSearch(String keyword, String field,
   // }
 
   public List<AchievementDTO> getByIds(List<String> ids) {
-    List<String> prefixedIds = ids.stream().map(this::ensureIdPrefix).collect(Collectors.toList());
+    List<String> prefixedIds = ids.stream().map(IdPrefixUtil::ensureIdPrefix).collect(Collectors.toList());
     Iterable<Achievement> achievements = achievementRepository.findAllById(prefixedIds);
     List<AchievementDTO> dtos = new ArrayList<>();
     achievements.forEach(a -> dtos.add(toDTO(a)));
@@ -228,22 +228,22 @@ public Page<AchievementDTO> advancedSearch(String keyword, String field,
   }
 
   public void incrementFavouriteCount(String achievementId) {
-    updateEsFieldCount(ensureIdPrefix(achievementId), "favouriteCount", 1);
+    updateEsFieldCount(IdPrefixUtil.ensureIdPrefix(achievementId), "favouriteCount", 1);
   }
 
   public void decrementFavouriteCount(String achievementId) {
-    updateEsFieldCount(ensureIdPrefix(achievementId), "favouriteCount", -1);
+    updateEsFieldCount(IdPrefixUtil.ensureIdPrefix(achievementId), "favouriteCount", -1);
   }
-
 
   private void updateEsFieldCount(String id, String field, int delta) {
     try {
       String scriptCode;
       if (delta > 0) {
-        scriptCode = String.format("if (ctx._source.%s == null) { ctx._source.%s = %d } else { ctx._source.%s += %d }", field, field, delta, field, delta);
-      } 
-      else {
-        scriptCode = String.format("if (ctx._source.%s != null && ctx._source.%s > 0) { ctx._source.%s += %d }", field, field, field, delta);
+        scriptCode = String.format("if (ctx._source.%s == null) { ctx._source.%s = %d } else { ctx._source.%s += %d }",
+            field, field, delta, field, delta);
+      } else {
+        scriptCode = String.format("if (ctx._source.%s != null && ctx._source.%s > 0) { ctx._source.%s += %d }", field,
+            field, field, delta);
       }
 
       UpdateQuery updateQuery = UpdateQuery.builder(id)
@@ -264,7 +264,7 @@ public Page<AchievementDTO> advancedSearch(String keyword, String field,
    */
   public AchievementDTO toDTO(Achievement achievement) {
     AchievementDTO dto = new AchievementDTO();
-    dto.setId(removeIdPrefix(achievement.getId()));
+    dto.setId(IdPrefixUtil.removeIdPrefix(achievement.getId()));
     dto.setDoi(achievement.getDoi());
     dto.setTitle(achievement.getTitle());
     dto.setPublicationDate(achievement.getPublicationDate());
@@ -284,8 +284,7 @@ public Page<AchievementDTO> advancedSearch(String keyword, String field,
           .filter(authorship -> authorship.getAuthor() != null)
           .map(authorship -> new AchievementDTO.AuthorInfo(
               authorship.getAuthor().getId(),
-              authorship.getAuthor().getDisplayName()
-          ))
+              authorship.getAuthor().getDisplayName()))
           .collect(Collectors.toList());
       dto.setAuthorships(authors);
     }
@@ -293,18 +292,23 @@ public Page<AchievementDTO> advancedSearch(String keyword, String field,
     return dto;
   }
 
-  private String ensureIdPrefix(String id) {
-    if (id != null && !id.startsWith(ID_PREFIX)) {
-      return ID_PREFIX + id;
-    }
-    return id;
+  public List<AchievementDTO> getPendingAchievements() {
+    return achievementRepository.findByStatus(Achievement.AchievementStatus.PENDING)
+        .stream()
+        .map(Achievement::toDTO)
+        .collect(Collectors.toList());
   }
 
-  private String removeIdPrefix(String id) {
-    if (id != null && id.startsWith(ID_PREFIX)) {
-      return id.substring(ID_PREFIX.length());
-    }
-    return id;
+  @Transactional
+  public Achievement approveAchievement(String achievementId, String adminId) {
+    Achievement achievement = achievementRepository.findById(achievementId)
+        .orElseThrow(() -> new RuntimeException("成果不存在"));
+
+    User admin = userRepository.findById(adminId)
+        .orElseThrow(() -> new RuntimeException("管理员不存在"));
+
+    achievement.setStatus(Achievement.AchievementStatus.APPROVED);
+    return achievementRepository.save(achievement);
   }
 
       public List<AchievementDTO> getPendingAchievements() {
