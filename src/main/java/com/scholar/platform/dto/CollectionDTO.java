@@ -24,7 +24,7 @@ public class CollectionDTO {
     private LocalDateTime savedAt;
 
     @Schema(description = "整个成果")
-    private Achievement achievement;
+    private AchievementDTO achievementDTO;
 
     /**
      * 从UserCollection实体创建DTO
@@ -36,8 +36,7 @@ public class CollectionDTO {
 
         Achievement achievement = Utils.getAchievement(collection.getAchievementId());
         if (achievement != null) {
-            dto.setTitle(achievement.getTitle());
-            dto.setAchievement(achievement);
+            dto.setAchievementDTO(Achievement.toDTO(achievement));
         }
 
         return dto;
