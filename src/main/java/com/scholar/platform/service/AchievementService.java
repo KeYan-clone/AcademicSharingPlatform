@@ -35,6 +35,8 @@ public class AchievementService {
     private final PaperKeywordRepository paperKeywordRepository;
     private final ElasticsearchOperations elasticsearchOperations;
     private final UserRepository userRepository;
+    private final UserCollectionRepository userCollectionRepository;
+    private final TranslationService translationService;
 
     /**
      * 通过关键词搜索（带加权排序）
@@ -254,14 +256,100 @@ public class AchievementService {
 
         return toDTO(achievement);
     }
-  }
+    /**
+     * 增加成果的阅读次数
+     * 使用 Elasticsearch 脚本进行原子更新，避免并发覆盖问题
+     */
+    private void incrementReadCount(Achievement achievement) {
+    updateEsFieldCount(achievement.getId(), "readCount", 1);
 
-  /**
-   * 转换为DTO，提取作者信息
-   */
-  public AchievementDTO toDTO(Achievement achievement) {
+    if (achievement.getReadCount() == null) {
+        achievement.setReadCount(1);
+    } else {
+        achievement.setReadCount(achievement.getReadCount() + 1);
+    }
+    }
+
+    // /**
+    //  * 更新概念热度统计
+    //  */
+    // private void updateConcept(Achievement achievement) {
+    //   if (achievement.getConcepts() == null || achievement.getConcepts().isEmpty()) {
+    //     return;
+    //   }
+
+    //   try {
+    //     for (String concept : achievement.getConcepts()) {
+    //       if (concept == null || concept.trim().isEmpty()) {
+    //         continue;
+    //       }
+
+    //       int updatedRows = conceptRepository.incrementHeatCount(concept);
+
+    //       if (updatedRows == 0) {
+    //           if (!conceptRepository.existsById(concept)) {
+    //               try {
+    //                   conceptRepository.save(new Concept(concept, 1));
+    //               } catch (Exception e) {
+    //                   conceptRepository.incrementHeatCount(concept);
+    //               }
+    //           } else {
+    //               conceptRepository.incrementHeatCount(concept);
+    //           }
+    //       }
+    //     }
+    //   } catch (Exception e) {
+    //     System.err.println("Failed to update concept statistics for achievement: " + achievement.getId() + ", error: " + e.getMessage());
+    //   }
+    // }
+
+    public List<AchievementDTO> getByIds(List<String> ids) {
+    List<String> prefixedIds = ids.stream().map(IdPrefixUtil::ensureIdPrefix).collect(Collectors.toList());
+    Iterable<Achievement> achievements = achievementRepository.findAllById(prefixedIds);
+    List<AchievementDTO> dtos = new ArrayList<>();
+    achievements.forEach(a -> dtos.add(toDTO(a)));
+    return dtos;
+    }
+
+
+    public void incrementFavouriteCount(String achievementId) {
+    updateEsFieldCount(IdPrefixUtil.ensureIdPrefix(achievementId), "favouriteCount", 1);
+    }
+
+    public void decrementFavouriteCount(String achievementId) {
+    updateEsFieldCount(IdPrefixUtil.ensureIdPrefix(achievementId), "favouriteCount", -1);
+    }
+
+
+    private void updateEsFieldCount(String id, String field, int delta) {
+    try {
+        String scriptCode;
+        if (delta > 0) {
+        scriptCode = String.format("if (ctx._source.%s == null) { ctx._source.%s = %d } else { ctx._source.%s += %d }", field, field, delta, field, delta);
+        } 
+        else {
+        scriptCode = String.format("if (ctx._source.%s != null && ctx._source.%s > 0) { ctx._source.%s += %d }", field, field, field, delta);
+        }
+
+        UpdateQuery updateQuery = UpdateQuery.builder(id)
+            .withScript(scriptCode)
+            .withLang("painless")
+            .withScriptType(ScriptType.INLINE)
+            .build();
+
+        elasticsearchOperations.update(updateQuery, IndexCoordinates.of("openalex_works"));
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.err.println("Failed to update " + field + " for achievement: " + id + ", error: " + e.getMessage());
+    }
+    }
+
+    /**
+     * 转换为DTO，提取作者信息
+     */
+    public AchievementDTO toDTO(Achievement achievement) {
     AchievementDTO dto = Achievement.toDTO(achievement);
-    
+
     // Check if current user has favourited this achievement
     try {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -279,7 +367,7 @@ public class AchievementService {
     }
     return dto;
 
-  }
+    }
 
   public List<AchievementDTO> getPendingAchievements() {
       return achievementRepository.findByStatus(Achievement.AchievementStatus.PENDING)
