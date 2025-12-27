@@ -61,6 +61,12 @@ public class AchievementDTO {
   @Schema(description = "机构ID列表")
   private List<String> institutionIds;
 
+  @Schema(description = "作者姓名列表")
+  private List<String> authorNames;
+
+  @Schema(description = "机构名称列表")
+  private List<String> institutionNames;
+  
   @Schema(description = "是否已收藏")
   private Boolean isFavourite;
 

@@ -74,6 +74,12 @@ public class Achievement {
     @Field(name = "institution_ids", type = FieldType.Keyword)
     private List<String> institutionIds;
 
+    @Field(name = "author_names", type = FieldType.Keyword, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    private List<String> authorNames;
+
+    @Field(name = "institution_names", type = FieldType.Keyword, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
+    private List<String> institutionNames;
+
     @Field(type = FieldType.Keyword)
     private AchievementStatus status = AchievementStatus.PENDING;
 
@@ -146,6 +152,8 @@ public class Achievement {
         dto.setReadCount(achievement.getReadCount());
         dto.setAuthorIds(achievement.getAuthorIds());
         dto.setInstitutionIds(achievement.getInstitutionIds());
+        dto.setAuthorNames(achievement.getAuthorNames());
+        dto.setInstitutionNames(achievement.getInstitutionNames());
 
         if (achievement.getAuthorships() != null) {
             List<AchievementDTO.AuthorInfo> authors = achievement.getAuthorships().stream()

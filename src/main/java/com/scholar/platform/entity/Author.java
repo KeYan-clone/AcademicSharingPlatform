@@ -18,6 +18,6 @@ public class Author {
     @Field(type = FieldType.Keyword)
     private String id;
 
-    @Field(name = "display_name", type = FieldType.Text, analyzer = "standard")
+    @Field(name = "display_name", type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String displayName;
 }
