@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AchievementService {
 
+  private static final String ID_PREFIX = "https://openalex.org/";
+
   private final AchievementRepository achievementRepository;
   private final InstitutionRepository institutionRepository;
   private final AuthorRepository authorRepository;
@@ -136,7 +138,7 @@ public class AchievementService {
    * 同时更新阅读次数和概念热度统计
    */
   public AchievementDTO getById(String id) {
-    Achievement achievement = achievementRepository.findById(id)
+    Achievement achievement = achievementRepository.findById(ensureIdPrefix(id))
         .orElseThrow(() -> new RuntimeException("成果不存在"));
 
     incrementReadCount(achievement);
@@ -193,18 +195,19 @@ public class AchievementService {
   }
 
   public List<AchievementDTO> getByIds(List<String> ids) {
-    Iterable<Achievement> achievements = achievementRepository.findAllById(ids);
+    List<String> prefixedIds = ids.stream().map(this::ensureIdPrefix).collect(Collectors.toList());
+    Iterable<Achievement> achievements = achievementRepository.findAllById(prefixedIds);
     List<AchievementDTO> dtos = new ArrayList<>();
     achievements.forEach(a -> dtos.add(toDTO(a)));
     return dtos;
   }
 
   public void incrementFavouriteCount(String achievementId) {
-    updateEsFieldCount(achievementId, "favouriteCount", 1);
+    updateEsFieldCount(ensureIdPrefix(achievementId), "favouriteCount", 1);
   }
 
   public void decrementFavouriteCount(String achievementId) {
-    updateEsFieldCount(achievementId, "favouriteCount", -1);
+    updateEsFieldCount(ensureIdPrefix(achievementId), "favouriteCount", -1);
   }
 
 
@@ -236,7 +239,7 @@ public class AchievementService {
    */
   public AchievementDTO toDTO(Achievement achievement) {
     AchievementDTO dto = new AchievementDTO();
-    dto.setId(achievement.getId());
+    dto.setId(removeIdPrefix(achievement.getId()));
     dto.setDoi(achievement.getDoi());
     dto.setTitle(achievement.getTitle());
     dto.setPublicationDate(achievement.getPublicationDate());
@@ -263,5 +266,19 @@ public class AchievementService {
     }
 
     return dto;
+  }
+
+  private String ensureIdPrefix(String id) {
+    if (id != null && !id.startsWith(ID_PREFIX)) {
+      return ID_PREFIX + id;
+    }
+    return id;
+  }
+
+  private String removeIdPrefix(String id) {
+    if (id != null && id.startsWith(ID_PREFIX)) {
+      return id.substring(ID_PREFIX.length());
+    }
+    return id;
   }
 }

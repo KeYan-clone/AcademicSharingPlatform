@@ -5,37 +5,39 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-
 @Entity
 @Table(name = "scholar_influence")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(ScholarInfluence.ScholarInfluenceId.class)
 public class ScholarInfluence {
 
-  @Id
-  @Column(name = "scholar_id", length = 36)
-  private String scholarId;
+    @Id
+    @Column(name = "user_id", length = 36)
+    private String userId; // 对应 User 表的主键
 
-  @Id
-  @Column(name = "year")
-  private Integer year;
+    @Column(name = "author_name")
+    private String authorName;
 
-  @ManyToOne
-  @JoinColumn(name = "scholar_id", insertable = false, updatable = false)
-  private User scholar;
+    @Column(name = "works_count")
+    private Integer worksCount;
 
-  @Column(name = "value", nullable = false, precision = 18, scale = 4)
-  private BigDecimal value;
+    @Column(name = "cited_by_cnt")
+    private Integer citedByCnt;
 
-  @Data
-  @NoArgsConstructor
-  @AllArgsConstructor
-  public static class ScholarInfluenceId implements Serializable {
-    private String scholarId;
-    private Integer year;
-  }
+    @Column(name = "h_index")
+    private Integer hIndex;
+
+    @Column(name = "i10_index")
+    private Integer i10Index;
+
+    @Column(name = "domain")
+    private String domain;
+
+    @Column(name = "topics", length = 500) // 适当增加长度
+    private String topics; // 存储为 "Tag1, Tag2, Tag3"
+    
+    // 记录关联的 OpenAlex ID，方便后续更新
+    @Column(name = "open_alex_id")
+    private String openAlexId; 
 }

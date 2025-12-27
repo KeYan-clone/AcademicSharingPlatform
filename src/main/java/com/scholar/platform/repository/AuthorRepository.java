@@ -15,4 +15,15 @@ public interface AuthorRepository extends ElasticsearchRepository<Author, String
      */
     @Query("{\"match\": {\"display_name\": {\"query\": \"?0\", \"operator\": \"and\"}}}")
     Page<Author> findByDisplayName(String displayName, Pageable pageable);
+
+    /**
+     * 模糊匹配作者姓名
+     * 使用 match 查询，operator 默认为 OR，ES 会根据相关性评分排序，最匹配的在第一条
+     */
+    //@Query("{\"match\": {\"display_name\": {\"query\": \"?0\", \"fuzziness\": \"AUTO\"}}}")
+    @Query("{\"bool\": {\"should\": [" +
+           "  {\"match_phrase\": {\"display_name\": {\"query\": \"?0\", \"boost\": 2}}}, " + // 短语匹配权重更高
+           "  {\"match\": {\"display_name\": {\"query\": \"?0\", \"operator\": \"and\"}}}" + // 必须包含所有词
+           "], \"minimum_should_match\": 1}}")
+    Page<Author> findByDisplayNameFuzzy(String displayName, Pageable pageable);
 }
