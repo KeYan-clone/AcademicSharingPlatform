@@ -101,6 +101,9 @@ public class AiServiceClient {
       if (topK != null) {
         body.put("top_k", topK);
       }
+       if (kbId != null && !kbId.isBlank()) {
+         body.put("kb_id", kbId);
+       }
 
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.APPLICATION_JSON);
