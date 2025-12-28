@@ -111,8 +111,6 @@ public class AchievementService {
                     Pageable.ofSize(1));
             if (institutions.hasContent()) {
                 institutionId = institutions.getContent().get(0).getId();
-            } else {
-                return Page.empty(pageable);
             }
         }
 
@@ -121,8 +119,6 @@ public class AchievementService {
             Page<Author> authors = authorRepository.findByDisplayName(authorName, Pageable.ofSize(1));
             if (authors.hasContent()) {
                 authorId = authors.getContent().get(0).getId();
-            } else {
-                return Page.empty(pageable);
             }
         }
 
@@ -135,10 +131,34 @@ public class AchievementService {
 
         // 4. 添加各种过滤器 (Filters)
         List<Query> filters = new ArrayList<>();
-        if (institutionId != null)
-            filters.add(createTermQuery("institution_ids", institutionId));
-        if (authorId != null)
-            filters.add(createTermQuery("author_ids", authorId));
+
+        // 机构：name和id只要有一个匹配即可
+        if ((institutionName != null && !institutionName.trim().isEmpty()) || institutionId != null) {
+            List<Query> institutionShould = new ArrayList<>();
+            if (institutionName != null && !institutionName.trim().isEmpty()) {
+                institutionShould.addAll(buildNameQueries("institution_names", institutionName));
+            }
+            if (institutionId != null) {
+                institutionShould.add(createTermQuery("institution_ids", institutionId));
+            }
+            if (!institutionShould.isEmpty()) {
+                filters.add(QueryBuilders.bool(b -> b.should(institutionShould).minimumShouldMatch("1")));
+            }
+        }
+
+        // 作者：name和id只要有一个匹配即可
+        if ((authorName != null && !authorName.trim().isEmpty()) || authorId != null) {
+            List<Query> authorShould = new ArrayList<>();
+            if (authorName != null && !authorName.trim().isEmpty()) {
+                authorShould.addAll(buildNameQueries("author_names", authorName));
+            }
+            if (authorId != null) {
+                authorShould.add(createTermQuery("author_ids", authorId));
+            }
+            if (!authorShould.isEmpty()) {
+                filters.add(QueryBuilders.bool(b -> b.should(authorShould).minimumShouldMatch("1")));
+            }
+        }
 
         // 修正这里：使用 concepts 而不是 concept
         if (field != null && !field.trim().isEmpty())
@@ -151,7 +171,7 @@ public class AchievementService {
 
         // 5. 兜底逻辑：如果没有任何搜索条件，展示热门概念
         // 修正这里：检查的是 concepts 字段相关的条件
-        if (isCriteriaEmpty(keyword, field, institutionId, authorId)) {
+        if (isCriteriaEmpty(keyword, field, institutionName, institutionId, authorName, authorId)) {
             filters.add(getPopularConceptFilter()); // 这个方法需要返回对 concepts 数组的查询
         }
 
@@ -246,6 +266,22 @@ public class AchievementService {
 
     private Query createTermQuery(String field, String value) {
         return QueryBuilders.term(t -> t.field(field).value(FieldValue.of(value)));
+    }
+
+    private List<Query> buildNameQueries(String fieldBase, String value) {
+        String trimmed = value == null ? null : value.trim();
+        if (trimmed == null || trimmed.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Query> queries = new ArrayList<>();
+        // 优先尝试 keyword 子字段匹配，若不存在则不会命中，但不会报错
+        queries.add(QueryBuilders.term(t -> t.field(fieldBase + ".keyword").value(FieldValue.of(trimmed))));
+        // 同时保留直接 term 匹配
+        queries.add(QueryBuilders.term(t -> t.field(fieldBase).value(FieldValue.of(trimmed))));
+        // 再补一个 match_phrase 支持分词字段
+        queries.add(QueryBuilders.matchPhrase(m -> m.field(fieldBase).query(trimmed)));
+        return queries;
     }
 
     private boolean isCriteriaEmpty(String... params) {
