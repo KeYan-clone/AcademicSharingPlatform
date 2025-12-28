@@ -89,21 +89,12 @@ public class AnalysisAuthorService {
             influence.setI10Index(0);
         }
 
-        if (esAuthor.getFields() != null && !esAuthor.getFields().isEmpty()) {
-            // 1. Domain (一级学科): 取 fields 列表的第一个元素
-            // 例如: ["Materials Science", "Psychology"] -> "Materials Science"
+        if (esAuthor.getFields() != null && !esAuthor.getFields().isEmpty())
             influence.setDomain(esAuthor.getFields().get(0));
-
-            // 2. Topics (研究方向): 将整个 fields 列表拼接成字符串
-            // 例如: "Materials Science, Psychology"
-            String topicStr = esAuthor.getFields().stream()
-                    .limit(5) // 限制长度，防止过长
-                    .collect(Collectors.joining(", "));
-//            influence.setTopics(topicStr);
-        } else {
+        else if (esAuthor.getConcepts() != null && !esAuthor.getConcepts().isEmpty()) 
+            influence.setDomain(esAuthor.getConcepts().get(0));
+        else
             influence.setDomain("Unknown");
-//            influence.setTopics("");
-        }
 
         scholarInfluenceRepository.save(influence);
         log.info("已将ES数据同步至MySQL缓存, userId: {}", userId);
