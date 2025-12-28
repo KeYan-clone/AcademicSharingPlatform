@@ -96,13 +96,13 @@ public class AnalysisAuthorService {
 
             // 2. Topics (研究方向): 将整个 fields 列表拼接成字符串
             // 例如: "Materials Science, Psychology"
-            String topicStr = esAuthor.getFields().stream()
-                    .limit(5) // 限制长度，防止过长
-                    .collect(Collectors.joining(", "));
-            influence.setTopics(topicStr);
+            //String topicStr = esAuthor.getFields().stream()
+              //      .limit(5) // 限制长度，防止过长
+               //     .collect(Collectors.joining(", "));
+            //influence.setTopics(topicStr);
         } else {
             influence.setDomain("Unknown");
-            influence.setTopics("");
+            //influence.setTopics("");
         }
 
         scholarInfluenceRepository.save(influence);
