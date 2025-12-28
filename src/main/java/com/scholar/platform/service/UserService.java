@@ -1,20 +1,8 @@
 package com.scholar.platform.service;
 
-import com.scholar.platform.dto.AchievementDTO;
-import com.scholar.platform.dto.AchievementRequest;
-import com.scholar.platform.dto.CollectionDTO;
-import com.scholar.platform.dto.PendingClaimRequestDTO;
-import com.scholar.platform.dto.UserClaimRequestDTO;
-import com.scholar.platform.entity.Achievement;
-import com.scholar.platform.entity.AchievementAuthor;
-import com.scholar.platform.entity.AchievementClaimRequest;
-import com.scholar.platform.entity.User;
-import com.scholar.platform.entity.UserCollection;
-import com.scholar.platform.repository.AchievementAuthorRepository;
-import com.scholar.platform.repository.AchievementClaimRequestRepository;
-import com.scholar.platform.repository.AchievementRepository;
-import com.scholar.platform.repository.UserCollectionRepository;
-import com.scholar.platform.repository.UserRepository;
+import com.scholar.platform.dto.*;
+import com.scholar.platform.entity.*;
+import com.scholar.platform.repository.*;
 import com.scholar.platform.util.Utils;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +23,7 @@ public class UserService {
     private final AchievementAuthorRepository achievementAuthorRepository;
     private final UserCollectionRepository userCollectionRepository;
     private final AchievementClaimRequestRepository achievementClaimRequestRepository;
+    private final ScholarRepository scholarRepository;
 
     public Optional<User> findById(String id) {
         return userRepository.findById(id);
@@ -53,8 +42,27 @@ public class UserService {
     }
 
     public User getByEmailOrThrow(String email) {
+
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("用户不存在"));
+
+    }
+    public ScholarDTO getMe(String email) {
+        User user=userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("用户不存在"));
+        Scholar scholar=  scholarRepository.findById(user.getId())
+                .orElse(null);
+
+        ScholarDTO scholarDTO =new ScholarDTO();
+        if(scholar!=null){
+            scholarDTO=ScholarDTO.from(scholar);
+        }
+        scholarDTO.setUserId(user.getId());
+        scholarDTO.setUsername(user.getUsername());
+        scholarDTO.setEmail(user.getEmail());
+
+        return scholarDTO;
+
     }
 
     /**

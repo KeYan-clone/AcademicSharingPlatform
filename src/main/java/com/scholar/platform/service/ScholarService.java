@@ -99,7 +99,6 @@ public class ScholarService {
 
     Scholar scholar = scholarRepository.findById(userId).orElse(new Scholar());
     scholar.setUserId(userId);
-    scholar.setUser(user);
     scholar.setPublicName(dto.getPublicName());
     scholar.setOrganization(dto.getOrganization());
     scholar.setTitle(dto.getTitle());

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.elasticsearch.annotations.Field;
 
 import java.time.LocalDateTime;
 
@@ -39,6 +40,7 @@ public class User {
 
   @Column(name = "preferences", columnDefinition = "TEXT")
   private String preferences;
+
 
   public enum UserRole {
     USER, ADMIN

@@ -77,8 +77,8 @@ public class UserController {
 
     @GetMapping("/me")
     @Operation(summary = "获取当前登录用户信息")
-    public ResponseEntity<ApiResponse<User>> getMe() {
-        User user = userService.getByEmailOrThrow(currentUserEmail());
+    public ResponseEntity<ApiResponse<ScholarDTO>> getMe() {
+        ScholarDTO user = userService.getMe(currentUserEmail());
         return ResponseEntity.ok(ApiResponse.success(user));
     }
 

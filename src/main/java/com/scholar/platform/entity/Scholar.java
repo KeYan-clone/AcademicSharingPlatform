@@ -1,9 +1,7 @@
 package com.scholar.platform.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
@@ -11,6 +9,8 @@ import org.hibernate.annotations.UuidGenerator;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "user")
+@EqualsAndHashCode(exclude = "user")
 public class Scholar {
 
   @Id

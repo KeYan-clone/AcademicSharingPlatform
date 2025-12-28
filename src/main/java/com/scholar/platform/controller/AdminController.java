@@ -68,8 +68,8 @@ public class AdminController {
   public ResponseEntity<ApiResponse<Map<String, String>>> approveCertification(
       @Parameter(description = "认证申请ID") @PathVariable String appId,
       Authentication authentication) {
-    String adminId = authentication.getName();
-    certificationService.approveCertification(appId, adminId);
+    String adminEmail = authentication.getName();
+    certificationService.approveCertification(appId, adminEmail);
 
     Map<String, String> response = new HashMap<>();
     response.put("message", "认证已批准");

@@ -1,9 +1,11 @@
 package com.scholar.platform.service;
 
 import com.scholar.platform.dto.CertificationRequest;
+import com.scholar.platform.entity.Scholar;
 import com.scholar.platform.entity.ScholarCertification;
 import com.scholar.platform.entity.User;
 import com.scholar.platform.repository.ScholarCertificationRepository;
+import com.scholar.platform.repository.ScholarRepository;
 import com.scholar.platform.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,92 +20,102 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CertificationService {
 
-  private final ScholarCertificationRepository certificationRepository;
-  private final UserRepository userRepository;
-  private final ObjectMapper objectMapper;
+    private final ScholarCertificationRepository certificationRepository;
+    private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
+    private final ScholarRepository scholarRepository;
 
-  @Transactional
-  public ScholarCertification submitCertification(String userId, CertificationRequest request) {
-    User user = userRepository.findById(userId)
-        .orElseThrow(() -> new RuntimeException("用户不存在"));
+    @Transactional
+    public ScholarCertification submitCertification(String userId, CertificationRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("用户不存在"));
 
-    ScholarCertification certification = new ScholarCertification();
-    certification.setUser(user);
-    certification.setRealName(request.getRealName());
-    certification.setOrganization(request.getOrganization());
-    certification.setOrgEmail(request.getOrgEmail());
-    certification.setTitle(request.getTitle());
-    certification.setProofMaterials(serializeProofMaterials(request));
-    certification.setStatus(ScholarCertification.CertificationStatus.PENDING);
+        ScholarCertification certification = new ScholarCertification();
+        certification.setUser(user);
+        certification.setRealName(request.getRealName());
+        certification.setOrganization(request.getOrganization());
+        certification.setOrgEmail(request.getOrgEmail());
+        certification.setTitle(request.getTitle());
+        certification.setProofMaterials(serializeProofMaterials(request));
+        certification.setStatus(ScholarCertification.CertificationStatus.PENDING);
 
-    certification = certificationRepository.save(certification);
+        certification = certificationRepository.save(certification);
 
-    // Update user status
-    user.setCertificationStatus(User.CertificationStatus.PENDING);
-    userRepository.save(user);
+        // Update user status
+        user.setCertificationStatus(User.CertificationStatus.PENDING);
+        userRepository.save(user);
 
-    return certification;
-  }
-
-  public List<ScholarCertification> getPendingCertifications() {
-    return certificationRepository.findByStatus(ScholarCertification.CertificationStatus.PENDING);
-  }
-
-  public ScholarCertification getLatestByUser(String userId) {
-    return certificationRepository.findFirstByUserIdOrderBySubmittedAtDesc(userId);
-  }
-
-  private String serializeProofMaterials(CertificationRequest request) {
-    if (request.getProofMaterials() == null) {
-      return null;
+        return certification;
     }
-    try {
-      return objectMapper.writeValueAsString(request.getProofMaterials());
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException("证明材料格式不正确");
+
+    public List<ScholarCertification> getPendingCertifications() {
+        return certificationRepository.findByStatus(ScholarCertification.CertificationStatus.PENDING);
     }
-  }
 
-  @Transactional
-  public ScholarCertification approveCertification(String certificationId, String adminId) {
-    ScholarCertification certification = certificationRepository.findById(certificationId)
-        .orElseThrow(() -> new RuntimeException("认证申请不存在"));
+    public ScholarCertification getLatestByUser(String userId) {
+        return certificationRepository.findFirstByUserIdOrderBySubmittedAtDesc(userId);
+    }
 
-    User admin = userRepository.findById(adminId)
-        .orElseThrow(() -> new RuntimeException("管理员不存在"));
+    private String serializeProofMaterials(CertificationRequest request) {
+        if (request.getProofMaterials() == null) {
+            return null;
+        }
+        try {
+            return objectMapper.writeValueAsString(request.getProofMaterials());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("证明材料格式不正确");
+        }
+    }
 
-    certification.setStatus(ScholarCertification.CertificationStatus.APPROVED);
-    certification.setProcessedByAdmin(admin);
-    certification.setProcessedAt(LocalDateTime.now());
-    certification = certificationRepository.save(certification);
+    @Transactional
+    public ScholarCertification approveCertification(String certificationId, String adminEmail) {
+        ScholarCertification certification = certificationRepository.findById(certificationId)
+                .orElseThrow(() -> new RuntimeException("认证申请不存在"));
 
-    // Update user status
-    User user = certification.getUser();
-    user.setCertificationStatus(User.CertificationStatus.CERTIFIED);
-    userRepository.save(user);
+        User admin = userRepository.findByEmail(adminEmail)
+                .orElseThrow(() -> new RuntimeException("管理员不存在"));
 
-    return certification;
-  }
+        certification.setStatus(ScholarCertification.CertificationStatus.APPROVED);
+        certification.setProcessedByAdmin(admin);
+        certification.setProcessedAt(LocalDateTime.now());
+        certification = certificationRepository.save(certification);
 
-  @Transactional
-  public ScholarCertification rejectCertification(String certificationId, String adminId, String reason) {
-    ScholarCertification certification = certificationRepository.findById(certificationId)
-        .orElseThrow(() -> new RuntimeException("认证申请不存在"));
+        User user = certification.getUser();
+        user.setCertificationStatus(User.CertificationStatus.CERTIFIED);
+        userRepository.save(user);
 
-    User admin = userRepository.findById(adminId)
-        .orElseThrow(() -> new RuntimeException("管理员不存在"));
+        Scholar scholar = new Scholar();
+        scholar.setUserId(user.getId());
+        scholar.setPublicName(certification.getRealName());
+        scholar.setOrganization(certification.getOrganization());
+        scholar.setTitle(certification.getTitle());
+        scholarRepository.save(scholar);
 
-    certification.setStatus(ScholarCertification.CertificationStatus.REJECTED);
-    certification.setRejectionReason(reason);
-    certification.setProcessedByAdmin(admin);
-    certification.setProcessedAt(LocalDateTime.now());
-    certification = certificationRepository.save(certification);
+        // Update user status
 
-    // Update user status
-    User user = certification.getUser();
-    user.setCertificationStatus(User.CertificationStatus.NOT_CERTIFIED);
-    userRepository.save(user);
 
-    return certification;
-  }
+        return certification;
+    }
+
+    @Transactional
+    public ScholarCertification rejectCertification(String certificationId, String adminEmail, String reason) {
+        ScholarCertification certification = certificationRepository.findById(certificationId)
+                .orElseThrow(() -> new RuntimeException("认证申请不存在"));
+
+        User admin = userRepository.findByEmail(adminEmail)
+                .orElseThrow(() -> new RuntimeException("管理员不存在"));
+
+        certification.setStatus(ScholarCertification.CertificationStatus.REJECTED);
+        certification.setRejectionReason(reason);
+        certification.setProcessedByAdmin(admin);
+        certification.setProcessedAt(LocalDateTime.now());
+        certification = certificationRepository.save(certification);
+
+        // Update user status
+        User user = certification.getUser();
+        user.setCertificationStatus(User.CertificationStatus.NOT_CERTIFIED);
+        userRepository.save(user);
+
+        return certification;
+    }
 }
