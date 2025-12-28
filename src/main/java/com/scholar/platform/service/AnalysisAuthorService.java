@@ -139,8 +139,8 @@ public class AnalysisAuthorService {
      * 根据作者名模糊查询作者关系（author1_name 或 author2_name 匹配）
      */
     public List<AuthorRelationDTO> getAuthorRelation(String authorName) {
-        List<AuthorRelation> list1 = authorRelationRepository.findByAuthor1NameContainingIgnoreCase(authorName);
-        List<AuthorRelation> list2 = authorRelationRepository.findByAuthor2NameContainingIgnoreCase(authorName);
+        List<AuthorRelation> list1 = authorRelationRepository.findByAuthor1Name(authorName);
+        List<AuthorRelation> list2 = authorRelationRepository.findByAuthor2Name(authorName);
         List<AuthorRelation> merged = new ArrayList<>(list1);
         for (AuthorRelation ar : list2) {
             if (!merged.contains(ar)) {
