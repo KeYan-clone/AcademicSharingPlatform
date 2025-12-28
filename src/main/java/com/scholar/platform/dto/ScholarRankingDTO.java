@@ -18,12 +18,12 @@ public class ScholarRankingDTO {
         private Integer hIndex;
         private Integer i10Index;
         private Integer worksCount;
+        private Integer citedCount;
     }
     
     // 静态工厂方法：将实体转换为DTO
     public static ScholarRankingDTO fromEntity(com.scholar.platform.entity.ScholarRanking entity) {
         ScholarRankingDTO dto = new ScholarRankingDTO();
-        dto.setRank(entity.getRankInDomain());
         dto.setInfluenceScore(entity.getInfluenceScore());
         
         ScholarInfo info = new ScholarInfo();

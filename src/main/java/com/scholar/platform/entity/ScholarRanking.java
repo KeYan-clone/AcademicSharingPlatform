@@ -19,14 +19,11 @@ public class ScholarRanking {
     @Column(name = "display_name")
     private String displayName;
 
-    @Column(length = 100)
-    private String domain;
-
     @Column(name = "primary_tags")
     private String primaryTags;
 
     @Column(name = "h_index")
-    private Integer hIndex;
+    private Integer hIndex; 
 
     @Column(name = "i10_index")
     private Integer i10Index;
@@ -37,6 +34,6 @@ public class ScholarRanking {
     @Column(name = "influence_score")
     private Double influenceScore;
 
-    @Column(name = "rank_in_domain")
-    private Integer rankInDomain;
+    @Column(name = "cited_count")
+    private Double citedCount;
 }

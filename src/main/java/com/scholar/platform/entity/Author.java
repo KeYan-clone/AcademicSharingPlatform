@@ -47,8 +47,8 @@ public class Author {
     @Field(name = "topics", type = FieldType.Nested)
     private List<Topic> topics;
 
-    @Field(name = "fields", type = FieldType.Keyword)
-    private List<String> fields;
+    @Field(name = "field", type = FieldType.Keyword)
+    private List<String> field;
     
     @Data
     public static class Topic {

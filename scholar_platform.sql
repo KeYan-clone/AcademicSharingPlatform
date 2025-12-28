@@ -373,17 +373,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `scholar_ranking`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8mb4 */; 
 CREATE TABLE `scholar_ranking` (
   `id` VARCHAR(100) PRIMARY KEY,     -- 唯一标识
   `display_name` VARCHAR(255),       -- 姓名
-  `domain` VARCHAR(100),             -- 用于 WHERE 查询的一级学科
   `primary_tags` VARCHAR(255),       -- 直接存拼好的字符串，如 "Gynecology, Stroke"
   `h_index` INT,
   `i10_index` INT,
   `works_count` INT,
   `influence_score` DOUBLE,          -- 后端根据算法算好的总分
-  `rank_in_domain` INT,              -- 预存该领域的排名，查询更快
+  `cited_count` INT,
   INDEX `idx_domain_score` (`domain`, `influence_score` DESC) -- 核心索引
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;

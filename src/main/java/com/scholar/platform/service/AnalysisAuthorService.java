@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.scholar.platform.repository.ScholarRankingRepository;
 import org.springframework.data.domain.Sort;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class AnalysisAuthorService {
     private final ScholarRankingRepository scholarRankingRepository;
     private final AuthorRelationRepository authorRelationRepository;
     
+    private final JdbcTemplate jdbcTemplate;
     @Transactional
     public AuthorInfluenceDTO getAuthorTrend(String userId) {
         // 1. 尝试从 MySQL 缓存表中获取
@@ -89,10 +91,10 @@ public class AnalysisAuthorService {
             influence.setI10Index(0);
         }
 
-        if (esAuthor.getFields() != null && !esAuthor.getFields().isEmpty()) {
+        if (esAuthor.getField() != null && !esAuthor.getField().isEmpty()) {
             // 1. Domain (一级学科): 取 fields 列表的第一个元素
             // 例如: ["Materials Science", "Psychology"] -> "Materials Science"
-            influence.setDomain(esAuthor.getFields().get(0));
+            influence.setDomain(esAuthor.getField().get(0));
 
             // 2. Topics (研究方向): 将整个 fields 列表拼接成字符串
             // 例如: "Materials Science, Psychology"
@@ -137,11 +139,59 @@ public class AnalysisAuthorService {
     }
 
     public List<ScholarRankingDTO> getScholarRanking(String domain) {
-        List<ScholarRanking> rankings = scholarRankingRepository.findByDomainOrderByInfluenceScoreDesc(domain);
+        String tableName;
         
-        return rankings.stream()
-                .map(ScholarRankingDTO::fromEntity)
-                .collect(Collectors.toList());
+        if ("all".equalsIgnoreCase(domain)) {
+            tableName = "scholar_ranking_all";
+        } else {
+            tableName = sanitizeTableName(domain);
+        }
+
+        
+        String sql = "SELECT * FROM `" + tableName + "` ORDER BY influence_score DESC LIMIT 100";
+
+        try {
+            // 3. 执行查询并手动映射结果
+            return jdbcTemplate.query(sql, (rs, rowNum) -> {
+                ScholarRankingDTO dto = new ScholarRankingDTO();
+                // 1. 设置外层属性
+                dto.setInfluenceScore(rs.getDouble("influence_score"));
+                dto.setRank(rowNum + 1); // 设置排名
+
+                // 2. 创建并设置内层 ScholarInfo 对象
+                ScholarRankingDTO.ScholarInfo info = new ScholarRankingDTO.ScholarInfo();
+                info.setId(rs.getString("id"));
+                info.setDisplayName(rs.getString("display_name"));
+                info.setHIndex(rs.getInt("h_index"));
+                info.setI10Index(rs.getInt("i10_index"));
+                info.setWorksCount(rs.getInt("works_count"));
+                info.setCitedCount(rs.getInt("cited_count"));
+
+                // 3. 处理 tags: 数据库存的是字符串 "Tag1, Tag2"，转为 List
+                String tagsStr = rs.getString("primary_tags");
+                if (tagsStr != null && !tagsStr.isEmpty()) {
+                    info.setPrimaryTags(Arrays.asList(tagsStr.split(",\\s*")));
+                } else {
+                    info.setPrimaryTags(Collections.emptyList());
+                }
+
+                dto.setScholar(info);
+                return dto;
+            });
+        } catch (Exception e) {
+            // 如果表不存在（比如用户输入了错误的领域），返回空列表而不是报错
+            log.error("查询排行榜失败，表名: {}, 错误: {}", tableName, e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    private String sanitizeTableName(String domain) {
+        if (domain == null) return "scholar_ranking_all";
+        String safeName = domain.toLowerCase().replaceAll("[^a-z0-9]", "_");
+        safeName = safeName.replaceAll("_+", "_");
+        if (safeName.startsWith("_")) safeName = safeName.substring(1);
+        if (safeName.endsWith("_")) safeName = safeName.substring(0, safeName.length() - 1);
+        return "scholar_ranking_" + safeName;
     }
 
     /**
