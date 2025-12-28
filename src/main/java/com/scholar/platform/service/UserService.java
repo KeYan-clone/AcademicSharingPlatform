@@ -4,12 +4,13 @@ import com.scholar.platform.dto.*;
 import com.scholar.platform.entity.*;
 import com.scholar.platform.repository.*;
 import com.scholar.platform.util.Utils;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.scholar.platform.util.IdPrefixUtil;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +25,9 @@ public class UserService {
     private final UserCollectionRepository userCollectionRepository;
     private final AchievementClaimRequestRepository achievementClaimRequestRepository;
     private final ScholarRepository scholarRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    private static final Duration USER_PROFILE_TTL = Duration.ofMinutes(30);
 
     public Optional<User> findById(String id) {
         return userRepository.findById(id);
@@ -48,9 +52,15 @@ public class UserService {
 
     }
     public ScholarDTO getMe(String email) {
-        User user=userRepository.findByEmail(email)
+        String cacheKey = buildUserProfileKey(email);
+        Object cached = redisTemplate.opsForValue().get(cacheKey);
+        if (cached instanceof ScholarDTO cachedDto) {
+            return cachedDto;
+        }
+
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("用户不存在"));
-        Scholar scholar=  scholarRepository.findById(user.getId())
+        Scholar scholar = scholarRepository.findById(user.getId())
                 .orElse(null);
 
         ScholarDTO scholarDTO =new ScholarDTO();
@@ -61,8 +71,17 @@ public class UserService {
         scholarDTO.setUsername(user.getUsername());
         scholarDTO.setEmail(user.getEmail());
 
+        redisTemplate.opsForValue().set(cacheKey, scholarDTO, USER_PROFILE_TTL);
         return scholarDTO;
 
+    }
+
+    public void evictProfileCache(String email) {
+        redisTemplate.delete(buildUserProfileKey(email));
+    }
+
+    private String buildUserProfileKey(String email) {
+        return "user:profile:" + email;
     }
 
     /**
@@ -103,7 +122,7 @@ public class UserService {
                     .orElseThrow(() -> new RuntimeException("用户不存在"));
 
             // 验证成果存在
-            Achievement achievement = achievementRepository.findById(IdPrefixUtil.ensureIdPrefix(request.getAchievementId()))
+            achievementRepository.findById(IdPrefixUtil.ensureIdPrefix(request.getAchievementId()))
                     .orElseThrow(() -> new RuntimeException("成果不存在"));
 
             // 建立用户与成果的作者关联

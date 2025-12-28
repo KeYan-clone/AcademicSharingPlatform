@@ -2,11 +2,7 @@ package com.scholar.platform.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Data
 @Schema(description = "添加学术成果的请求体")

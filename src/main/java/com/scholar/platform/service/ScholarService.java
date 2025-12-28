@@ -3,7 +3,6 @@ package com.scholar.platform.service;
 import com.scholar.platform.dto.ScholarDTO;
 import com.scholar.platform.entity.AchievementAuthor;
 import com.scholar.platform.entity.Scholar;
-import com.scholar.platform.entity.User;
 import com.scholar.platform.repository.AchievementAuthorRepository;
 import com.scholar.platform.repository.ScholarRepository;
 import com.scholar.platform.repository.UserRepository;
@@ -94,7 +93,7 @@ public class ScholarService {
 
   @Transactional
   public ScholarDTO updateScholarProfile(String userId, ScholarDTO dto) {
-    User user = userRepository.findById(userId)
+     userRepository.findById(userId)
         .orElseThrow(() -> new RuntimeException("用户不存在"));
 
     Scholar scholar = scholarRepository.findById(userId).orElse(new Scholar());

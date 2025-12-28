@@ -32,8 +32,8 @@ public class Author {
     @Field(name = "summary_stats", type = FieldType.Object)
     private SummaryStats summaryStats;
 
-    @Field(name = "last_known_institutions", type = FieldType.Nested)
-    private List<Institution> lastKnownInstitutions;
+    @Field(name = "institution", type = FieldType.Nested)
+    private List<Institution> institutions;
 
     @Data
     public static class SummaryStats {
@@ -44,24 +44,10 @@ public class Author {
         private Integer i10Index;
     }
 
-    @Field(name = "topics", type = FieldType.Nested)
-    private List<Topic> topics;
+    @Field(name = "concept", type = FieldType.Nested)
+    private List<String> concepts;
 
     @Field(name = "field", type = FieldType.Keyword)
     private List<String> field;
     
-    @Data
-    public static class Topic {
-        @Field(name = "display_name", type = FieldType.Text)
-        private String displayName; // 二级学科名称
-
-        @Field(name = "domain", type = FieldType.Object)
-        private Domain domain;      // 所属一级学科
-    }
-
-    @Data
-    public static class Domain {
-        @Field(name = "display_name", type = FieldType.Text)
-        private String displayName; // 一级学科名称
-    }
 }

@@ -20,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -86,6 +85,7 @@ public class UserController {
     @Operation(summary = "更新当前登录用户信息")
     public ResponseEntity<ApiResponse<User>> updateMe(@Validated @RequestBody UpdateUserRequest request) {
         User user = userService.getByEmailOrThrow(currentUserEmail());
+        String originalEmail = user.getEmail();
         if (request.getUsername() != null) {
             user.setUsername(request.getUsername());
         }
@@ -100,6 +100,10 @@ public class UserController {
             }
         }
         User updated = userService.save(user);
+        userService.evictProfileCache(originalEmail);
+        if (!originalEmail.equals(updated.getEmail())) {
+            userService.evictProfileCache(updated.getEmail());
+        }
         return ResponseEntity.ok(ApiResponse.success("更新成功", updated));
     }
 
@@ -109,6 +113,7 @@ public class UserController {
             @Validated @RequestBody CertificationRequest request) {
         User user = userService.getByEmailOrThrow(currentUserEmail());
         ScholarCertification certification = certificationService.submitCertification(user.getId(), request);
+        userService.evictProfileCache(user.getEmail());
         return ResponseEntity.accepted().body(ApiResponse.success("认证已提交", certification));
     }
 

@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface AuthorRelationRepository extends JpaRepository<AuthorRelation, AuthorRelationId> {
-    List<AuthorRelation> findByAuthor1NameContainingIgnoreCase(String author1Name);
-    List<AuthorRelation> findByAuthor2NameContainingIgnoreCase(String author2Name);
+    List<AuthorRelation> findByAuthor1Name(String author1Name);
+    List<AuthorRelation> findByAuthor2Name(String author2Name);
 }

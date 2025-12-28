@@ -2,7 +2,6 @@ package com.scholar.platform.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Table(name = "scholars")

@@ -4,7 +4,6 @@ import com.scholar.platform.dto.AchievementClaimReplyDTO;
 import com.scholar.platform.dto.AchievementDTO;
 import com.scholar.platform.dto.ApiResponse;
 import com.scholar.platform.dto.PendingClaimRequestDTO;
-import com.scholar.platform.entity.Achievement;
 import com.scholar.platform.entity.ScholarCertification;
 import com.scholar.platform.entity.UserAppeal;
 import com.scholar.platform.service.AchievementService;
