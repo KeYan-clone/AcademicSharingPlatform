@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
@@ -20,8 +22,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.scholar.platform.util.IdPrefixUtil;
 
-import java.util.ArrayList;
-import java.util.List;
+import co.elastic.clients.elasticsearch._types.FieldValue;
+import co.elastic.clients.json.JsonData;
+import co.elastic.clients.elasticsearch._types.query_dsl.*;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -98,91 +103,132 @@ public class AchievementService {
      * @param pageable        分页参数
      */
     public Page<AchievementDTO> advancedSearch(String keyword, String field,
-                                              String startDate, String endDate,
-                                              String authorName, String institutionName,
-                                              Pageable pageable) {
-      // 1. 预先解析 ID (暂缓搜索)
-      String institutionId = null;
-      if (institutionName != null && !institutionName.trim().isEmpty()) {
-          Page<Institution> institutions = institutionRepository.findByDisplayName(institutionName, Pageable.ofSize(1));
-          if (institutions.hasContent()) {
-              institutionId = institutions.getContent().get(0).getId();
-          } else {
-              return Page.empty(pageable);
-          }
-      }
+            String startDate, String endDate,
+            String authorName, String institutionName,
+            Pageable pageable) {
+        // 1. 预先解析 ID (暂缓搜索)
+        String institutionId = null;
+        if (institutionName != null && !institutionName.trim().isEmpty()) {
+            Page<Institution> institutions = institutionRepository.findByDisplayName(institutionName,
+                    Pageable.ofSize(1));
+            if (institutions.hasContent()) {
+                institutionId = institutions.getContent().get(0).getId();
+            } else {
+                return Page.empty(pageable);
+            }
+        }
 
-      String authorId = null;
-      if (authorName != null && !authorName.trim().isEmpty()) {
-          Page<Author> authors = authorRepository.findByDisplayName(authorName, Pageable.ofSize(1));
-          if (authors.hasContent()) {
-              authorId = authors.getContent().get(0).getId();
-          } else {
-              return Page.empty(pageable);
-          }
-      }
+        String authorId = null;
+        if (authorName != null && !authorName.trim().isEmpty()) {
+            Page<Author> authors = authorRepository.findByDisplayName(authorName, Pageable.ofSize(1));
+            if (authors.hasContent()) {
+                authorId = authors.getContent().get(0).getId();
+            } else {
+                return Page.empty(pageable);
+            }
+        }
 
-      // 2. 构建组合查询 Criteria
-      Criteria criteria = new Criteria();
-      boolean hasCondition = false;
+        // 2. 构建核心 Bool 查询
+        BoolQuery.Builder boolBuilder = new BoolQuery.Builder();
 
-      if (institutionId != null) {
-          criteria = criteria.and("institution_ids").is(institutionId);
-          hasCondition = true;
-      }
+        // 3. 构建 Function Score 评分查询
+        // 评分逻辑：1.0 + (1.2*ln(cited) + 1.0*ln(fav) + 0.8*ln(read)) / 3.0
+        Query mainQuery = buildScoredQuery(keyword);
+        boolBuilder.must(mainQuery);
 
-      if (authorId != null) {
-          criteria = criteria.and("author_ids").is(authorId);
-          hasCondition = true;
-      }
+        // 4. 添加各种过滤器 (Filters)
+        List<Query> filters = new ArrayList<>();
+        if (institutionId != null)
+            filters.add(createTermQuery("institution_ids", institutionId));
+        if (authorId != null)
+            filters.add(createTermQuery("author_ids", authorId));
+        if (field != null && !field.trim().isEmpty())
+            filters.add(createTermQuery("concepts", field));
 
-      if (startDate != null && endDate != null) {
-          criteria = criteria.and("publication_date").between(startDate, endDate);
-          hasCondition = true;
-      }
+        if (startDate != null && endDate != null) {
+            filters.add(QueryBuilders
+                    .range(r -> r.field("publication_date").gte(JsonData.of(startDate)).lte(JsonData.of(endDate))));
+        }
 
-      if (field != null && !field.trim().isEmpty()) {
-          criteria = criteria.and("concepts").matches(field);
-          hasCondition = true;
-      }
+        // 5. 兜底逻辑：如果没有任何搜索条件，展示热门概念
+        if (isCriteriaEmpty(keyword, field, institutionId, authorId)) {
+            filters.add(getPopularConceptFilter());
+        }
 
-      if (keyword != null && !keyword.trim().isEmpty()) {
-          Criteria keywordCriteria = new Criteria("title").matches(keyword)
-                  .or("concepts").matches(keyword);
+        boolBuilder.filter(filters);
 
-          if (translationService.containsChinese(keyword)) {
-              String translatedKeyword = translationService.translateToEnglish(keyword);
-              if (!keyword.equals(translatedKeyword)) {
-                  keywordCriteria = keywordCriteria.or("title").matches(translatedKeyword)
-                          .or("concepts").matches(translatedKeyword);
-              }
-          }
+        // 6. 执行 NativeQuery
+        NativeQuery nativeQuery = new NativeQueryBuilder()
+                .withQuery(boolBuilder.build()._toQuery())
+                .withPageable(pageable)
+                .build();
 
-          criteria = criteria.subCriteria(keywordCriteria);
-          hasCondition = true;
-      }
+        System.out.println("NativeQuery: " + nativeQuery.getQuery().toString());
 
-      if (!hasCondition) {
-          // 尝试获取最热的 concept
-          PaperKeyword topKeyword = paperKeywordRepository.findFirstByOrderByCntDesc();
-          if (topKeyword != null && topKeyword.getKeyword() != null) {
-              criteria = criteria.and("concepts").matches(topKeyword.getKeyword());
-          } else {
-              throw new IllegalArgumentException("请输入检索内容");
-          }
-      }
+        SearchHits<Achievement> hits = elasticsearchOperations.search(nativeQuery, Achievement.class);
 
-      CriteriaQuery query = new CriteriaQuery(criteria);
-      query.setPageable(pageable);
+        List<AchievementDTO> list = hits.getSearchHits().stream()
+                .map(hit -> toDTO(hit.getContent()))
+                .collect(Collectors.toList());
 
-      SearchHits<Achievement> searchHits = elasticsearchOperations.search(query, Achievement.class);
+        return new PageImpl<>(list, pageable, hits.getTotalHits());
+    }
 
-      List<AchievementDTO> list = searchHits.getSearchHits().stream()
-              .map(hit -> toDTO(hit.getContent()))
-              .collect(Collectors.toList());
+    /**
+     * 构建带权重的评分查询
+     */
+    private Query buildScoredQuery(String keyword) {
+        Query baseQuery;
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            // 基础多字段匹配 - 移除了concepts和abstract字段
+            Query matchQuery = QueryBuilders.multiMatch(m -> m
+                    .query(keyword)
+                    .fields("title")
+                    .type(TextQueryType.BestFields));
 
-      return new PageImpl<>(list, pageable, searchHits.getTotalHits());
-  }
+            // 处理中英翻译加权
+            if (translationService != null && translationService.containsChinese(keyword)) {
+                String translated = translationService.translateToEnglish(keyword);
+                Query translatedMatch = QueryBuilders
+                        .multiMatch(m -> m.query(translated).fields("title")); // 同样只保留title字段，不设置权重
+                baseQuery = QueryBuilders
+                        .bool(b -> b.should(matchQuery).should(translatedMatch).minimumShouldMatch("1"));
+            } else {
+                baseQuery = matchQuery;
+            }
+        } else {
+            baseQuery = QueryBuilders.matchAll(m -> m);
+        }
+
+        // 使用脚本进行热度加权
+        String scriptCode = "double weight = (Math.log1p(doc['cited_by_count'].value) * 1.2 + " +
+                "Math.log1p(doc['favourite_count'].value) * 1.0 + " +
+                "Math.log1p(doc['read_count'].value) * 0.8) / 3.0; " +
+                "return 1.0 + weight;";
+
+        return QueryBuilders.functionScore(fs -> fs
+                .query(baseQuery)
+                .functions(
+                        f -> f.scriptScore(ss -> ss.script(s -> s.inline(i -> i.source(scriptCode).lang("painless")))))
+                .scoreMode(FunctionScoreMode.Multiply)
+                .boostMode(FunctionBoostMode.Multiply));
+    }
+
+    private Query createTermQuery(String field, String value) {
+        return QueryBuilders.term(t -> t.field(field).value(FieldValue.of(value)));
+    }
+
+    private boolean isCriteriaEmpty(String... params) {
+        return Arrays.stream(params).allMatch(p -> p == null || p.trim().isEmpty());
+    }
+
+    private Query getPopularConceptFilter() {
+        PaperKeyword pk = paperKeywordRepository.findFirstByOrderByCntDesc();
+
+        return Optional.ofNullable(pk)
+                .map(item -> createTermQuery("concepts", item.getKeyword()))
+                .orElseThrow(() -> new IllegalArgumentException("搜索内容不能为空且系统暂无推荐数据"));
+    }
 
     /**
      * 辅助方法：在内存中过滤结果
