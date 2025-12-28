@@ -17,6 +17,15 @@ spring:
     connection-timeout: 50s
     socket-timeout: 30s
 
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      client-type: lettuce
+      lettuce:
+        shutdown-timeout: 100ms
+
   mail:
     host: ${MAIL_HOST:localhost}
     port: ${MAIL_PORT:1025}

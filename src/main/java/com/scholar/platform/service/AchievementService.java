@@ -3,6 +3,9 @@ package com.scholar.platform.service;
 import com.scholar.platform.dto.AchievementDTO;
 import com.scholar.platform.entity.*;
 import com.scholar.platform.repository.*;
+import com.scholar.platform.service.cache.CachedPage;
+import com.scholar.platform.service.cache.SearchCacheService;
+import com.scholar.platform.util.CacheKeyUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -40,6 +43,7 @@ public class AchievementService {
     private final UserRepository userRepository;
     private final UserCollectionRepository userCollectionRepository;
     private final TranslationService translationService;
+    private final SearchCacheService searchCacheService;
 
     /**
      * 通过关键词搜索（带加权排序）
@@ -104,6 +108,13 @@ public class AchievementService {
             String startDate, String endDate,
             String authorName, String institutionName,
             Pageable pageable) {
+        String cacheKey = CacheKeyUtil.advancedSearchKey(keyword, field, startDate, endDate, authorName,
+                institutionName, pageable);
+        CachedPage<Achievement> cachedPage = searchCacheService.get(cacheKey);
+        if (cachedPage != null) {
+            return toDtoPageFromCache(cachedPage, pageable);
+        }
+
         // 1. 预先解析 ID (暂缓搜索)
         String institutionId = null;
         if (institutionName != null && !institutionName.trim().isEmpty()) {
@@ -186,12 +197,28 @@ public class AchievementService {
         // System.out.println("NativeQuery: " + nativeQuery.getQuery().toString());
 
         SearchHits<Achievement> hits = elasticsearchOperations.search(nativeQuery, Achievement.class);
+        List<Achievement> achievements = hits.getSearchHits().stream()
+            .map(hit -> hit.getContent())
+            .collect(Collectors.toList());
 
-        List<AchievementDTO> list = hits.getSearchHits().stream()
-                .map(hit -> toDTO(hit.getContent()))
+        searchCacheService.put(cacheKey, CachedPage.of(achievements, hits.getTotalHits()));
+
+        return toDtoPage(achievements, pageable, hits.getTotalHits());
+    }
+
+    private Page<AchievementDTO> toDtoPageFromCache(CachedPage<Achievement> cachedPage, Pageable pageable) {
+        List<Achievement> records = cachedPage.getRecords();
+        if (records == null) {
+            records = Collections.emptyList();
+        }
+        return toDtoPage(records, pageable, cachedPage.getTotal());
+    }
+
+    private Page<AchievementDTO> toDtoPage(List<Achievement> achievements, Pageable pageable, long total) {
+        List<AchievementDTO> list = achievements.stream()
+                .map(this::toDTO)
                 .collect(Collectors.toList());
-
-        return new PageImpl<>(list, pageable, hits.getTotalHits());
+        return new PageImpl<>(list, pageable, total);
     }
 
     /**

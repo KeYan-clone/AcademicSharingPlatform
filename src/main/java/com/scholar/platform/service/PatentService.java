@@ -2,6 +2,9 @@ package com.scholar.platform.service;
 
 import com.scholar.platform.dto.PatentDTO;
 import com.scholar.platform.entity.Patent;
+import com.scholar.platform.service.cache.CachedPage;
+import com.scholar.platform.service.cache.SearchCacheService;
+import com.scholar.platform.util.CacheKeyUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,8 +25,19 @@ import java.util.stream.Collectors;
 public class PatentService {
 
     private final ElasticsearchOperations elasticsearchOperations;
+    private final SearchCacheService searchCacheService;
 
     public Page<PatentDTO> searchPatents(String keyword, Integer applicationYear, Integer grantYear, Pageable pageable) {
+        String cacheKey = CacheKeyUtil.patentSearchKey(keyword, applicationYear, grantYear, pageable);
+        CachedPage<PatentDTO> cachedPage = searchCacheService.get(cacheKey);
+        if (cachedPage != null) {
+            List<PatentDTO> cachedRecords = cachedPage.getRecords();
+            if (cachedRecords == null) {
+                cachedRecords = List.of();
+            }
+            return new PageImpl<>(cachedRecords, pageable, cachedPage.getTotal());
+        }
+
         BoolQuery.Builder boolBuilder = new BoolQuery.Builder();
 
         if (keyword != null && !keyword.trim().isEmpty()) {
@@ -56,8 +70,10 @@ public class PatentService {
 
         SearchHits<Patent> hits = elasticsearchOperations.search(nativeQuery, Patent.class);
         List<PatentDTO> list = hits.getSearchHits().stream()
-                .map(hit -> PatentDTO.fromEntity(hit.getContent()))
-                .collect(Collectors.toList());
+            .map(hit -> PatentDTO.fromEntity(hit.getContent()))
+            .collect(Collectors.toList());
+
+        searchCacheService.put(cacheKey, CachedPage.of(list, hits.getTotalHits()));
 
         return new PageImpl<>(list, pageable, hits.getTotalHits());
     }

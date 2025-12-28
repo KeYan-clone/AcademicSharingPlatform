@@ -11,6 +11,7 @@ import com.scholar.platform.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,10 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.time.Instant;
-import java.util.Map;
+import java.time.Duration;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +35,7 @@ public class AuthService {
   private final JwtTokenProvider jwtTokenProvider;
   private final AuthenticationManager authenticationManager;
   private final JavaMailSender mailSender;
-  private final Map<String, ResetCodeEntry> resetCodeStore = new ConcurrentHashMap<>();
+  private final StringRedisTemplate stringRedisTemplate;
 
   @Value("${mail.from:no-reply@localhost}")
   private String mailFrom;
@@ -81,18 +80,19 @@ public class AuthService {
     User user = userRepository.findByEmail(request.getEmail())
         .orElseThrow(() -> new RuntimeException("该邮箱未注册"));
     String code = generateCode();
-    long expireAt = Instant.now().plusSeconds(10 * 60).toEpochMilli(); // 10 minutes
-    resetCodeStore.put(user.getEmail(), new ResetCodeEntry(code, expireAt));
+    String redisKey = buildResetCodeKey(user.getEmail());
+    stringRedisTemplate.opsForValue().set(redisKey, code, Duration.ofMinutes(10));
     sendResetCode(user.getEmail(), code);
   }
 
   @Transactional
   public void resetPassword(ResetPasswordRequest request) {
-    ResetCodeEntry entry = resetCodeStore.get(request.getEmail());
-    if (entry == null || entry.isExpired()) {
+    String redisKey = buildResetCodeKey(request.getEmail());
+    String cachedCode = stringRedisTemplate.opsForValue().get(redisKey);
+    if (cachedCode == null) {
       throw new RuntimeException("验证码已失效，请重新获取");
     }
-    if (!entry.code().equals(request.getVerificationCode())) {
+    if (!cachedCode.equals(request.getVerificationCode())) {
       throw new RuntimeException("验证码不正确");
     }
 
@@ -100,7 +100,7 @@ public class AuthService {
         .orElseThrow(() -> new RuntimeException("用户不存在"));
     user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
     userRepository.save(user);
-    resetCodeStore.remove(request.getEmail());
+    stringRedisTemplate.delete(redisKey);
   }
 
   private Optional<User> findByAccount(String account) {
@@ -127,9 +127,7 @@ public class AuthService {
     }
   }
 
-  private record ResetCodeEntry(String code, long expireAt) {
-    boolean isExpired() {
-      return Instant.now().toEpochMilli() > expireAt;
-    }
+  private String buildResetCodeKey(String email) {
+    return "auth:reset:" + email;
   }
 }

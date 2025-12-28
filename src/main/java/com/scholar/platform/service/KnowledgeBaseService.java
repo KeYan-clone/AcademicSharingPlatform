@@ -3,7 +3,6 @@ package com.scholar.platform.service;
 import com.scholar.platform.entity.KnowledgeBase;
 import com.scholar.platform.repository.KnowledgeBaseRepository;
 import com.scholar.platform.repository.KnowledgeDocumentRepository;
-import com.scholar.platform.service.AiServiceClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
