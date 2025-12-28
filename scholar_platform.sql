@@ -603,6 +603,79 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `knowledge_bases`
+--
+
+DROP TABLE IF EXISTS `knowledge_bases`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `knowledge_bases` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `user_id` char(36) NOT NULL COMMENT '所属用户ID',
+  `name` varchar(100) NOT NULL COMMENT '知识库名称',
+  `description` text COMMENT '描述',
+  `storage_path` varchar(512) NOT NULL COMMENT '存储目录',
+  `visibility` enum('PRIVATE','PUBLIC') NOT NULL DEFAULT 'PRIVATE' COMMENT '可见性',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_kb_user` (`user_id`),
+  CONSTRAINT `fk_kb_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='个人知识库';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `knowledge_bases`
+--
+
+LOCK TABLES `knowledge_bases` WRITE;
+/*!40000 ALTER TABLE `knowledge_bases` DISABLE KEYS */;
+/*!40000 ALTER TABLE `knowledge_bases` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `knowledge_documents`
+--
+
+DROP TABLE IF EXISTS `knowledge_documents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `knowledge_documents` (
+  `id` char(36) NOT NULL DEFAULT (uuid()),
+  `knowledge_base_id` char(36) NOT NULL COMMENT '所属知识库ID',
+  `user_id` char(36) NOT NULL COMMENT '所属用户ID',
+  `original_filename` varchar(255) NOT NULL COMMENT '原始文件名',
+  `stored_filename` varchar(255) NOT NULL COMMENT '存储文件名',
+  `storage_path` varchar(512) NOT NULL COMMENT '存储路径',
+  `text_path` varchar(512) DEFAULT NULL COMMENT '解析文本路径',
+  `content_type` varchar(100) DEFAULT NULL COMMENT '内容类型',
+  `file_size` bigint DEFAULT NULL COMMENT '文件大小(Byte)',
+  `status` enum('PENDING','PARSING','READY','FAILED') NOT NULL DEFAULT 'PENDING' COMMENT '解析状态',
+  `page_count` int DEFAULT NULL COMMENT '页数',
+  `summary` text COMMENT '摘要（截断版）',
+  `parse_error` text COMMENT '解析错误信息',
+  `parsed_at` timestamp NULL DEFAULT NULL COMMENT '解析完成时间',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_kd_kb` (`knowledge_base_id`),
+  KEY `idx_kd_user` (`user_id`),
+  KEY `idx_kd_status` (`status`),
+  CONSTRAINT `fk_kd_kb` FOREIGN KEY (`knowledge_base_id`) REFERENCES `knowledge_bases` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_kd_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='知识库文档';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `knowledge_documents`
+--
+
+LOCK TABLES `knowledge_documents` WRITE;
+/*!40000 ALTER TABLE `knowledge_documents` DISABLE KEYS */;
+/*!40000 ALTER TABLE `knowledge_documents` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

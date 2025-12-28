@@ -31,6 +31,7 @@
 *.jks
 application-secret.yml
 application-prod.yml
+storage/
 
 # --------------------
 # 4. 系统垃圾文件
