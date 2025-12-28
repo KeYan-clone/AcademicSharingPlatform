@@ -7,13 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.ScriptType;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -266,62 +264,62 @@ public class AchievementService {
             .query(pk.getKeyword()));
     }
 
-    /**
-     * 辅助方法：在内存中过滤结果
-     */
-    private Page<AchievementDTO> filterResults(Page<Achievement> results, String field,
-            String authorId, String institutionId,
-            Pageable pageable) {
-        return filterResults(results, field, authorId, institutionId, pageable, null, null);
-    }
+    // /**
+    //  * 辅助方法：在内存中过滤结果
+    //  */
+    // private Page<AchievementDTO> filterResults(Page<Achievement> results, String field,
+    //         String authorId, String institutionId,
+    //         Pageable pageable) {
+    //     return filterResults(results, field, authorId, institutionId, pageable, null, null);
+    // }
 
-    /**
-     * 辅助方法：在内存中过滤结果（包含日期范围）
-     */
-    private Page<AchievementDTO> filterResults(Page<Achievement> results, String field,
-            String authorId, String institutionId,
-            Pageable pageable, String startDate, String endDate) {
-        List<AchievementDTO> filtered = results.getContent().stream()
-                .filter(achievement -> {
-                    // 按概念过滤
-                    if (field != null && !field.trim().isEmpty()) {
-                        if (achievement.getConcepts() == null ||
-                                !achievement.getConcepts().contains(field)) {
-                            return false;
-                        }
-                    }
+    // /**
+    //  * 辅助方法：在内存中过滤结果（包含日期范围）
+    //  */
+    // private Page<AchievementDTO> filterResults(Page<Achievement> results, String field,
+    //         String authorId, String institutionId,
+    //         Pageable pageable, String startDate, String endDate) {
+    //     List<AchievementDTO> filtered = results.getContent().stream()
+    //             .filter(achievement -> {
+    //                 // 按概念过滤
+    //                 if (field != null && !field.trim().isEmpty()) {
+    //                     if (achievement.getConcepts() == null ||
+    //                             !achievement.getConcepts().contains(field)) {
+    //                         return false;
+    //                     }
+    //                 }
 
-                    // 按作者过滤
-                    if (authorId != null) {
-                        if (achievement.getAuthorIds() == null ||
-                                !achievement.getAuthorIds().contains(authorId)) {
-                            return false;
-                        }
-                    }
+    //                 // 按作者过滤
+    //                 if (authorId != null) {
+    //                     if (achievement.getAuthorIds() == null ||
+    //                             !achievement.getAuthorIds().contains(authorId)) {
+    //                         return false;
+    //                     }
+    //                 }
 
-                    // 按机构过滤
-                    if (institutionId != null) {
-                        if (achievement.getInstitutionIds() == null ||
-                                !achievement.getInstitutionIds().contains(institutionId)) {
-                            return false;
-                        }
-                    }
+    //                 // 按机构过滤
+    //                 if (institutionId != null) {
+    //                     if (achievement.getInstitutionIds() == null ||
+    //                             !achievement.getInstitutionIds().contains(institutionId)) {
+    //                         return false;
+    //                     }
+    //                 }
 
-                    // 按日期范围过滤
-                    if (startDate != null && endDate != null && achievement.getPublicationDate() != null) {
-                        String pubDate = achievement.getPublicationDate();
-                        if (pubDate.compareTo(startDate) < 0 || pubDate.compareTo(endDate) > 0) {
-                            return false;
-                        }
-                    }
+    //                 // 按日期范围过滤
+    //                 if (startDate != null && endDate != null && achievement.getPublicationDate() != null) {
+    //                     String pubDate = achievement.getPublicationDate();
+    //                     if (pubDate.compareTo(startDate) < 0 || pubDate.compareTo(endDate) > 0) {
+    //                         return false;
+    //                     }
+    //                 }
 
-                    return true;
-                })
-                .map(this::toDTO)
-                .collect(Collectors.toList());
+    //                 return true;
+    //             })
+    //             .map(this::toDTO)
+    //             .collect(Collectors.toList());
 
-        return new PageImpl<>(filtered, pageable, results.getTotalElements());
-    }
+    //     return new PageImpl<>(filtered, pageable, results.getTotalElements());
+    // }
 
     /**
      * 获取成果详情
@@ -431,7 +429,7 @@ public class AchievementService {
         Achievement achievement = achievementRepository.findById(achievementId)
                 .orElseThrow(() -> new RuntimeException("成果不存在"));
 
-        User admin = userRepository.findById(adminId)
+        userRepository.findById(adminId)
                 .orElseThrow(() -> new RuntimeException("管理员不存在"));
 
         achievement.setStatus(Achievement.AchievementStatus.APPROVED);
@@ -443,7 +441,7 @@ public class AchievementService {
         Achievement achievement = achievementRepository.findById(achievementId)
                 .orElseThrow(() -> new RuntimeException("成果不存在"));
 
-        User admin = userRepository.findById(adminId)
+        userRepository.findById(adminId)
                 .orElseThrow(() -> new RuntimeException("管理员不存在"));
 
         achievement.setStatus(Achievement.AchievementStatus.REJECTED);

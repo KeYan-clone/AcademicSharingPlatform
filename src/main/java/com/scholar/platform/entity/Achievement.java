@@ -3,14 +3,12 @@ package com.scholar.platform.entity;
 import com.scholar.platform.dto.AchievementDTO;
 import com.scholar.platform.util.IdPrefixUtil;
 
-import jakarta.persistence.PrePersist;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

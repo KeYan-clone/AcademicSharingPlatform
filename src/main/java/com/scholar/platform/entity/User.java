@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
-import org.springframework.data.elasticsearch.annotations.Field;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")

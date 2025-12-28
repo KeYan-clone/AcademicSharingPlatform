@@ -4,7 +4,6 @@ import com.scholar.platform.dto.*;
 import com.scholar.platform.entity.*;
 import com.scholar.platform.repository.*;
 import com.scholar.platform.util.Utils;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,7 +102,7 @@ public class UserService {
                     .orElseThrow(() -> new RuntimeException("用户不存在"));
 
             // 验证成果存在
-            Achievement achievement = achievementRepository.findById(IdPrefixUtil.ensureIdPrefix(request.getAchievementId()))
+            achievementRepository.findById(IdPrefixUtil.ensureIdPrefix(request.getAchievementId()))
                     .orElseThrow(() -> new RuntimeException("成果不存在"));
 
             // 建立用户与成果的作者关联
