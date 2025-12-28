@@ -121,12 +121,7 @@ public class AnalysisAuthorService {
 
         dto.setDomain(entity.getDomain());
         
-        if (entity.getTopics() != null && !entity.getTopics().isEmpty()) {
-            // 将 "Tag1, Tag2" 转为 List ["Tag1", "Tag2"]
-            dto.setTopics(Arrays.asList(entity.getTopics().split(",\\s*")));
-        } else {
-            dto.setTopics(Collections.emptyList());
-        }
+        
 
         return dto;
     }

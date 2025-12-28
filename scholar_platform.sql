@@ -348,6 +348,7 @@ CREATE TABLE `scholar_influence` (
   `h_index` int DEFAULT 0 COMMENT 'H指数',
   `i10_index` int DEFAULT 0 COMMENT 'i10指数',
   `open_alex_id` varchar(255) DEFAULT NULL COMMENT 'OpenAlex原始ID (用于关联ES数据)',
+  `domain` varchar(255) default null comment '学科'
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='学者影响力数据缓存表';
 /*!40101 SET character_set_client = @saved_cs_client */;
