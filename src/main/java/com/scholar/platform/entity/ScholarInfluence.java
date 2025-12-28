@@ -33,9 +33,6 @@ public class ScholarInfluence {
 
     @Column(name = "domain")
     private String domain;
-
-    @Column(name = "topics", length = 500) // 适当增加长度
-    private String topics; // 存储为 "Tag1, Tag2, Tag3"
     
     // 记录关联的 OpenAlex ID，方便后续更新
     @Column(name = "open_alex_id")
