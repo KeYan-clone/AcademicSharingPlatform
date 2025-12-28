@@ -132,7 +132,6 @@ public class AchievementService {
         BoolQuery.Builder boolBuilder = new BoolQuery.Builder();
 
         // 3. 构建 Function Score 评分查询
-        // 评分逻辑：1.0 + (1.2*ln(cited) + 1.0*ln(fav) + 0.8*ln(read)) / 3.0
         Query mainQuery = buildScoredQuery(keyword);
         boolBuilder.must(mainQuery);
 
@@ -142,8 +141,10 @@ public class AchievementService {
             filters.add(createTermQuery("institution_ids", institutionId));
         if (authorId != null)
             filters.add(createTermQuery("author_ids", authorId));
+
+        // 修正这里：使用 concepts 而不是 concept
         if (field != null && !field.trim().isEmpty())
-            filters.add(createTermQuery("concepts", field));
+            filters.add(createTermQuery("concepts", field)); // concepts 是数组字段
 
         if (startDate != null && endDate != null) {
             filters.add(QueryBuilders
@@ -151,8 +152,9 @@ public class AchievementService {
         }
 
         // 5. 兜底逻辑：如果没有任何搜索条件，展示热门概念
+        // 修正这里：检查的是 concepts 字段相关的条件
         if (isCriteriaEmpty(keyword, field, institutionId, authorId)) {
-            filters.add(getPopularConceptFilter());
+            filters.add(getPopularConceptFilter()); // 这个方法需要返回对 concepts 数组的查询
         }
 
         boolBuilder.filter(filters);
@@ -163,7 +165,7 @@ public class AchievementService {
                 .withPageable(pageable)
                 .build();
 
-        System.out.println("NativeQuery: " + nativeQuery.getQuery().toString());
+        // System.out.println("NativeQuery: " + nativeQuery.getQuery().toString());
 
         SearchHits<Achievement> hits = elasticsearchOperations.search(nativeQuery, Achievement.class);
 
@@ -179,37 +181,67 @@ public class AchievementService {
      */
     private Query buildScoredQuery(String keyword) {
         Query baseQuery;
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            // 基础多字段匹配 - 移除了concepts和abstract字段
-            Query matchQuery = QueryBuilders.multiMatch(m -> m
-                    .query(keyword)
-                    .fields("title")
-                    .type(TextQueryType.BestFields));
 
-            // 处理中英翻译加权
-            if (translationService != null && translationService.containsChinese(keyword)) {
-                String translated = translationService.translateToEnglish(keyword);
-                Query translatedMatch = QueryBuilders
-                        .multiMatch(m -> m.query(translated).fields("title")); // 同样只保留title字段，不设置权重
-                baseQuery = QueryBuilders
-                        .bool(b -> b.should(matchQuery).should(translatedMatch).minimumShouldMatch("1"));
-            } else {
-                baseQuery = matchQuery;
-            }
+        // 构建基础查询（使用BM25相关度）
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            // 使用正确的方式构建BoolQuery
+            baseQuery = QueryBuilders.bool(b -> {
+                // title字段匹配（权重3）
+                b.should(s -> s.match(m -> m
+                        .field("title")
+                        .query(keyword)
+                        .boost(3.0f)));
+
+                // abstractText字段匹配（权重2）
+                b.should(s -> s.match(m -> m
+                        .field("abstractText")
+                        .query(keyword)
+                        .boost(2.0f)));
+
+                // 处理中英翻译加权
+                if (translationService != null && translationService.containsChinese(keyword)) {
+                    String translated = translationService.translateToEnglish(keyword);
+
+                    // 翻译后的title查询
+                    b.should(s -> s.match(m -> m
+                            .field("title")
+                            .query(translated)
+                            .boost(3.0f)));
+
+                    // 翻译后的abstract查询
+                    b.should(s -> s.match(m -> m
+                            .field("abstractText")
+                            .query(translated)
+                            .boost(2.0f)));
+                }
+
+                b.minimumShouldMatch("1");
+                return b;
+            });
+
         } else {
             baseQuery = QueryBuilders.matchAll(m -> m);
         }
 
-        // 使用脚本进行热度加权
-        String scriptCode = "double weight = (Math.log1p(doc['cited_by_count'].value) * 1.2 + " +
-                "Math.log1p(doc['favourite_count'].value) * 1.0 + " +
-                "Math.log1p(doc['read_count'].value) * 0.8) / 3.0; " +
-                "return 1.0 + weight;";
+        // 简化脚本 - 假设三个count字段都确保存在
+        String scriptCode = "double c = " +
+                "doc.containsKey('citedByCount') ? " +
+                "Math.log1p(doc['citedByCount'].value) * 1.2 : 0.0; " +
+                "double f = doc.containsKey('favouriteCount') ?" +
+                " Math.log1p(doc['favouriteCount'].value) * 1.0 : 0.0; " +
+                "double r = doc.containsKey('readCount') ?" +
+                " Math.log1p(doc['readCount'].value) * 0.8 : 0.0; " +
+                "return 1.0 + (c + f + r) / 3.0;";
 
+        // 创建函数评分查询
         return QueryBuilders.functionScore(fs -> fs
                 .query(baseQuery)
                 .functions(
-                        f -> f.scriptScore(ss -> ss.script(s -> s.inline(i -> i.source(scriptCode).lang("painless")))))
+                        f -> f.scriptScore(ss -> ss
+                                .script(s -> s
+                                        .inline(i -> i
+                                                .source(scriptCode)
+                                                .lang("painless")))))
                 .scoreMode(FunctionScoreMode.Multiply)
                 .boostMode(FunctionBoostMode.Multiply));
     }
@@ -225,9 +257,13 @@ public class AchievementService {
     private Query getPopularConceptFilter() {
         PaperKeyword pk = paperKeywordRepository.findFirstByOrderByCntDesc();
 
-        return Optional.ofNullable(pk)
-                .map(item -> createTermQuery("concepts", item.getKeyword()))
-                .orElseThrow(() -> new IllegalArgumentException("搜索内容不能为空且系统暂无推荐数据"));
+        // 简单的 null 检查
+        Objects.requireNonNull(pk, "搜索内容不能为空且系统暂无推荐数据");
+
+        // 直接返回 term 查询
+        return QueryBuilders.match(m -> m
+            .field("concepts")
+            .query(pk.getKeyword()));
     }
 
     /**
