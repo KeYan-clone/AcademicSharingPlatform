@@ -81,15 +81,18 @@ public class CertificationService {
         certification = certificationRepository.save(certification);
 
         User user = certification.getUser();
-        user.setCertificationStatus(User.CertificationStatus.CERTIFIED);
-        userRepository.save(user);
+
 
         Scholar scholar = new Scholar();
-        scholar.setUserId(user.getId());
+        scholar.setUser(user);
         scholar.setPublicName(certification.getRealName());
         scholar.setOrganization(certification.getOrganization());
         scholar.setTitle(certification.getTitle());
         scholarRepository.save(scholar);
+
+
+        user.setCertificationStatus(User.CertificationStatus.CERTIFIED);
+        userRepository.save(user);
 
         // Update user status
 
