@@ -4,6 +4,21 @@ spring:
   # 核心修改：在这里引入 .env 文件
   config:
     import: optional:file:.env[.properties]
-  
+
   profiles:
     active: dev
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# 知识库文件存储根目录（可改为绝对路径）
+storage:
+  knowledge-base-root: storage/knowledge-base
+
+ai-service:
+  enabled: true
+  base-url: http://localhost:8000
+  connect-timeout-ms: 10000
+  read-timeout-ms: 120000
