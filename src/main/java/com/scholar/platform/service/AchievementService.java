@@ -286,11 +286,11 @@ public class AchievementService {
         // 简化脚本 - 假设三个count字段都确保存在
         String scriptCode = "double c = " +
                 "doc.containsKey('citedByCount') ? " +
-                "Math.log1p(doc['citedByCount'].value) * 1.2 : 0.0; " +
+                "Math.log1p(doc['citedByCount'].value) * 12 : 0.0; " +
                 "double f = doc.containsKey('favouriteCount') ?" +
-                " Math.log1p(doc['favouriteCount'].value) * 1.0 : 0.0; " +
+                " Math.log1p(doc['favouriteCount'].value) * 3 : 0.0; " +
                 "double r = doc.containsKey('readCount') ?" +
-                " Math.log1p(doc['readCount'].value) * 0.8 : 0.0; " +
+                " Math.log1p(doc['readCount'].value) * 2 : 0.0; " +
                 "return 1.0 + (c + f + r) / 3.0;";
 
         // 创建函数评分查询
