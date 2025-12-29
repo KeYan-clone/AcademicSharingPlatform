@@ -135,8 +135,8 @@ public class ScholarRankingBatchService {
     private void processSingleDomain(String domainName) {
         // 2.1 查询该领域引用量最高的 Top 100
         NativeQuery query = NativeQuery.builder()
-                .withQuery(q -> q.match(m -> m.field("field").query(domainName))) // 筛选 fields
-                //.withQuery(q -> q.term(t -> t.field("field").value(domainName))) 
+                //.withQuery(q -> q.match(m -> m.field("field").query(domainName))) // 筛选 fields
+                .withQuery(q -> q.term(t -> t.field("field.keyword").value(domainName))) 
                 .withSort(Sort.by(Sort.Direction.DESC, "cited_by_count"))          // 按引用量降序
                 .withPageable(PageRequest.of(0, 100))                              // 取前100
                 .build();
