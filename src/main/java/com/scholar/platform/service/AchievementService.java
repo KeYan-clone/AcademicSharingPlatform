@@ -30,6 +30,8 @@ import co.elastic.clients.elasticsearch._types.query_dsl.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
+
 @Service
 @RequiredArgsConstructor
 public class AchievementService {
@@ -102,14 +104,17 @@ public class AchievementService {
      * @param endDate         结束日期
      * @param authorName      作者姓名（精确匹配）
      * @param institutionName 机构名称（精确匹配）
+     * @param sortBy          排序字段 (date, citation)
+     * @param sortOrder       排序方式 (asc, desc)
      * @param pageable        分页参数
      */
     public Page<AchievementDTO> advancedSearch(String keyword, String field,
             String startDate, String endDate,
             String authorName, String institutionName,
+            String sortBy, String sortOrder,
             Pageable pageable) {
         String cacheKey = CacheKeyUtil.advancedSearchKey(keyword, field, startDate, endDate, authorName,
-                institutionName, pageable);
+                institutionName, sortBy, sortOrder, pageable);
         CachedPage<Achievement> cachedPage = searchCacheService.get(cacheKey);
         if (cachedPage != null) {
             return toDtoPageFromCache(cachedPage, pageable);
@@ -189,10 +194,20 @@ public class AchievementService {
         boolBuilder.filter(filters);
 
         // 6. 执行 NativeQuery
-        NativeQuery nativeQuery = new NativeQueryBuilder()
+        NativeQueryBuilder queryBuilder = new NativeQueryBuilder()
                 .withQuery(boolBuilder.build()._toQuery())
-                .withPageable(pageable)
-                .build();
+                .withPageable(pageable);
+
+        if (sortBy != null && !sortBy.trim().isEmpty()) {
+            Sort.Direction direction = "asc".equalsIgnoreCase(sortOrder) ? Sort.Direction.ASC : Sort.Direction.DESC;
+            if ("date".equalsIgnoreCase(sortBy) || "publicationDate".equalsIgnoreCase(sortBy)) {
+                queryBuilder.withSort(Sort.by(direction, "publication_date"));
+            } else if ("citation".equalsIgnoreCase(sortBy) || "citedByCount".equalsIgnoreCase(sortBy)) {
+                queryBuilder.withSort(Sort.by(direction, "cited_by_count"));
+            }
+        }
+
+        NativeQuery nativeQuery = queryBuilder.build();
 
         // System.out.println("NativeQuery: " + nativeQuery.getQuery().toString());
 

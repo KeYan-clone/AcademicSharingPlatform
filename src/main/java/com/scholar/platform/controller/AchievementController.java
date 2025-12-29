@@ -35,13 +35,15 @@ public class AchievementController {
       @Parameter(description = "截止日期 (格式: yyyy-MM-dd)") @RequestParam(required = false) String endDate,
       @Parameter(description = "作者姓名 - 精确匹配") @RequestParam(required = false) String author,
       @Parameter(description = "机构名称 - 精确匹配") @RequestParam(required = false) String institution,
+      @Parameter(description = "排序字段 (date: 时间, citation: 引用量)") @RequestParam(required = false) String sortBy,
+      @Parameter(description = "排序方式 (asc: 升序, desc: 降序)") @RequestParam(defaultValue = "desc") String sortOrder,
       @Parameter(description = "页码") @RequestParam(defaultValue = "0") int page,
       @Parameter(description = "每页大小") @RequestParam(defaultValue = "10") int size) {
     
     Pageable pageable = PageRequest.of(page, size);
     
     try {
-      Page<AchievementDTO> result = achievementService.advancedSearch(q, field, startDate, endDate, author, institution, pageable);
+      Page<AchievementDTO> result = achievementService.advancedSearch(q, field, startDate, endDate, author, institution, sortBy, sortOrder, pageable);
       return ResponseEntity.ok(ApiResponse.success(PageResponse.of(result)));
     } catch (IllegalArgumentException e) {
       return ResponseEntity.badRequest()

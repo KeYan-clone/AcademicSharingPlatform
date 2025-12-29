@@ -14,6 +14,7 @@ public final class CacheKeyUtil {
     public static String advancedSearchKey(String keyword, String field,
                                            String startDate, String endDate,
                                            String authorName, String institutionName,
+                                           String sortBy, String sortOrder,
                                            Pageable pageable) {
         return new StringBuilder("adv::")
             .append(sanitize(keyword)).append("::")
@@ -22,6 +23,8 @@ public final class CacheKeyUtil {
             .append(sanitize(endDate)).append("::")
             .append(sanitize(authorName)).append("::")
             .append(sanitize(institutionName)).append("::")
+            .append(sanitize(sortBy)).append("::")
+            .append(sanitize(sortOrder)).append("::")
             .append(pageable.getPageNumber()).append("::")
                 .append(pageable.getPageSize())
                 .toString();
