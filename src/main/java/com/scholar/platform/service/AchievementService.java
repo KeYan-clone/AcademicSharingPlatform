@@ -173,7 +173,7 @@ public class AchievementService {
 
         // 修正这里：使用 concepts 而不是 concept
         if (field != null && !field.trim().isEmpty())
-            filters.add(createTermQuery("concepts", field)); // concepts 是数组字段
+            filters.add(createMatchQuery("concepts", field)); // concepts 是数组字段
 
         if (startDate != null && endDate != null) {
             filters.add(QueryBuilders
@@ -293,6 +293,10 @@ public class AchievementService {
 
     private Query createTermQuery(String field, String value) {
         return QueryBuilders.term(t -> t.field(field).value(FieldValue.of(value)));
+    }
+
+    private Query createMatchQuery(String field, String value) {
+        return QueryBuilders.match(m -> m.field(field).query(value));
     }
 
     private List<Query> buildNameQueries(String fieldBase, String value) {
