@@ -33,13 +33,13 @@ public class Patent {
     private String applicationNumber;
 
     @Field(name = "applicationYear", type = FieldType.Integer)
-    private Integer applicationYear;
+    private Object applicationYear;
 
     @Field(name = "grantNumber", type = FieldType.Keyword)
     private String grantNumber;
 
     @Field(name = "grantYear", type = FieldType.Integer)
-    private Integer grantYear;
+    private Object grantYear;
 
     @Field(name = "ipc", type = FieldType.Keyword)
     private String ipcCode;
