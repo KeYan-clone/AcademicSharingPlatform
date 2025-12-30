@@ -1,0 +1,4 @@
+2025-12-27 19:37:23,986 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-27 19:37:23,997 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-27 20:32:17,666 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-27 20:32:17,671 - rag - INFO - Vector DB not found in E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db, initialized empty.

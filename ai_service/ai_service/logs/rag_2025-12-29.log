@@ -1,0 +1,12 @@
+2025-12-29 01:34:03,017 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-29 01:34:03,035 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-29 01:40:55,044 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-29 01:40:55,048 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-29 01:41:12,571 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: FNOC是什么
+2025-12-29 03:05:31,611 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-29 03:05:31,624 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-29 03:08:49,788 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-29 03:08:49,797 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-29 03:23:07,508 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-29 03:23:07,510 - rag - INFO - Vector DB not found in E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db, initialized empty.
+2025-12-29 03:23:24,205 - rag - INFO - Added 5 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db

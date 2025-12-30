@@ -1,0 +1,7 @@
+2025-10-14 14:24:27,853 - embedding - INFO - Qwen API base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+2025-10-14 14:24:27,854 - embedding - INFO - Qwen API key: 已加载
+2025-10-14 14:24:27,854 - embedding - INFO - Qwen embedding model: text-embedding-v4, dimensions: 1536
+2025-10-14 14:24:27,907 - embedding - INFO - Qwen API base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+2025-10-14 14:24:27,908 - embedding - INFO - Qwen API key: 已加载
+2025-10-14 14:24:27,908 - embedding - INFO - Qwen embedding model: text-embedding-v4, dimensions: 1536
+2025-10-14 14:25:12,158 - embedding - INFO - 请求 embedding，模型: text-embedding-v4, 文本长度: 5

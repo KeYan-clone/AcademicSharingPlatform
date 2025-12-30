@@ -1,0 +1,131 @@
+2025-12-28 00:26:28,632 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 00:26:28,652 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 00:37:48,618 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 00:37:48,620 - rag - INFO - Vector DB not found in E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db, initialized empty.
+2025-12-28 00:39:09,768 - rag - INFO - Added 15 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 01:08:17,103 - rag - INFO - Added 15 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 01:08:27,441 - rag - INFO - Added 15 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 01:08:34,235 - rag - INFO - Added 4 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 01:11:54,280 - rag - INFO - Added 15 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 01:20:42,863 - rag - INFO - Added 5 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 01:49:37,328 - rag - INFO - Added 5 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 01:49:57,841 - rag - INFO - Added 5 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 02:11:20,777 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 02:11:20,825 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 02:12:07,397 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 02:12:07,406 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 02:12:17,240 - rag - INFO - Search across 1 KBs (initial_k=15, candidates=8, final=5) for query: 解释这个论文
+2025-12-28 09:17:34,181 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 09:17:34,195 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 09:19:22,245 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 09:19:22,276 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 09:19:31,448 - rag - INFO - Added 15 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 09:25:59,080 - rag - INFO - Search across 1 KBs (initial_k=15, candidates=8, final=5) for query: 这两篇论文是关于什么的
+2025-12-28 09:27:15,196 - rag - INFO - Search across 1 KBs (initial_k=15, candidates=8, final=5) for query: 这两篇论文是关于什么的呢
+2025-12-28 09:30:09,700 - rag - INFO - Search across 1 KBs (initial_k=15, candidates=8, final=5) for query: 这里有几篇论文
+2025-12-28 09:38:24,561 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 09:38:24,590 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 09:38:31,117 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 09:38:31,167 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 09:38:32,424 - rag - ERROR - Error searching knowledge bases: Error code: 404 - {'error': {'message': 'Unsupported model `qwen-flash` for OpenAI compatibility mode.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_supported'}, 'request_id': 'd50d4624-ea6e-988c-9083-26a9460d5c82'}
+2025-12-28 09:38:47,608 - rag - ERROR - Error searching knowledge bases: Error code: 404 - {'error': {'message': 'Unsupported model `qwen-flash` for OpenAI compatibility mode.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_supported'}, 'request_id': '20308e93-7c72-9ae8-a217-a99b4d557091'}
+2025-12-28 09:39:18,255 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 09:39:18,262 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 09:39:21,441 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 09:39:21,450 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 09:39:28,289 - rag - INFO - Search across 1 KBs (initial_k=15, candidates=8, final=5) for query: 这里有几篇论文
+2025-12-28 09:57:55,195 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 09:57:55,206 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 09:58:51,958 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 09:58:51,966 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 09:59:08,028 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 这个库有几篇论文
+2025-12-28 09:59:52,158 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 这个库有几篇论文
+2025-12-28 10:00:32,739 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 这个库有几篇论文
+2025-12-28 10:01:40,546 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 这个库有几篇论文
+2025-12-28 10:04:51,291 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 这个库里有几篇论文
+2025-12-28 10:18:51,368 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 10:18:51,392 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 10:38:00,377 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 10:38:00,386 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 10:38:21,623 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 讲下deeplearning这个论文
+2025-12-28 10:39:29,877 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 讲一下这篇论文
+2025-12-28 10:41:56,265 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 10:41:56,279 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 10:42:27,749 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 10:42:27,749 - rag - INFO - Vector DB not found in E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db, initialized empty.
+2025-12-28 10:42:58,350 - rag - INFO - Added 15 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 10:43:59,410 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 讲一下现在知识库中的论文
+2025-12-28 10:45:35,373 - rag - INFO - Added 6 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 10:46:31,188 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 讲一下现在库中的论文
+2025-12-28 10:47:37,560 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 库中的两篇论文都是关于什么的
+2025-12-28 10:50:20,823 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 10:50:20,831 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 10:51:18,674 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 10:51:18,676 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 10:51:36,672 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 讲一下GraphClip这篇论文
+2025-12-28 10:53:05,930 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 讲一下现在库里文章
+2025-12-28 10:55:12,182 - rag - INFO - Added 5 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 10:55:42,774 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 讲一下现在的文章
+2025-12-28 11:03:39,066 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 11:03:39,074 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 11:04:17,693 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 11:04:17,695 - rag - INFO - Vector DB not found in E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db, initialized empty.
+2025-12-28 11:04:39,656 - rag - WARNING - 知识库为空，search_knowledge_base直接返回空列表
+2025-12-28 11:04:51,806 - rag - INFO - Added 5 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:05:26,915 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=5, final=5) for query: 讲一下库里的论文
+2025-12-28 11:06:03,406 - rag - INFO - Added 15 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:06:39,065 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 讲一下库里的论文
+2025-12-28 11:08:05,252 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: GraphCLIP是什么
+2025-12-28 11:10:32,464 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: Deep Learning Strategies是什么
+2025-12-28 11:13:53,291 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: Deep Learning Strategies是什么
+2025-12-28 11:14:28,984 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: Deep Learning Strategies是什么
+2025-12-28 11:28:14,266 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 11:28:14,280 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 11:28:45,174 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 11:28:45,181 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 11:28:59,256 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 11:28:59,257 - rag - INFO - Vector DB not found in E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db, initialized empty.
+2025-12-28 11:29:08,648 - rag - INFO - Added 15 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:33:32,890 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 11:33:32,899 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 11:35:46,977 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 11:35:46,979 - rag - INFO - Vector DB not found in E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db, initialized empty.
+2025-12-28 11:35:56,328 - rag - INFO - Added 15 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:36:07,476 - rag - INFO - Deleted documents dir for kb feab5439-7cf7-4538-b50c-f2dbf484c867: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\feab5439-7cf7-4538-b50c-f2dbf484c867
+2025-12-28 11:36:35,515 - rag - INFO - Added 15 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:36:43,028 - rag - INFO - Added 5 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:37:09,391 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: Deep Learning Strategies是什么
+2025-12-28 11:39:22,138 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: Deep Learning Strategies是什么
+2025-12-28 11:40:03,285 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 11:40:03,295 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 11:40:22,728 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 11:40:22,731 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:40:42,678 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: Deep Learning Strategie是什么
+2025-12-28 11:41:19,140 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: Deep Learning Strategie是什么
+2025-12-28 11:42:29,540 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: 讲一下Deep Learning Strategie
+2025-12-28 11:47:09,154 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 11:47:09,162 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 11:47:40,270 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 11:47:40,273 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:48:06,188 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: GraphClip是什么
+2025-12-28 11:48:58,897 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: Deep Learning Strategies是什么
+2025-12-28 16:04:35,041 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 16:04:35,056 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 16:05:48,466 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 16:05:48,478 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 16:05:52,150 - rag - INFO - Added 6 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 16:10:01,626 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 16:10:01,655 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 16:10:27,045 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\data\\vector_db']
+2025-12-28 16:10:27,050 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 16:10:30,042 - rag - INFO - Added 6 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 16:11:25,013 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: FNOC是什么
+2025-12-28 16:32:32,192 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: FNOC是什么
+2025-12-28 16:33:15,331 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=15, final=15) for query: FNOC是什么
+2025-12-28 17:26:32,245 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\data\\vector_db']
+2025-12-28 17:26:32,274 - rag - INFO - Loaded vector DB from E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 17:27:50,216 - rag - INFO - Initializing RAGService with vector DB paths: ['E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_e752e295-6944-4f0f-931e-8bed9e57e0a3\\data\\vector_db']
+2025-12-28 17:27:50,218 - rag - INFO - Vector DB not found in E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_e752e295-6944-4f0f-931e-8bed9e57e0a3\data\vector_db, initialized empty.
+2025-12-28 17:27:54,831 - rag - INFO - Added 5 chunks to KB at E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_e752e295-6944-4f0f-931e-8bed9e57e0a3\data\vector_db
+2025-12-28 17:28:27,256 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=5, final=5) for query: DeepLearning是什么
+2025-12-28 17:29:22,366 - rag - INFO - Search across 1 KBs (initial_k=45, candidates=5, final=5) for query: Deep_Learning_Strategies讲的是什么

@@ -1,0 +1,303 @@
+2025-12-28 00:26:28,380 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 00:26:28,381 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 00:26:28,382 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 00:26:28,382 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 00:26:28,522 - api - INFO - MultiModalChatService initialized
+2025-12-28 00:26:28,653 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 00:37:48,236 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 00:37:48,242 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 00:37:48,242 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 00:37:48,242 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 00:37:48,247 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 00:37:48,631 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 00:37:48,641 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\90d53956b0b34293b93f921479ea17c2_003748.pdf
+2025-12-28 00:37:48,641 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\90d53956b0b34293b93f921479ea17c2_003748.pdf
+2025-12-28 00:37:48,691 - api - ERROR - Error processing file 90d53956b0b34293b93f921479ea17c2.pdf: PDF无可提取文本，可能是无文本图片型PDF或加密PDF
+2025-12-28 00:39:00,797 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\9d79fc85c26348aaa16a3794804ea3f1_003900.pdf
+2025-12-28 00:39:00,797 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\9d79fc85c26348aaa16a3794804ea3f1_003900.pdf
+2025-12-28 00:39:04,132 - api - INFO - Successfully parsed file 9d79fc85c26348aaa16a3794804ea3f1.pdf into 15 chunks
+2025-12-28 00:39:09,769 - api - INFO - Successfully added 15 chunks to knowledge base
+2025-12-28 01:08:05,191 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\664c6012d7cb4700a236b18014848734_010805.pdf
+2025-12-28 01:08:05,193 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\664c6012d7cb4700a236b18014848734_010805.pdf
+2025-12-28 01:08:12,136 - api - INFO - Successfully parsed file 664c6012d7cb4700a236b18014848734.pdf into 15 chunks
+2025-12-28 01:08:17,103 - api - INFO - Successfully added 15 chunks to knowledge base
+2025-12-28 01:08:17,144 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\dc52813861d5404b8349307aadcd9e63_010817.pdf
+2025-12-28 01:08:17,146 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\dc52813861d5404b8349307aadcd9e63_010817.pdf
+2025-12-28 01:08:22,390 - api - INFO - Successfully parsed file dc52813861d5404b8349307aadcd9e63.pdf into 15 chunks
+2025-12-28 01:08:27,442 - api - INFO - Successfully added 15 chunks to knowledge base
+2025-12-28 01:08:32,480 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\d90362c0634c43e3ac0dd584cc5711ee_010832.pdf
+2025-12-28 01:08:32,480 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\d90362c0634c43e3ac0dd584cc5711ee_010832.pdf
+2025-12-28 01:08:33,396 - api - INFO - Successfully parsed file d90362c0634c43e3ac0dd584cc5711ee.pdf into 4 chunks
+2025-12-28 01:08:34,237 - api - INFO - Successfully added 4 chunks to knowledge base
+2025-12-28 01:11:44,972 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\036879b2410c4fb98b251131fca90871_011144.pdf
+2025-12-28 01:11:44,974 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\036879b2410c4fb98b251131fca90871_011144.pdf
+2025-12-28 01:11:49,378 - api - INFO - Successfully parsed file 036879b2410c4fb98b251131fca90871.pdf into 15 chunks
+2025-12-28 01:11:54,281 - api - INFO - Successfully added 15 chunks to knowledge base
+2025-12-28 01:20:38,343 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\ee8c76096613475cba58468068dc22fe_012038.pdf
+2025-12-28 01:20:38,343 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\ee8c76096613475cba58468068dc22fe_012038.pdf
+2025-12-28 01:20:41,099 - api - INFO - Successfully parsed file ee8c76096613475cba58468068dc22fe.pdf into 5 chunks
+2025-12-28 01:20:42,865 - api - INFO - Successfully added 5 chunks to knowledge base
+2025-12-28 01:49:33,750 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\3d2789f098604c19897db7ef76317be1_014933.pdf
+2025-12-28 01:49:33,751 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\3d2789f098604c19897db7ef76317be1_014933.pdf
+2025-12-28 01:49:35,831 - api - INFO - Successfully parsed file 3d2789f098604c19897db7ef76317be1.pdf into 5 chunks
+2025-12-28 01:49:37,328 - api - INFO - Successfully added 5 chunks to knowledge base
+2025-12-28 01:49:55,053 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\d1dd776986a840a7a4f879f3596507c4_014955.pdf
+2025-12-28 01:49:55,053 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\d1dd776986a840a7a4f879f3596507c4_014955.pdf
+2025-12-28 01:49:56,626 - api - INFO - Successfully parsed file d1dd776986a840a7a4f879f3596507c4.pdf into 5 chunks
+2025-12-28 01:49:57,842 - api - INFO - Successfully added 5 chunks to knowledge base
+2025-12-28 02:11:19,997 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 02:11:19,998 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 02:11:19,999 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 02:11:20,000 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 02:11:20,318 - api - INFO - MultiModalChatService initialized
+2025-12-28 02:11:20,828 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 02:12:07,095 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 02:12:07,096 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 02:12:07,098 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 02:12:07,100 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 02:12:07,100 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 02:12:07,408 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 09:17:34,066 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 09:17:34,066 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 09:17:34,068 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 09:17:34,069 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 09:17:34,138 - api - INFO - MultiModalChatService initialized
+2025-12-28 09:17:34,196 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 09:19:22,091 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 09:19:22,093 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 09:19:22,094 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 09:19:22,095 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 09:19:22,096 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 09:19:22,278 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 09:19:22,297 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\ec1103ca9a7047f7a6ddb5d080e8ffc4_091922.pdf
+2025-12-28 09:19:22,299 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\ec1103ca9a7047f7a6ddb5d080e8ffc4_091922.pdf
+2025-12-28 09:19:25,766 - api - INFO - Successfully parsed file ec1103ca9a7047f7a6ddb5d080e8ffc4.pdf into 15 chunks
+2025-12-28 09:19:31,448 - api - INFO - Successfully added 15 chunks to knowledge base
+2025-12-28 09:38:24,461 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 09:38:24,462 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 09:38:24,463 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 09:38:24,463 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 09:38:24,515 - api - INFO - MultiModalChatService initialized
+2025-12-28 09:38:24,607 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 09:38:30,886 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 09:38:30,890 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 09:38:30,896 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 09:38:30,899 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 09:38:30,901 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 09:38:31,169 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 09:38:32,426 - api - ERROR - Paper QA error: Error code: 404 - {'error': {'message': 'Unsupported model `qwen-flash` for OpenAI compatibility mode.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_supported'}, 'request_id': 'd50d4624-ea6e-988c-9083-26a9460d5c82'}
+2025-12-28 09:38:47,609 - api - ERROR - Paper QA error: Error code: 404 - {'error': {'message': 'Unsupported model `qwen-flash` for OpenAI compatibility mode.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_supported'}, 'request_id': '20308e93-7c72-9ae8-a217-a99b4d557091'}
+2025-12-28 09:39:18,144 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 09:39:18,145 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 09:39:18,145 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 09:39:18,145 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 09:39:18,206 - api - INFO - MultiModalChatService initialized
+2025-12-28 09:39:18,263 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 09:39:21,311 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 09:39:21,314 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 09:39:21,316 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 09:39:21,318 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 09:39:21,319 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 09:39:21,450 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 09:57:54,869 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 09:57:54,869 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 09:57:54,872 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 09:57:54,872 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 09:57:55,053 - api - INFO - MultiModalChatService initialized
+2025-12-28 09:57:55,207 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 09:58:51,734 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 09:58:51,735 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 09:58:51,736 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 09:58:51,737 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 09:58:51,738 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 09:58:51,967 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 10:18:50,742 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 10:18:50,745 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 10:18:50,745 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 10:18:50,747 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 10:18:51,077 - api - INFO - MultiModalChatService initialized
+2025-12-28 10:18:51,393 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 10:38:00,191 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 10:38:00,194 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 10:38:00,194 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 10:38:00,194 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 10:38:00,194 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 10:38:00,386 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 10:41:13,567 - api - ERROR - Error processing file a7e255958be842aabc0472d2c25bd5f6.pdf: [Errno 2] No such file or directory: 'E:\\previous D\\ImportantFiles\\Study\\ThirdF\\SA\\bigwork\\ai_service\\ai_service\\private_kb\\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\\storage\\temp\\a7e255958be842aabc0472d2c25bd5f6.pdf'
+2025-12-28 10:41:55,859 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 10:41:55,860 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 10:41:55,861 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 10:41:55,862 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 10:41:56,090 - api - INFO - MultiModalChatService initialized
+2025-12-28 10:41:56,280 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 10:42:27,575 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 10:42:27,577 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 10:42:27,577 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 10:42:27,579 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 10:42:27,579 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 10:42:27,751 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 10:42:27,756 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\7489964142284ae6a46a0f3f71e4d23d_104227.pdf
+2025-12-28 10:42:27,756 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\7489964142284ae6a46a0f3f71e4d23d_104227.pdf
+2025-12-28 10:42:46,675 - api - ERROR - Error processing file 7489964142284ae6a46a0f3f71e4d23d.pdf: PDF无可提取文本，可能是无文本图片型PDF或加密PDF
+2025-12-28 10:42:49,555 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\ba11123a428041c88dcf590dc030dc91_104249.pdf
+2025-12-28 10:42:49,556 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\ba11123a428041c88dcf590dc030dc91_104249.pdf
+2025-12-28 10:42:52,944 - api - INFO - Successfully parsed file ba11123a428041c88dcf590dc030dc91.pdf into 15 chunks
+2025-12-28 10:42:58,350 - api - INFO - Successfully added 15 chunks to knowledge base
+2025-12-28 10:45:31,556 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\dda86ff5a4e44ac7a4a0308ce590d909_104531.pdf
+2025-12-28 10:45:31,557 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\dda86ff5a4e44ac7a4a0308ce590d909_104531.pdf
+2025-12-28 10:45:33,824 - api - INFO - Successfully parsed file dda86ff5a4e44ac7a4a0308ce590d909.pdf into 6 chunks
+2025-12-28 10:45:35,373 - api - INFO - Successfully added 6 chunks to knowledge base
+2025-12-28 10:50:20,547 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 10:50:20,548 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 10:50:20,549 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 10:50:20,549 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 10:50:20,703 - api - INFO - MultiModalChatService initialized
+2025-12-28 10:50:20,832 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 10:51:18,492 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 10:51:18,492 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 10:51:18,493 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 10:51:18,494 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 10:51:18,494 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 10:51:18,677 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 10:55:09,981 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\79de843a9ed84c60ae7cb272ed5e2d8c_105509.pdf
+2025-12-28 10:55:09,985 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\79de843a9ed84c60ae7cb272ed5e2d8c_105509.pdf
+2025-12-28 10:55:10,888 - api - INFO - Successfully parsed file 79de843a9ed84c60ae7cb272ed5e2d8c.pdf into 5 chunks
+2025-12-28 10:55:12,182 - api - INFO - Successfully added 5 chunks to knowledge base
+2025-12-28 11:03:38,787 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 11:03:38,788 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 11:03:38,789 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 11:03:38,790 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 11:03:38,948 - api - INFO - MultiModalChatService initialized
+2025-12-28 11:03:39,074 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 11:04:17,519 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:04:17,520 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 11:04:17,522 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 11:04:17,523 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 11:04:17,523 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 11:04:17,695 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 11:04:49,071 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\21a55d54ae0d48378cbd5da299729231_110449.pdf
+2025-12-28 11:04:49,072 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\21a55d54ae0d48378cbd5da299729231_110449.pdf
+2025-12-28 11:04:50,095 - api - INFO - Successfully parsed file 21a55d54ae0d48378cbd5da299729231.pdf into 5 chunks
+2025-12-28 11:04:51,806 - api - INFO - Successfully added 5 chunks to knowledge base
+2025-12-28 11:05:54,418 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\462647b3e6d048f2916e0ad05ad1f9a4_110554.pdf
+2025-12-28 11:05:54,418 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\462647b3e6d048f2916e0ad05ad1f9a4_110554.pdf
+2025-12-28 11:05:58,238 - api - INFO - Successfully parsed file 462647b3e6d048f2916e0ad05ad1f9a4.pdf into 15 chunks
+2025-12-28 11:06:03,406 - api - INFO - Successfully added 15 chunks to knowledge base
+2025-12-28 11:28:13,896 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 11:28:13,897 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 11:28:13,898 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 11:28:13,900 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 11:28:14,084 - api - INFO - MultiModalChatService initialized
+2025-12-28 11:28:14,281 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 11:28:44,897 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 11:28:44,897 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 11:28:44,898 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 11:28:44,899 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 11:28:45,051 - api - INFO - MultiModalChatService initialized
+2025-12-28 11:28:45,182 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 11:28:59,075 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:28:59,077 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 11:28:59,079 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 11:28:59,079 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 11:28:59,080 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 11:28:59,258 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 11:28:59,261 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\19280c2fcc974e59a963e50f48f38d92_112859.pdf
+2025-12-28 11:28:59,262 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251228\19280c2fcc974e59a963e50f48f38d92_112859.pdf
+2025-12-28 11:29:03,111 - api - INFO - Successfully parsed file 19280c2fcc974e59a963e50f48f38d92.pdf into 15 chunks
+2025-12-28 11:29:08,649 - api - INFO - Successfully added 15 chunks to knowledge base
+2025-12-28 11:33:32,494 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 11:33:32,495 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 11:33:32,495 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 11:33:32,497 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 11:33:32,717 - api - INFO - MultiModalChatService initialized
+2025-12-28 11:33:32,900 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 11:35:46,750 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:35:46,753 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 11:35:46,754 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 11:35:46,755 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 11:35:46,756 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 11:35:46,979 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 11:35:46,986 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\feab5439-7cf7-4538-b50c-f2dbf484c867\20251228\f21822c2d27f47dd8d16685a1eea1554_113546.pdf
+2025-12-28 11:35:46,987 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\feab5439-7cf7-4538-b50c-f2dbf484c867\20251228\f21822c2d27f47dd8d16685a1eea1554_113546.pdf
+2025-12-28 11:35:50,899 - api - INFO - Successfully parsed file f21822c2d27f47dd8d16685a1eea1554.pdf into 15 chunks
+2025-12-28 11:35:56,329 - api - INFO - Successfully added 15 chunks to knowledge base
+2025-12-28 11:36:26,258 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\b9d53a01-5620-4711-8f32-74ec508868e2\20251228\eaf649ca9ac0409681a3a77f796de333_113626.pdf
+2025-12-28 11:36:26,259 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\b9d53a01-5620-4711-8f32-74ec508868e2\20251228\eaf649ca9ac0409681a3a77f796de333_113626.pdf
+2025-12-28 11:36:30,310 - api - INFO - Successfully parsed file eaf649ca9ac0409681a3a77f796de333.pdf into 15 chunks
+2025-12-28 11:36:35,515 - api - INFO - Successfully added 15 chunks to knowledge base
+2025-12-28 11:36:40,890 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\b9d53a01-5620-4711-8f32-74ec508868e2\20251228\c5b6f638c8914eadb37174378633c6ae_113640.pdf
+2025-12-28 11:36:40,891 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\b9d53a01-5620-4711-8f32-74ec508868e2\20251228\c5b6f638c8914eadb37174378633c6ae_113640.pdf
+2025-12-28 11:36:41,853 - api - INFO - Successfully parsed file c5b6f638c8914eadb37174378633c6ae.pdf into 5 chunks
+2025-12-28 11:36:43,029 - api - INFO - Successfully added 5 chunks to knowledge base
+2025-12-28 11:40:02,888 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 11:40:02,889 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 11:40:02,890 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 11:40:02,891 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 11:40:03,113 - api - INFO - MultiModalChatService initialized
+2025-12-28 11:40:03,296 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 11:40:22,509 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:40:22,511 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 11:40:22,512 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 11:40:22,513 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 11:40:22,514 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 11:40:22,732 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 11:47:08,873 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 11:47:08,874 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 11:47:08,875 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 11:47:08,875 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 11:47:09,028 - api - INFO - MultiModalChatService initialized
+2025-12-28 11:47:09,163 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 11:47:40,094 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 11:47:40,095 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 11:47:40,096 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 11:47:40,097 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 11:47:40,097 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 11:47:40,274 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 16:04:34,713 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 16:04:34,713 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 16:04:34,715 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 16:04:34,715 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 16:04:34,917 - api - INFO - MultiModalChatService initialized
+2025-12-28 16:04:35,058 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 16:05:48,300 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 16:05:48,302 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 16:05:48,302 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 16:05:48,303 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 16:05:48,303 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 16:05:48,479 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 16:05:48,487 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\f02cf661-68f6-408d-8ead-017a872e8955\20251228\131e770f54d745a9a887908e9d814de2_160548.pdf
+2025-12-28 16:05:48,488 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\f02cf661-68f6-408d-8ead-017a872e8955\20251228\131e770f54d745a9a887908e9d814de2_160548.pdf
+2025-12-28 16:05:49,612 - api - INFO - Successfully parsed file 131e770f54d745a9a887908e9d814de2.pdf into 6 chunks
+2025-12-28 16:05:52,151 - api - INFO - Successfully added 6 chunks to knowledge base
+2025-12-28 16:10:01,315 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 16:10:01,317 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 16:10:01,317 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 16:10:01,318 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 16:10:01,485 - api - INFO - MultiModalChatService initialized
+2025-12-28 16:10:01,656 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 16:10:26,909 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-28 16:10:26,910 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-28 16:10:26,910 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-28 16:10:26,910 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-28 16:10:26,912 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-28 16:10:27,051 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-28 16:10:27,053 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\f849b1e3-0437-4c3a-821e-20e1fbf3266f\20251228\53b91e423ddd4132be7be7d3ce7ac27c_161027.pdf
+2025-12-28 16:10:27,054 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\f849b1e3-0437-4c3a-821e-20e1fbf3266f\20251228\53b91e423ddd4132be7be7d3ce7ac27c_161027.pdf
+2025-12-28 16:10:28,141 - api - INFO - Successfully parsed file 53b91e423ddd4132be7be7d3ce7ac27c.pdf into 6 chunks
+2025-12-28 16:10:30,042 - api - INFO - Successfully added 6 chunks to knowledge base
+2025-12-28 17:26:31,874 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-28 17:26:31,875 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-28 17:26:31,877 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-28 17:26:31,877 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-28 17:26:32,097 - api - INFO - MultiModalChatService initialized
+2025-12-28 17:26:32,275 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-28 17:27:49,872 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_e752e295-6944-4f0f-931e-8bed9e57e0a3\data\vector_db
+2025-12-28 17:27:49,874 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_e752e295-6944-4f0f-931e-8bed9e57e0a3\storage\documents
+2025-12-28 17:27:49,876 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_e752e295-6944-4f0f-931e-8bed9e57e0a3\storage\temp
+2025-12-28 17:27:49,877 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_e752e295-6944-4f0f-931e-8bed9e57e0a3\logs
+2025-12-28 17:27:49,879 - api - INFO - 用户 e752e295-6944-4f0f-931e-8bed9e57e0a3 首次创建服务，使用默认私密知识库
+2025-12-28 17:27:50,220 - api - INFO - 用户 e752e295-6944-4f0f-931e-8bed9e57e0a3 的服务实例已创建，当前知识库: ['private']
+2025-12-28 17:27:50,238 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_e752e295-6944-4f0f-931e-8bed9e57e0a3\storage\documents\dd4e4b9e-33a6-4d75-8fce-d38a6d5b1e2f\20251228\eefa02650ef04ae3801e13f1acb80905_172750.pdf
+2025-12-28 17:27:50,239 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_e752e295-6944-4f0f-931e-8bed9e57e0a3\storage\documents\dd4e4b9e-33a6-4d75-8fce-d38a6d5b1e2f\20251228\eefa02650ef04ae3801e13f1acb80905_172750.pdf
+2025-12-28 17:27:52,332 - api - INFO - Successfully parsed file eefa02650ef04ae3801e13f1acb80905.pdf into 5 chunks
+2025-12-28 17:27:54,834 - api - INFO - Successfully added 5 chunks to knowledge base

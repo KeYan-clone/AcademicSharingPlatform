@@ -1,0 +1,4 @@
+2025-12-29 01:34:02,043 - doc_parser - WARNING - Tesseract 未安装或未配置，图片型 PDF 将跳过 OCR 提取。
+2025-12-29 03:05:30,579 - doc_parser - WARNING - Tesseract 未安装或未配置，图片型 PDF 将跳过 OCR 提取。
+2025-12-29 03:08:48,933 - doc_parser - WARNING - Tesseract 未安装或未配置，图片型 PDF 将跳过 OCR 提取。
+2025-12-29 03:23:22,355 - doc_parser - INFO - Successfully parsed PDF file: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\93e79b02-0b16-41b7-b01c-ca133506a209\20251229\c0f98f026d8d4f1daac4e417b62f8f4d_032321.pdf，共5个分块，0页无文本

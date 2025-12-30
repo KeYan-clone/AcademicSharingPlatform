@@ -1,0 +1,8 @@
+2025-10-14 14:24:27,851 - api - INFO - Ensured directory exists: D:\桌面\64013525源码\ai_service\data\vector_db
+2025-10-14 14:24:27,852 - api - INFO - Ensured directory exists: D:\桌面\64013525源码\ai_service\storage\documents
+2025-10-14 14:24:27,852 - api - INFO - Ensured directory exists: D:\桌面\64013525源码\ai_service\storage\temp
+2025-10-14 14:24:27,853 - api - INFO - Ensured directory exists: D:\桌面\64013525源码\ai_service\logs
+2025-10-14 14:24:28,036 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-10-14 14:25:12,156 - api - INFO - AI问答请求 - 用户ID: None
+2025-10-14 14:25:12,157 - api - INFO - AI问答使用的知识库路径: ['']
+2025-10-14 14:25:15,502 - api - INFO - Successfully answered student question

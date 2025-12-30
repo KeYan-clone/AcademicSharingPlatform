@@ -1,0 +1,12 @@
+2025-10-14 14:24:27,966 - rag - INFO - Initializing RAGService with vector DB paths: ['D:\\桌面\\64013525源码\\ai_service\\data\\vector_db']
+2025-10-14 14:24:28,025 - rag - INFO - Loaded vector DB from D:\桌面\64013525源码\ai_service\data\vector_db
+2025-10-14 14:25:12,569 - rag - INFO - Search across 1 KBs, returned 5 results for query: hello
+2025-10-14 14:25:15,499 - rag - INFO - LLM 返回内容: {
+    "answer": "Hello！欢迎来到课程学习，我是您的在线学习助教。如果您有任何关于课程内容的问题，例如概念理解、技术实现或练习题解析，请随时提出。我会基于课程资料为您提供详细且易于理解的解答。请告诉我您需要帮助的具体内容。",
+    "references": [],
+    "knowledgePoints": [
+        "在线学习助教功能",
+        "课程问答支持"
+    ]
+}
+2025-10-14 14:25:15,502 - rag - INFO - Successfully answered student question

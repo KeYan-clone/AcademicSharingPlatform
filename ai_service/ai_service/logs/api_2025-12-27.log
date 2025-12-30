@@ -1,0 +1,21 @@
+2025-12-27 19:37:23,703 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\data\vector_db
+2025-12-27 19:37:23,705 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\documents
+2025-12-27 19:37:23,705 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\storage\temp
+2025-12-27 19:37:23,706 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\logs
+2025-12-27 19:37:23,863 - api - INFO - MultiModalChatService initialized
+2025-12-27 19:37:23,999 - api - INFO - Loaded user KB settings from user_kb_settings.json
+2025-12-27 20:32:17,266 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\data\vector_db
+2025-12-27 20:32:17,276 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents
+2025-12-27 20:32:17,277 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\temp
+2025-12-27 20:32:17,279 - api - INFO - Ensured directory exists: E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\logs
+2025-12-27 20:32:17,280 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 首次创建服务，使用默认私密知识库
+2025-12-27 20:32:17,682 - api - INFO - 用户 81e5406c-86a5-4e45-bebc-0ce1def0364c 的服务实例已创建，当前知识库: ['private']
+2025-12-27 20:32:17,688 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251227\43023f29710747cd853cf0ea325d2ed9_203217.pdf
+2025-12-27 20:32:17,688 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251227\43023f29710747cd853cf0ea325d2ed9_203217.pdf
+2025-12-27 20:32:19,122 - api - ERROR - Error processing file 43023f29710747cd853cf0ea325d2ed9.pdf: D:\Tesseract-OCR\tesseract.exe is not installed or it's not in your PATH. See README file for more information.
+2025-12-27 20:35:57,140 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251227\8e57b987b977451a9c246ae2c561749e_203557.pdf
+2025-12-27 20:35:57,140 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251227\8e57b987b977451a9c246ae2c561749e_203557.pdf
+2025-12-27 20:35:58,055 - api - ERROR - Error processing file 8e57b987b977451a9c246ae2c561749e.pdf: D:\Tesseract-OCR\tesseract.exe is not installed or it's not in your PATH. See README file for more information.
+2025-12-27 20:36:27,376 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251227\9f3a27f0e9fb420c95078dd011636b53_203627.pdf
+2025-12-27 20:36:27,378 - api - INFO - Saved document to E:\previous D\ImportantFiles\Study\ThirdF\SA\bigwork\ai_service\ai_service\private_kb\user_81e5406c-86a5-4e45-bebc-0ce1def0364c\storage\documents\20251227\9f3a27f0e9fb420c95078dd011636b53_203627.pdf
+2025-12-27 20:36:28,122 - api - ERROR - Error processing file 9f3a27f0e9fb420c95078dd011636b53.pdf: D:\Tesseract-OCR\tesseract.exe is not installed or it's not in your PATH. See README file for more information.
