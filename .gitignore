@@ -1,0 +1,21 @@
+# 环境与配置
+.env
+.env.*
+!*.env.example
+!*.env.template
+
+# 构建产物
+target/
+
+# 日志
+*.log
+logs/
+
+# 本地存储（解析文本、用户上传）
+storage/
+
+# IDE/OS
+.idea/
+.vscode/
+*.iml
+*.DS_Store
