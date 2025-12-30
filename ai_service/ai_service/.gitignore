@@ -63,3 +63,5 @@ Thumbs.db
 logs/
 storage/
 user_kb_settings.json
+private_kb/
+venv/*
