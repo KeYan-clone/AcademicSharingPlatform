@@ -60,6 +60,6 @@ temp/
 Thumbs.db
 
 # 项目本地配置/样例数据
-ai_service/ai_service/logs/
-ai_service/ai_service/storage/
-ai_service/ai_service/user_kb_settings.json
+logs/
+storage/
+user_kb_settings.json
