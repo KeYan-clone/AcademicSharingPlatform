@@ -4,18 +4,62 @@
 !*.env.example
 !*.env.template
 
-# 构建产物
-target/
+# Python 编译产物
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+*.dll
 
-# 日志
+# 包构建/发布
+*.egg
+*.egg-info/
+dist/
+build/
+target/
+.eggs/
+pip-wheel-metadata/
+*.manifest
+*.spec
+
+# 虚拟环境
+venv/
+.venv/
+ENV/
+env/
+env.bak/
+
+# 测试与缓存
+.pytest_cache/
+.cache/
+.nox/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints
+.coverage*
+coverage.xml
+htmlcov/
+
+# 日志与本地数据
 *.log
 logs/
-
-# 本地存储（解析文本、用户上传）
 storage/
+**/logs/
+**/storage/
+tmp/
+temp/
+*.db
+*.sqlite
+*.sqlite3
 
-# IDE/OS
+# 编辑器/操作系统
 .idea/
 .vscode/
 *.iml
 *.DS_Store
+Thumbs.db
+
+# 项目本地配置/样例数据
+ai_service/ai_service/logs/
+ai_service/ai_service/storage/
+ai_service/ai_service/user_kb_settings.json
